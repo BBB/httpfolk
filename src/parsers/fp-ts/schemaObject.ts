@@ -224,7 +224,9 @@ export const OpenApi = S.struct({
     requestBodies: S.optional(
       S.record(restrictedStringKey, referenceOr(RequestBodyObject))
     ),
-    headers: S.optional(S.record(restrictedStringKey, S.struct({}))),
+    headers: S.optional(
+      S.record(restrictedStringKey, referenceOr(HeaderObject))
+    ),
     securitySchemes: S.optional(S.record(restrictedStringKey, S.struct({}))),
     links: S.optional(S.record(restrictedStringKey, S.struct({}))),
     callbacks: S.optional(S.record(restrictedStringKey, S.struct({}))),
