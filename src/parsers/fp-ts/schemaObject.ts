@@ -199,6 +199,12 @@ const ResponseObject = S.struct({
   links: S.optional(S.record(S.string, LinkObject)),
 });
 
+const RequestBodyObject = S.struct({
+  description: S.optional(S.string),
+  content: S.record(S.string, MediaTypeObject),
+  required: S.optional(S.boolean),
+});
+
 export const OpenApi = S.struct({
   openapi: S.literal("3.1.0"), // https://spec.openapis.org/oas/v3.1.0.html
   info: InfoObject,
@@ -215,7 +221,9 @@ export const OpenApi = S.struct({
     examples: S.optional(
       S.record(restrictedStringKey, referenceOr(ExampleObject))
     ),
-    requestBodies: S.optional(S.record(restrictedStringKey, S.struct({}))),
+    requestBodies: S.optional(
+      S.record(restrictedStringKey, referenceOr(RequestBodyObject))
+    ),
     headers: S.optional(S.record(restrictedStringKey, S.struct({}))),
     securitySchemes: S.optional(S.record(restrictedStringKey, S.struct({}))),
     links: S.optional(S.record(restrictedStringKey, S.struct({}))),
