@@ -209,7 +209,9 @@ export const OpenApi = S.struct({
     responses: S.optional(
       S.record(restrictedStringKey, referenceOr(ResponseObject))
     ),
-    parameters: S.optional(S.record(restrictedStringKey, S.struct({}))),
+    parameters: S.optional(
+      S.record(restrictedStringKey, referenceOr(ParameterObject))
+    ),
     examples: S.optional(S.record(restrictedStringKey, S.struct({}))),
     requestBodies: S.optional(S.record(restrictedStringKey, S.struct({}))),
     headers: S.optional(S.record(restrictedStringKey, S.struct({}))),
