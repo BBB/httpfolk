@@ -205,16 +205,61 @@ const RequestBodyObject = S.struct({
   required: S.optional(S.boolean),
 });
 
+const ExternalDocumentationObject = S.struct({
+  description: S.optional(S.string),
+  url: url,
+});
+
+const ResponsesObject = S.record(
+  restrictedStringKey,
+  referenceOr(ResponseObject)
+);
+
+const SecurityRequirementObject = S.record(S.string, S.array(S.string));
+const OperationObject: S.Schema<any> = S.lazy(() =>
+  S.struct({
+    tags: S.optional(S.array(S.string)),
+    summary: S.optional(S.string),
+    description: S.optional(S.string),
+    externalDocs: S.optional(ExternalDocumentationObject),
+    operationId: S.optional(S.string),
+    parameters: S.optional(S.array(referenceOr(ParameterObject))),
+    requestBody: S.optional(S.array(referenceOr(RequestBodyObject))),
+    responses: S.optional(ResponsesObject),
+    callbacks: S.optional(S.record(S.string, referenceOr(CallbackObject))),
+    deprecated: S.optional(S.boolean),
+    security: S.optional(S.array(SecurityRequirementObject)),
+    servers: S.optional(S.array(ServerObject)),
+  })
+);
+
+const PathItemObject: S.Schema<any> = S.lazy(() =>
+  S.struct({
+    summary: S.optional(S.string),
+    description: S.optional(S.string),
+    get: S.optional(OperationObject),
+    put: S.optional(OperationObject),
+    post: S.optional(OperationObject),
+    delete: S.optional(OperationObject),
+    options: S.optional(OperationObject),
+    head: S.optional(OperationObject),
+    patch: S.optional(OperationObject),
+    trace: S.optional(OperationObject),
+    servers: S.optional(S.array(ServerObject)),
+    parameters: S.optional(S.array(S.union(ParameterObject, ReferenceObject))),
+  })
+);
+const CallbackObject = S.record(S.string, referenceOr(PathItemObject));
+
+const PathsObject = S.record(S.string, referenceOr(PathItemObject));
 export const OpenApi = S.struct({
   openapi: S.literal("3.1.0"), // https://spec.openapis.org/oas/v3.1.0.html
   info: InfoObject,
-  jsonSchemaDialect: S.string,
+  jsonSchemaDialect: S.optional(S.string),
   servers: S.array(ServerObject),
   components: S.struct({
     schemas: S.optional(S.record(restrictedStringKey, SchemaObject)),
-    responses: S.optional(
-      S.record(restrictedStringKey, referenceOr(ResponseObject))
-    ),
+    responses: S.optional(ResponsesObject),
     parameters: S.optional(
       S.record(restrictedStringKey, referenceOr(ParameterObject))
     ),
@@ -232,4 +277,5 @@ export const OpenApi = S.struct({
     callbacks: S.optional(S.record(restrictedStringKey, S.any)),
     pathItems: S.optional(S.record(restrictedStringKey, S.any)),
   }),
+  paths: S.optional(PathsObject),
 });
