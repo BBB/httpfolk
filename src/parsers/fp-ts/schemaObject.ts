@@ -1,5 +1,4 @@
 import * as S from "@fp-ts/schema/Schema";
-import { string } from "@fp-ts/schema/Schema";
 
 const url = S.string;
 const email = S.string;
@@ -174,12 +173,23 @@ const EncodingObject = S.struct({
   allowReserved: S.optional(S.boolean),
 });
 
-const MediaTypeObject = S.struct({
-  schema: referenceOr(SchemaObject),
-  example: S.any,
-  examples: S.record(S.string, referenceOr(ExampleObject)),
-  encoding: S.record(S.string, referenceOr(EncodingObject)),
+const MediaTypeCommon = S.struct({
+  schema: S.optional(referenceOr(SchemaObject)),
+  encoding: S.optional(S.record(S.string, referenceOr(EncodingObject))),
 });
+
+export const MediaTypeObject = S.union(
+  S.extend(MediaTypeCommon)(
+    S.struct({
+      examples: S.optional(S.record(S.string, referenceOr(ExampleObject))),
+    })
+  ),
+  S.extend(MediaTypeCommon)(
+    S.struct({
+      example: S.optional(S.any),
+    })
+  )
+);
 
 const LinkObject = S.struct({
   operationRef: S.optional(S.string),
