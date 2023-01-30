@@ -2,6 +2,52 @@ import { describe, expect, it } from "vitest";
 import { SchemaObject } from "../../../src/parsers/fp-ts/schemaObject";
 import { decode } from "@fp-ts/schema/Parser";
 
+describe("oneOf", () => {
+  it("should allow oneOf", () => {
+    expect(
+      decode(SchemaObject)({
+        oneOf: [{ type: "string" }, { type: "number" }],
+      })
+    ).toMatchInlineSnapshot(`
+      {
+        "_tag": "Right",
+        "right": {
+          "oneOf": [
+            {
+              "type": "string",
+            },
+            {
+              "type": "number",
+            },
+          ],
+        },
+      }
+    `);
+  });
+});
+describe("allOf", () => {
+  it("should allow allOf", () => {
+    expect(
+      decode(SchemaObject)({
+        allOf: [{ type: "string" }, { type: "number" }],
+      })
+    ).toMatchInlineSnapshot(`
+      {
+        "_tag": "Right",
+        "right": {
+          "allOf": [
+            {
+              "type": "string",
+            },
+            {
+              "type": "number",
+            },
+          ],
+        },
+      }
+    `);
+  });
+});
 describe("object", () => {
   it("should allow objects", () => {
     expect(
