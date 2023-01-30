@@ -2,6 +2,29 @@ import {describe, expect, it} from "vitest";
 import {SchemaObject} from "../../../src/parsers/fp-ts/schemaObject";
 import {decode} from "@fp-ts/schema/Parser";
 
+describe("array", () => {
+
+  it("should allow arrays", () => {
+    expect(
+      decode(SchemaObject)({
+        type: "array",
+        items: {
+          type:"string"
+        }
+      })
+    ).toMatchInlineSnapshot(`
+      {
+        "_tag": "Right",
+        "right": {
+          "items": {
+            "type": "string",
+          },
+          "type": "array",
+        },
+      }
+    `);
+  });
+});
 describe("integer", () => {
 
   it("should allow integers", () => {
