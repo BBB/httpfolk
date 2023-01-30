@@ -2,6 +2,24 @@ import {describe, expect, it} from "vitest";
 import {SchemaObject} from "../../../src/parsers/fp-ts/schemaObject";
 import {decode} from "@fp-ts/schema/Parser";
 
+describe("integer", () => {
+
+  it("should allow integers", () => {
+    expect(
+      decode(SchemaObject)({
+        type: "integer"
+      })
+    ).toMatchInlineSnapshot(`
+    {
+      "_tag": "Right",
+      "right": {
+        "type": "integer",
+      },
+    }
+  `);
+  });
+});
+
 describe("boolean", () => {
 
   it("should allow booleans", () => {
