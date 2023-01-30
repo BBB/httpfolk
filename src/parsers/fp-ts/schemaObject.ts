@@ -263,7 +263,7 @@ const CallbackObject = S.record(S.string, referenceOr(PathItemObject));
 
 const PathsObject = S.record(S.string, referenceOr(PathItemObject));
 export const OpenApi = S.struct({
-  openapi: S.union(S.literal("3.0.0"),S.literal("3.1.0")), // https://spec.openapis.org/oas/v3.1.0.html
+  openapi: S.union(S.literal("3.0.0"), S.literal("3.1.0")), // https://spec.openapis.org/oas/v3.1.0.html
   info: InfoObject,
   jsonSchemaDialect: S.optional(S.string),
   servers: S.array(ServerObject),

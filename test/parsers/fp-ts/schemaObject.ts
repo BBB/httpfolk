@@ -1,16 +1,66 @@
-import {describe, expect, it} from "vitest";
-import {SchemaObject} from "../../../src/parsers/fp-ts/schemaObject";
-import {decode} from "@fp-ts/schema/Parser";
+import { describe, expect, it } from "vitest";
+import { SchemaObject } from "../../../src/parsers/fp-ts/schemaObject";
+import { decode } from "@fp-ts/schema/Parser";
 
+describe("object", () => {
+  it("should allow objects", () => {
+    expect(
+      decode(SchemaObject)({
+        type: "object",
+      })
+    ).toMatchInlineSnapshot(`
+      {
+        "_tag": "Right",
+        "right": {
+          "type": "object",
+        },
+      }
+    `);
+  });
+
+  it("should allow objects with properties", () => {
+    expect(
+      decode(SchemaObject)({
+        type: "object",
+        properties: {
+          key: { type: "string" },
+        },
+        required: ["key"],
+        additionalProperties: {
+          woo: { type: "boolean" },
+        },
+      })
+    ).toMatchInlineSnapshot(`
+      {
+        "_tag": "Right",
+        "right": {
+          "additionalProperties": {
+            "woo": {
+              "type": "boolean",
+            },
+          },
+          "properties": {
+            "key": {
+              "type": "string",
+            },
+          },
+          "required": [
+            "key",
+          ],
+          "type": "object",
+        },
+      }
+    `);
+  });
+});
 describe("array", () => {
-
   it("should allow arrays", () => {
     expect(
       decode(SchemaObject)({
         type: "array",
         items: {
-          type:"string"
-        }
+          type: "string",
+        },
       })
     ).toMatchInlineSnapshot(`
       {
@@ -26,11 +76,10 @@ describe("array", () => {
   });
 });
 describe("integer", () => {
-
   it("should allow integers", () => {
     expect(
       decode(SchemaObject)({
-        type: "integer"
+        type: "integer",
       })
     ).toMatchInlineSnapshot(`
     {
@@ -44,11 +93,10 @@ describe("integer", () => {
 });
 
 describe("boolean", () => {
-
   it("should allow booleans", () => {
     expect(
       decode(SchemaObject)({
-        type: "boolean"
+        type: "boolean",
       })
     ).toMatchInlineSnapshot(`
     {
@@ -62,11 +110,10 @@ describe("boolean", () => {
 });
 
 describe("number", () => {
-
   it("should allow numbers", () => {
     expect(
       decode(SchemaObject)({
-        type: "number"
+        type: "number",
       })
     ).toMatchInlineSnapshot(`
     {
@@ -80,11 +127,10 @@ describe("number", () => {
 });
 
 describe("string", () => {
-
   it("should allow strings", () => {
     expect(
       decode(SchemaObject)({
-        type: "string"
+        type: "string",
       })
     ).toMatchInlineSnapshot(`
     {
@@ -100,7 +146,7 @@ describe("string", () => {
     expect(
       decode(SchemaObject)({
         type: "string",
-        enum: ["ONE", "TWO", "THREE"]
+        enum: ["ONE", "TWO", "THREE"],
       })
     ).toMatchInlineSnapshot(`
     {
@@ -116,5 +162,4 @@ describe("string", () => {
     }
   `);
   });
-
-})
+});
