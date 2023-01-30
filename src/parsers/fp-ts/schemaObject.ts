@@ -99,7 +99,7 @@ function schemaCommonAnd<Fields extends Record<PropertyKey, S.Schema<any>>>(
   return S.extend(SchemaObjectCommon)(S.struct(fields));
 }
 
-const SchemaObject: S.Schema<SchemaObject> = S.lazy(() =>
+export const SchemaObject: S.Schema<SchemaObject> = S.lazy(() =>
   S.union(
     schemaCommonAnd({
       type: S.literal("string"),
@@ -200,7 +200,7 @@ const LinkObject = S.struct({
   server: S.optional(ServerObject),
 });
 
-const ResponseObject = S.struct({
+export const ResponseObject = S.struct({
   description: S.string,
   headers: S.optional(
     S.record(S.string, S.union(ReferenceObject, HeaderObject))
@@ -263,7 +263,7 @@ const CallbackObject = S.record(S.string, referenceOr(PathItemObject));
 
 const PathsObject = S.record(S.string, referenceOr(PathItemObject));
 export const OpenApi = S.struct({
-  openapi: S.literal("3.1.0"), // https://spec.openapis.org/oas/v3.1.0.html
+  openapi: S.union(S.literal("3.0.0"),S.literal("3.1.0")), // https://spec.openapis.org/oas/v3.1.0.html
   info: InfoObject,
   jsonSchemaDialect: S.optional(S.string),
   servers: S.array(ServerObject),
