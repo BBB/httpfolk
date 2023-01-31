@@ -1,14 +1,21 @@
-import { describe, expect, it } from "vitest";
-import { SchemaObject } from "../../../src/parsers/fp-ts/schemaObject";
-import { decode } from "@fp-ts/schema/Parser";
+import {describe, expect, it} from "vitest";
+import {SchemaObject} from "../../../src/parsers/fp-ts/schemaObject";
+import {decode} from "@fp-ts/schema/Parser";
+import {
+  allOfSchema,
+  arraySchema,
+  booleanSchema,
+  enumSchema,
+  numberSchema,
+  objectSchema,
+  oneOfSchema,
+  stringSchema
+} from "../../../src/inputs/schemas";
 
 describe("oneOf", () => {
   it("should allow oneOf", () => {
-    expect(
-      decode(SchemaObject)({
-        oneOf: [{ type: "string" }, { type: "number" }],
-      })
-    ).toMatchInlineSnapshot(`
+    expect(decode(SchemaObject)(oneOfSchema(stringSchema(), numberSchema())))
+      .toMatchInlineSnapshot(`
       {
         "_tag": "Right",
         "right": {
@@ -27,11 +34,8 @@ describe("oneOf", () => {
 });
 describe("allOf", () => {
   it("should allow allOf", () => {
-    expect(
-      decode(SchemaObject)({
-        allOf: [{ type: "string" }, { type: "number" }],
-      })
-    ).toMatchInlineSnapshot(`
+    expect(decode(SchemaObject)(allOfSchema(stringSchema(), numberSchema())))
+      .toMatchInlineSnapshot(`
       {
         "_tag": "Right",
         "right": {
@@ -48,13 +52,10 @@ describe("allOf", () => {
     `);
   });
 });
+
 describe("object", () => {
   it("should allow objects", () => {
-    expect(
-      decode(SchemaObject)({
-        type: "object",
-      })
-    ).toMatchInlineSnapshot(`
+    expect(decode(SchemaObject)(objectSchema())).toMatchInlineSnapshot(`
       {
         "_tag": "Right",
         "right": {
@@ -69,11 +70,11 @@ describe("object", () => {
       decode(SchemaObject)({
         type: "object",
         properties: {
-          key: { type: "string" },
+          key: stringSchema(),
         },
         required: ["key"],
         additionalProperties: {
-          woo: { type: "boolean" },
+          woo: booleanSchema(),
         },
       })
     ).toMatchInlineSnapshot(`
@@ -99,16 +100,11 @@ describe("object", () => {
     `);
   });
 });
+
 describe("array", () => {
   it("should allow arrays", () => {
-    expect(
-      decode(SchemaObject)({
-        type: "array",
-        items: {
-          type: "string",
-        },
-      })
-    ).toMatchInlineSnapshot(`
+    expect(decode(SchemaObject)(arraySchema(stringSchema())))
+      .toMatchInlineSnapshot(`
       {
         "_tag": "Right",
         "right": {
@@ -157,11 +153,7 @@ describe("boolean", () => {
 
 describe("number", () => {
   it("should allow numbers", () => {
-    expect(
-      decode(SchemaObject)({
-        type: "number",
-      })
-    ).toMatchInlineSnapshot(`
+    expect(decode(SchemaObject)(numberSchema())).toMatchInlineSnapshot(`
     {
       "_tag": "Right",
       "right": {
@@ -174,11 +166,7 @@ describe("number", () => {
 
 describe("string", () => {
   it("should allow strings", () => {
-    expect(
-      decode(SchemaObject)({
-        type: "string",
-      })
-    ).toMatchInlineSnapshot(`
+    expect(decode(SchemaObject)(stringSchema())).toMatchInlineSnapshot(`
     {
       "_tag": "Right",
       "right": {
@@ -189,12 +177,8 @@ describe("string", () => {
   });
 
   it("should allow enums", () => {
-    expect(
-      decode(SchemaObject)({
-        type: "string",
-        enum: ["ONE", "TWO", "THREE"],
-      })
-    ).toMatchInlineSnapshot(`
+    expect(decode(SchemaObject)(enumSchema("ONE", "TWO", "THREE")))
+      .toMatchInlineSnapshot(`
     {
       "_tag": "Right",
       "right": {
