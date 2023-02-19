@@ -1,6 +1,5 @@
-import {describe, expect, it} from "vitest";
-import {SchemaObject} from "../../../src/parsers/fp-ts/schemaObject";
-import {decode} from "@fp-ts/schema/Parser";
+import { describe, expect, it } from "vitest";
+import { SchemaObject } from "../../../src/parsers/fp-ts/schemaObject";
 import {
   allOfSchema,
   arraySchema,
@@ -9,16 +8,15 @@ import {
   numberSchema,
   objectSchema,
   oneOfSchema,
-  stringSchema
+  stringSchema,
 } from "../../../src/inputs/schemas";
+import { decodeToResult } from "../../../src/parsers/fp-ts/decodeToResult";
 
 describe("oneOf", () => {
   it("should allow oneOf", () => {
-    expect(decode(SchemaObject)(oneOfSchema(stringSchema(), numberSchema())))
+    expect(underTest(oneOfSchema(stringSchema(), numberSchema())))
       .toMatchInlineSnapshot(`
-      {
-        "_tag": "Right",
-        "right": {
+        {
           "oneOf": [
             {
               "type": "string",
@@ -27,18 +25,15 @@ describe("oneOf", () => {
               "type": "number",
             },
           ],
-        },
-      }
-    `);
+        }
+      `);
   });
 });
 describe("allOf", () => {
   it("should allow allOf", () => {
-    expect(decode(SchemaObject)(allOfSchema(stringSchema(), numberSchema())))
+    expect(underTest(allOfSchema(stringSchema(), numberSchema())))
       .toMatchInlineSnapshot(`
-      {
-        "_tag": "Right",
-        "right": {
+        {
           "allOf": [
             {
               "type": "string",
@@ -47,27 +42,23 @@ describe("allOf", () => {
               "type": "number",
             },
           ],
-        },
-      }
-    `);
+        }
+      `);
   });
 });
 
 describe("object", () => {
   it("should allow objects", () => {
-    expect(decode(SchemaObject)(objectSchema())).toMatchInlineSnapshot(`
+    expect(underTest(objectSchema())).toMatchInlineSnapshot(`
       {
-        "_tag": "Right",
-        "right": {
-          "type": "object",
-        },
+        "type": "object",
       }
     `);
   });
 
   it("should allow objects with properties", () => {
     expect(
-      decode(SchemaObject)({
+      underTest({
         type: "object",
         properties: {
           key: stringSchema(),
@@ -79,23 +70,20 @@ describe("object", () => {
       })
     ).toMatchInlineSnapshot(`
       {
-        "_tag": "Right",
-        "right": {
-          "additionalProperties": {
-            "woo": {
-              "type": "boolean",
-            },
+        "additionalProperties": {
+          "woo": {
+            "type": "boolean",
           },
-          "properties": {
-            "key": {
-              "type": "string",
-            },
-          },
-          "required": [
-            "key",
-          ],
-          "type": "object",
         },
+        "properties": {
+          "key": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "key",
+        ],
+        "type": "object",
       }
     `);
   });
@@ -103,16 +91,12 @@ describe("object", () => {
 
 describe("array", () => {
   it("should allow arrays", () => {
-    expect(decode(SchemaObject)(arraySchema(stringSchema())))
-      .toMatchInlineSnapshot(`
+    expect(underTest(arraySchema(stringSchema()))).toMatchInlineSnapshot(`
       {
-        "_tag": "Right",
-        "right": {
-          "items": {
-            "type": "string",
-          },
-          "type": "array",
+        "items": {
+          "type": "string",
         },
+        "type": "array",
       }
     `);
   });
@@ -120,76 +104,68 @@ describe("array", () => {
 describe("integer", () => {
   it("should allow integers", () => {
     expect(
-      decode(SchemaObject)({
+      underTest({
         type: "integer",
       })
     ).toMatchInlineSnapshot(`
-    {
-      "_tag": "Right",
-      "right": {
+      {
         "type": "integer",
-      },
-    }
-  `);
+      }
+    `);
   });
 });
 
 describe("boolean", () => {
   it("should allow booleans", () => {
     expect(
-      decode(SchemaObject)({
+      underTest({
         type: "boolean",
       })
     ).toMatchInlineSnapshot(`
-    {
-      "_tag": "Right",
-      "right": {
+      {
         "type": "boolean",
-      },
-    }
-  `);
+      }
+    `);
   });
 });
 
 describe("number", () => {
   it("should allow numbers", () => {
-    expect(decode(SchemaObject)(numberSchema())).toMatchInlineSnapshot(`
-    {
-      "_tag": "Right",
-      "right": {
+    expect(underTest(numberSchema())).toMatchInlineSnapshot(`
+      {
         "type": "number",
-      },
-    }
-  `);
+      }
+    `);
   });
 });
 
 describe("string", () => {
   it("should allow strings", () => {
-    expect(decode(SchemaObject)(stringSchema())).toMatchInlineSnapshot(`
-    {
-      "_tag": "Right",
-      "right": {
+    expect(underTest(stringSchema())).toMatchInlineSnapshot(`
+      {
         "type": "string",
-      },
-    }
-  `);
+      }
+    `);
   });
 
   it("should allow enums", () => {
-    expect(decode(SchemaObject)(enumSchema("ONE", "TWO", "THREE")))
-      .toMatchInlineSnapshot(`
-    {
-      "_tag": "Right",
-      "right": {
+    expect(underTest(enumSchema("ONE", "TWO", "THREE"))).toMatchInlineSnapshot(`
+      {
         "enum": [
           "ONE",
           "TWO",
           "THREE",
         ],
         "type": "string",
-      },
-    }
-  `);
+      }
+    `);
   });
 });
+
+const decoder = decodeToResult(SchemaObject);
+
+function underTest(value: unknown) {
+  return decoder(value).getOrElse(() => {
+    throw new Error("Unexpected");
+  });
+}

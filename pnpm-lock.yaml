@@ -2,10 +2,14 @@ lockfileVersion: 5.4
 
 specifiers:
   '@fp-ts/schema': ^0.0.8
+  '@ollierelph/result4t': ^0.0.3
   prettier: ^2.8.3
   typescript: ^4.9.4
   vite: ^4.0.4
   vitest: ^0.27.1
+
+dependencies:
+  '@ollierelph/result4t': 0.0.3
 
 devDependencies:
   '@fp-ts/schema': 0.0.8
@@ -231,6 +235,10 @@ packages:
       '@fp-ts/data': 0.0.39
       fast-check: 3.5.0
     dev: true
+
+  /@ollierelph/result4t/0.0.3:
+    resolution: {integrity: sha512-Pia1mGrKLiOjkhw7VdVKYf9dAsElFdHfVZyZomDvH7DuSwnTy1lSDhsDTiPEjTrVQY4y87Y0X/vQm3Q2V7Fnrg==}
+    dev: false
 
   /@types/chai-subset/1.3.3:
     resolution: {integrity: sha512-frBecisrNGz+F4T6bcc+NLeolfiojh5FxW2klu669+8BARtyQv2C/GkNW6FUodVe4BroGMP/wER/YDGc7rEllw==}
