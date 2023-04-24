@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SchemaObject } from "../../../src/parsers/fp-ts/schemaObject";
+import { SchemaObject } from "../../../src/parsers/effect-schema/schemaObject";
 import {
   allOfSchema,
   arraySchema,
@@ -10,7 +10,7 @@ import {
   oneOfSchema,
   stringSchema,
 } from "../../../src/inputs/schemas";
-import { decodeToResult } from "../../../src/parsers/fp-ts/decodeToResult";
+import { decodeToResult } from "../../../src/parsers/effect-schema/decodeToResult";
 
 describe("oneOf", () => {
   it("should allow oneOf", () => {

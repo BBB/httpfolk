@@ -1,4 +1,4 @@
-import { SchemaObject } from "../parsers/fp-ts/schemaObject";
+import { SchemaObject } from "../parsers/effect-schema/schemaObject";
 
 export const stringSchema = () => ({ type: "string" as const });
 export const numberSchema = () => ({ type: "number" as const });

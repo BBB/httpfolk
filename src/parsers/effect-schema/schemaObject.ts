@@ -1,4 +1,5 @@
-import * as S from "@fp-ts/schema/Schema";
+import * as S from "@effect/schema/Schema";
+import { boolean, PropertySignature, Schema } from "@effect/schema/src/Schema";
 
 const url = S.string;
 const email = S.string;
@@ -42,7 +43,7 @@ const ServerVariablesObject = S.optional(
 const ServerObject = S.struct({
   url,
   description: S.optional(S.string),
-  variables: S.optional(ServerVariablesObject),
+  variables: ServerVariablesObject,
 });
 
 type SchemaCommon = {
@@ -50,7 +51,7 @@ type SchemaCommon = {
   readonly description?: string;
   readonly default?: any;
   readonly nullable?: boolean;
-  readonly format?: S.Infer<typeof format>;
+  readonly format?: S.To<typeof format>;
 };
 export type SchemaObject =
   | (SchemaCommon &
@@ -80,7 +81,7 @@ export type SchemaObject =
     };
 
 const ReferenceObject = S.struct({ $ref: S.string });
-type ReferenceObject = S.Infer<typeof ReferenceObject>;
+type ReferenceObject = S.To<typeof ReferenceObject>;
 
 const referenceOr = (...members: S.Schema<any>[]) =>
   S.union(ReferenceObject, ...members);
@@ -93,13 +94,19 @@ const SchemaObjectCommon = S.struct({
   format: S.optional(format),
 });
 
-function schemaCommonAnd<Fields extends Record<PropertyKey, S.Schema<any>>>(
-  fields: Fields
-) {
+function schemaCommonAnd<
+  Fields extends Record<
+    PropertyKey,
+    | Schema<any>
+    | Schema<never>
+    | PropertySignature<any, boolean, any, boolean>
+    | PropertySignature<never, boolean, never, boolean>
+  >
+>(fields: Fields) {
   return S.extend(SchemaObjectCommon)(S.struct(fields));
 }
 
-export const SchemaObject: S.Schema<SchemaObject> = S.lazy(() =>
+export const SchemaObject: S.Schema<any, SchemaObject> = S.lazy(() =>
   S.union(
     schemaCommonAnd({
       type: S.literal("string"),
@@ -289,3 +296,4 @@ export const OpenApi = S.struct({
   }),
   paths: S.optional(PathsObject),
 });
+export type OpenApi = S.To<typeof OpenApi>;
