@@ -2,8 +2,8 @@ lockfileVersion: '6.0'
 
 dependencies:
   '@ollierelph/result4t':
-    specifier: ^0.2.2
-    version: 0.2.2
+    specifier: ^0.2.4
+    version: 0.2.4
 
 devDependencies:
   '@effect/schema':
@@ -240,8 +240,8 @@ packages:
     dev: true
     optional: true
 
-  /@ollierelph/result4t@0.2.2:
-    resolution: {integrity: sha512-99XdfZIef4D6Cjgmb0IiIk0pkFHNtdoOVxZlCpmhbBUENM1HQqC3vPpmGqWO6QAMZKNVDpcSVeplDcKjJ7W32Q==}
+  /@ollierelph/result4t@0.2.4:
+    resolution: {integrity: sha512-YwWoD1eha2ksMmbOkohww5foEpzygAFXF2d3T09veJs4aqG1PavRl1pX3rF4dBw9M92sfURQ3ctA6lXzaWlyDA==}
     dev: false
 
   /@types/chai-subset@1.3.3:
