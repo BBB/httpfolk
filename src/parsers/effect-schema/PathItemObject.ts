@@ -4,7 +4,7 @@ import { ParameterObject } from "./ParameterObject";
 import { ReferenceObject } from "./ReferenceObject";
 import * as S from "@effect/schema/Schema";
 
-interface PathItemObject {
+export type PathItemObject = {
   summary?: string;
   description?: string;
   get?: OperationObject;
@@ -17,7 +17,7 @@ interface PathItemObject {
   trace?: OperationObject;
   servers?: ReadonlyArray<ServerObject>;
   parameters?: ReadonlyArray<ParameterObject | ReferenceObject>;
-}
+};
 
 export const PathItemObject: S.Schema<any, PathItemObject> = S.lazy(() =>
   S.struct({
