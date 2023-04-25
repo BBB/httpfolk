@@ -10,7 +10,7 @@ type SchemaCommon = {
   readonly nullable?: boolean;
   readonly format?: S.To<typeof format>;
 };
-export type SchemaObject =
+export type SchemaObject2 =
   | (SchemaCommon &
       (
         | { type: "string"; enum?: ReadonlyArray<string> }
@@ -19,22 +19,22 @@ export type SchemaObject =
         | { type: "integer" }
         | {
             type: "array";
-            items: ReferenceObject | SchemaObject;
+            items: ReferenceObject | SchemaObject2;
           }
       ))
   | {
       type: "object";
-      properties?: Record<PropertyKey, ReferenceObject | SchemaObject>;
+      properties?: Record<PropertyKey, ReferenceObject | SchemaObject2>;
       required?: ReadonlyArray<string>;
       additionalProperties?:
         | true
-        | Record<PropertyKey, ReferenceObject | SchemaObject>;
+        | Record<PropertyKey, ReferenceObject | SchemaObject2>;
     }
   | {
-      allOf: ReadonlyArray<ReferenceObject | SchemaObject>;
+      allOf: ReadonlyArray<ReferenceObject | SchemaObject2>;
     }
   | {
-      oneOf: ReadonlyArray<ReferenceObject | SchemaObject>;
+      oneOf: ReadonlyArray<ReferenceObject | SchemaObject2>;
     };
 
 const SchemaObjectCommon = S.struct({
@@ -61,7 +61,7 @@ function schemaCommonAnd<
  * The Schema Object allows the definition of input and output data types
  * https://spec.openapis.org/oas/latest.html#schema-object
  */
-export const SchemaObject: S.Schema<any, SchemaObject> = S.lazy(() =>
+export const SchemaObject: S.Schema<any, SchemaObject2> = S.lazy(() =>
   S.union(
     schemaCommonAnd({
       type: S.literal("string"),

@@ -1,4 +1,4 @@
-import { SchemaObject } from "../parsers/effect-schema/schemaObject";
+import { SchemaObject2 } from "../parsers/effect-schema/SchemaObject2";
 import {
   isReferenceObject,
   ReferenceObject,
@@ -9,8 +9,8 @@ const getReference = (schema: OpenApi) => (ref: ReferenceObject) => {};
 
 const visitSchemaObjects = (schema: OpenApi) => {
   const goto = getReference(schema);
-  const visited = new Set<SchemaObject>();
-  return (visit: (schemaObject: SchemaObject) => void) => {
+  const visited = new Set<SchemaObject2>();
+  return (visit: (schemaObject: SchemaObject2) => void) => {
     if (schema.paths) {
       Object.values(schema.paths).forEach((value) => {
         if (isReferenceObject(value)) {
