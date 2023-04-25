@@ -10,7 +10,7 @@ import {
   oneOfSchema,
   stringSchema,
 } from "../../../src/inputs/schemas";
-import { decodeToResult } from "../../../src/parsers/effect-schema/decodeToResult";
+import { decodeToResult } from "../../../src/parsers/effect-schema/lib/decodeToResult";
 
 describe("oneOf", () => {
   it("should allow oneOf", () => {
@@ -162,10 +162,10 @@ describe("string", () => {
   });
 });
 
-const decoder = decodeToResult(SchemaObject);
+const schemaDecoder = decodeToResult(SchemaObject);
 
 function underTest(value: unknown) {
-  return decoder(value).getOrElse(() => {
+  return schemaDecoder(value).getOrElse(() => {
     throw new Error("Unexpected");
   });
 }

@@ -1,7 +1,7 @@
 import { decodeEither, Schema } from "@effect/schema/Schema";
-import { Result } from "@ollierelph/result4t";
 import { ParseOptions } from "@effect/schema/AST";
 import { ParseError } from "@effect/schema/ParseResult";
+import { Result } from "./Result";
 
 export const decodeToResult = <Success>(schema: Schema<unknown, Success>) => {
   const decodeSchema = decodeEither(schema);
@@ -9,9 +9,6 @@ export const decodeToResult = <Success>(schema: Schema<unknown, Success>) => {
     input: unknown,
     options?: ParseOptions
   ): Result<Success, ParseError> => {
-    const either = decodeSchema(input, options);
-    return either._tag === "Right"
-      ? Result.success(either.right)
-      : Result.failure(either.left);
+    return Result.ofEither(decodeSchema(input, options));
   };
 };
