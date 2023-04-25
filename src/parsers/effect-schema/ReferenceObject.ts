@@ -1,7 +1,7 @@
 import { Schema } from "@effect/schema/src/Schema";
 import * as S from "@effect/schema/Schema";
 
-const componentFieldNames = S.union(
+export const componentFieldNames = S.union(
   S.literal("schemas"),
   S.literal("responses"),
   S.literal("parameters"),
