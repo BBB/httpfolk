@@ -6,7 +6,7 @@ import { OpenApi } from "../parsers/effect-schema/OpenApi";
 import { Result } from "@ollierelph/result4t";
 import { decodeToResult } from "../parsers/effect-schema/lib/decodeToResult";
 
-class ReferenceNotFound {
+export class ReferenceNotFound {
   protected constructor(public ref: ReferenceObject) {}
 
   static of(ref: ReferenceObject) {
@@ -27,7 +27,6 @@ export const getReference =
       .flatMap((s) => {
         const component = schema.components[s];
         const item = component?.[id];
-        console.log({ section, id });
         if (!item) {
           return Result.failure(ReferenceNotFound.of(ref));
         }
