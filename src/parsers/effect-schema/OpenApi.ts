@@ -22,6 +22,56 @@ export function buildOpenApi(): OpenApi {
       version: "1",
     },
     servers: [],
+    paths: {
+      "/a": {
+        get: {
+          responses: {
+            "200": {
+              description: "lists the a",
+              content: {
+                "application/json": {
+                  schema: {
+                    $ref: "#/components/schemas/a",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/b": {
+        get: {
+          responses: {
+            "200": {
+              description: "lists the b",
+              content: {
+                "application/json": {
+                  schema: {
+                    $ref: "#/components/schemas/b",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/c": {
+        post: {
+          responses: {
+            "200": {
+              description: "creates the c",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "string",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     components: {
       schemas: {
         a: {
