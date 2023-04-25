@@ -4,32 +4,11 @@ import {
   ReferenceNotFound,
 } from "../../src/visitor/getReference";
 import { Result } from "@ollierelph/result4t";
-import { OpenApi } from "../../src/parsers/effect-schema/OpenApi";
 import { SchemaObject } from "../../src/parsers/effect-schema/SchemaObject";
-
-function baseSchema(): OpenApi {
-  return {
-    openapi: "3.1.0",
-    info: {
-      title: "My Schema",
-      version: "1",
-    },
-    servers: [],
-    components: {
-      schemas: {
-        a: {
-          type: "string",
-        },
-        b: {
-          type: "string",
-        },
-      },
-    },
-  };
-}
+import { buildOpenApi } from "../../src/parsers/effect-schema/OpenApi";
 
 it("resolves a known item", () => {
-  const result = getReference(baseSchema())(
+  const result = getReference(buildOpenApi())(
     {
       $ref: "#/components/schemas/a",
     },
@@ -46,6 +25,6 @@ it("cant find an item", () => {
   const ref = {
     $ref: "#/components/schemas/c",
   } as const;
-  const result = getReference(baseSchema())(ref, SchemaObject);
+  const result = getReference(buildOpenApi())(ref, SchemaObject);
   expect(result).toStrictEqual(Result.failure(ReferenceNotFound.of(ref)));
 });

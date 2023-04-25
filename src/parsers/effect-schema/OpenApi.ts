@@ -13,3 +13,24 @@ export const OpenApi = S.struct({
   paths: S.optional(PathsObject),
 });
 export type OpenApi = S.To<typeof OpenApi>;
+
+export function buildOpenApi(): OpenApi {
+  return {
+    openapi: "3.1.0",
+    info: {
+      title: "My Schema",
+      version: "1",
+    },
+    servers: [],
+    components: {
+      schemas: {
+        a: {
+          type: "string",
+        },
+        b: {
+          type: "string",
+        },
+      },
+    },
+  };
+}
