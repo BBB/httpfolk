@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@ollierelph/result4t": "^0.0.3"
+    "@ollierelph/result4t": "^0.2.2"
   },
   "devDependencies": {
     "@effect/schema": "^0.17.2",
