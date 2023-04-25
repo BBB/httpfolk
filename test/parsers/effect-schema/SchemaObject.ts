@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SchemaObject2 } from "../../../src/parsers/effect-schema/SchemaObject2";
+import { SchemaObject } from "../../../src/parsers/effect-schema/SchemaObject";
 import {
   allOfSchema,
   arraySchema,

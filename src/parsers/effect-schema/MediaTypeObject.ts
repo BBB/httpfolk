@@ -1,7 +1,7 @@
 import * as S from "@effect/schema/Schema";
 import { referenceOr } from "./ReferenceObject";
 import { EncodingObject } from "./EncodingObject";
-import { SchemaObject2 } from "./SchemaObject2";
+import { SchemaObject } from "./SchemaObject";
 import { ExampleObject } from "./ExampleObject";
 
 const MediaTypeCommon = S.struct({

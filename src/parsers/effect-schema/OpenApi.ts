@@ -10,7 +10,7 @@ import { RequestBodyObject } from "./RequestBodyObject";
 import { HeaderObject } from "./HeaderObject";
 import { LinkObject } from "./LinkObject";
 import { PathsObject } from "./PathsObject";
-import { SchemaObject2 } from "./SchemaObject2";
+import { SchemaObject } from "./SchemaObject";
 
 export const OpenApi = S.struct({
   openapi: S.union(S.literal("3.0.0"), S.literal("3.1.0")), // https://spec.openapis.org/oas/v3.1.0.html
