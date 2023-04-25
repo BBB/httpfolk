@@ -1,9 +1,9 @@
+import { SchemaObject } from "../parsers/effect-schema/schemaObject";
 import {
   isReferenceObject,
-  OpenApi,
   ReferenceObject,
-  SchemaObject,
-} from "../parsers/effect-schema/schemaObject";
+} from "../parsers/effect-schema/ReferenceObject";
+import { OpenApi } from "../parsers/effect-schema/OpenApi";
 
 const getReference = (schema: OpenApi) => (ref: ReferenceObject) => {};
 

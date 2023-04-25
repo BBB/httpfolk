@@ -1,52 +1,7 @@
 import * as S from "@effect/schema/Schema";
-import { boolean, PropertySignature, Schema } from "@effect/schema/src/Schema";
-
-const url = S.string;
-const email = S.string;
-const format = S.string;
-const restrictedStringKey = S.pattern(/^[a-zA-Z0-9.\-_]+$/)(S.string);
-
-const ContactObject = S.optional(
-  S.struct({
-    name: S.optional(S.string),
-    url: S.optional(url),
-    email: S.optional(email),
-  })
-);
-
-const LicenseObject = S.optional(
-  S.struct({
-    name: S.string,
-    url: S.optional(url),
-  })
-);
-
-const InfoObject = S.struct({
-  title: S.string,
-  description: S.optional(S.string),
-  termsOfService: S.optional(url),
-  contact: ContactObject,
-  license: LicenseObject,
-  version: S.string,
-});
-
-const ServerVariablesObject = S.optional(
-  S.record(
-    S.string,
-    S.struct({
-      enum: S.optional(S.array(S.string)),
-      default: S.string,
-      description: S.string,
-    })
-  )
-);
-const ServerObject = S.struct({
-  url,
-  description: S.optional(S.string),
-  variables: ServerVariablesObject,
-});
-
-type ServerObject = S.To<typeof ServerObject>;
+import { PropertySignature, Schema } from "@effect/schema/src/Schema";
+import { ReferenceObject, referenceOr } from "./ReferenceObject";
+import { format } from "./lib/scalar/format";
 
 type SchemaCommon = {
   readonly title?: string;
@@ -82,15 +37,6 @@ export type SchemaObject =
       oneOf: ReadonlyArray<ReferenceObject | SchemaObject>;
     };
 
-export const ReferenceObject = S.struct({ $ref: S.string });
-export type ReferenceObject = S.To<typeof ReferenceObject>;
-
-export const isReferenceObject = S.is(ReferenceObject);
-
-const referenceOr = <Members extends ReadonlyArray<Schema<any>>>(
-  ...members: Members
-) => S.union(ReferenceObject, ...members);
-
 const SchemaObjectCommon = S.struct({
   title: S.optional(S.string),
   description: S.optional(S.string),
@@ -111,6 +57,10 @@ function schemaCommonAnd<
   return S.extend(SchemaObjectCommon)(S.struct(fields));
 }
 
+/**
+ * The Schema Object allows the definition of input and output data types
+ * https://spec.openapis.org/oas/latest.html#schema-object
+ */
 export const SchemaObject: S.Schema<any, SchemaObject> = S.lazy(() =>
   S.union(
     schemaCommonAnd({
@@ -148,207 +98,3 @@ export const SchemaObject: S.Schema<any, SchemaObject> = S.lazy(() =>
     // sharedSchemaAnd({ anyOf: S.optional(S.array(schema)) })
   )
 );
-
-type ParameterObject = S.To<typeof ParameterObject>;
-
-const ParameterObject = S.struct({
-  name: S.string,
-  in: S.union(
-    S.literal("query"),
-    S.literal("header"),
-    S.literal("path"),
-    S.literal("cookie")
-  ),
-  description: S.optional(S.string),
-  required: S.boolean,
-  deprecated: S.optional(S.boolean),
-  allowEmptyValue: S.optional(S.boolean),
-});
-
-type HeaderObject = S.To<typeof HeaderObject>;
-
-const HeaderObject = S.struct({
-  required: S.boolean,
-  deprecated: S.optional(S.boolean),
-  allowEmptyValue: S.optional(S.boolean),
-});
-
-type ExampleObject = S.To<typeof ExampleObject>;
-
-const ExampleObject = S.struct({
-  summary: S.optional(S.string),
-  description: S.optional(S.string),
-  value: S.any,
-  externalValue: S.string,
-});
-
-type EncodingObject = S.To<typeof EncodingObject>;
-
-const EncodingObject = S.struct({
-  contentType: S.optional(S.string),
-  headers: S.optional(
-    S.record(S.string, S.union(ReferenceObject, HeaderObject))
-  ),
-  style: S.optional(S.string),
-  explode: S.optional(S.boolean),
-  allowReserved: S.optional(S.boolean),
-});
-
-type MediaTypeCommon = S.To<typeof MediaTypeCommon>;
-
-const MediaTypeCommon = S.struct({
-  schema: S.optional(referenceOr(SchemaObject)),
-  encoding: S.optional(S.record(S.string, referenceOr(EncodingObject))),
-});
-
-export const MediaTypeObject = S.union(
-  S.extend(MediaTypeCommon)(
-    S.struct({
-      examples: S.optional(S.record(S.string, referenceOr(ExampleObject))),
-    })
-  ),
-  S.extend(MediaTypeCommon)(
-    S.struct({
-      example: S.optional(S.any),
-    })
-  )
-);
-type MediaTypeObject = S.To<typeof MediaTypeObject>;
-
-const LinkObject = S.struct({
-  operationRef: S.optional(S.string),
-  operationId: S.optional(S.string),
-  parameters: S.optional(S.record(S.string, S.any)),
-  requestBody: S.optional(S.any),
-  description: S.optional(S.string),
-  server: S.optional(ServerObject),
-});
-type LinkObject = S.To<typeof LinkObject>;
-
-export const ResponseObject = S.struct({
-  description: S.string,
-  headers: S.optional(
-    S.record(S.string, S.union(ReferenceObject, HeaderObject))
-  ),
-  content: S.optional(S.record(S.string, MediaTypeObject)),
-  links: S.optional(S.record(S.string, LinkObject)),
-});
-type ResponseObject = S.To<typeof ResponseObject>;
-
-const RequestBodyObject = S.struct({
-  description: S.optional(S.string),
-  content: S.record(S.string, MediaTypeObject),
-  required: S.optional(S.boolean),
-});
-type RequestBodyObject = S.To<typeof RequestBodyObject>;
-
-const ExternalDocumentationObject = S.struct({
-  description: S.optional(S.string),
-  url: url,
-});
-type ExternalDocumentationObject = S.To<typeof ExternalDocumentationObject>;
-
-const ResponsesObject = S.record(
-  restrictedStringKey,
-  referenceOr(ResponseObject)
-);
-type ResponsesObject = S.To<typeof ResponsesObject>;
-
-const SecurityRequirementObject = S.record(S.string, S.array(S.string));
-type SecurityRequirementObject = S.To<typeof SecurityRequirementObject>;
-
-type OperationObject = {
-  tags?: ReadonlyArray<string>;
-  summary?: string;
-  description?: string;
-  externalDocs?: ExternalDocumentationObject;
-  operationId?: string;
-  parameters?: ReadonlyArray<ReferenceObject | ParameterObject>;
-  requestBody?: ReadonlyArray<ReferenceObject | RequestBodyObject>;
-  responses?: ResponsesObject;
-  callbacks?: Record<string, ReferenceObject | CallbackObject>;
-  deprecated?: boolean;
-  security?: ReadonlyArray<SecurityRequirementObject>;
-  servers?: ReadonlyArray<ServerObject>;
-};
-
-const OperationObject: S.Schema<any, OperationObject> = S.lazy(() =>
-  S.struct({
-    tags: S.optional(S.array(S.string)),
-    summary: S.optional(S.string),
-    description: S.optional(S.string),
-    externalDocs: S.optional(ExternalDocumentationObject),
-    operationId: S.optional(S.string),
-    parameters: S.optional(S.array(referenceOr(ParameterObject))),
-    requestBody: S.optional(S.array(referenceOr(RequestBodyObject))),
-    responses: S.optional(ResponsesObject),
-    callbacks: S.optional(S.record(S.string, referenceOr(CallbackObject))),
-    deprecated: S.optional(S.boolean),
-    security: S.optional(S.array(SecurityRequirementObject)),
-    servers: S.optional(S.array(ServerObject)),
-  })
-);
-
-interface PathItemObject {
-  summary?: string;
-  description?: string;
-  get?: OperationObject;
-  put?: OperationObject;
-  post?: OperationObject;
-  delete?: OperationObject;
-  options?: OperationObject;
-  head?: OperationObject;
-  patch?: OperationObject;
-  trace?: OperationObject;
-  servers?: ReadonlyArray<ServerObject>;
-  parameters?: ReadonlyArray<ParameterObject | ReferenceObject>;
-}
-
-const PathItemObject: S.Schema<any, PathItemObject> = S.lazy(() =>
-  S.struct({
-    summary: S.optional(S.string),
-    description: S.optional(S.string),
-    get: S.optional(OperationObject),
-    put: S.optional(OperationObject),
-    post: S.optional(OperationObject),
-    delete: S.optional(OperationObject),
-    options: S.optional(OperationObject),
-    head: S.optional(OperationObject),
-    patch: S.optional(OperationObject),
-    trace: S.optional(OperationObject),
-    servers: S.optional(S.array(ServerObject)),
-    parameters: S.optional(S.array(S.union(ParameterObject, ReferenceObject))),
-  })
-);
-const CallbackObject = S.record(S.string, referenceOr(PathItemObject));
-type CallbackObject = S.To<typeof CallbackObject>;
-
-const PathsObject = S.record(S.string, referenceOr(PathItemObject));
-export const OpenApi = S.struct({
-  openapi: S.union(S.literal("3.0.0"), S.literal("3.1.0")), // https://spec.openapis.org/oas/v3.1.0.html
-  info: InfoObject,
-  jsonSchemaDialect: S.optional(S.string),
-  servers: S.array(ServerObject),
-  components: S.struct({
-    schemas: S.optional(S.record(restrictedStringKey, SchemaObject)),
-    responses: S.optional(ResponsesObject),
-    parameters: S.optional(
-      S.record(restrictedStringKey, referenceOr(ParameterObject))
-    ),
-    examples: S.optional(
-      S.record(restrictedStringKey, referenceOr(ExampleObject))
-    ),
-    requestBodies: S.optional(
-      S.record(restrictedStringKey, referenceOr(RequestBodyObject))
-    ),
-    headers: S.optional(
-      S.record(restrictedStringKey, referenceOr(HeaderObject))
-    ),
-    securitySchemes: S.optional(S.record(restrictedStringKey, S.any)),
-    links: S.optional(S.record(restrictedStringKey, referenceOr(LinkObject))),
-    callbacks: S.optional(S.record(restrictedStringKey, S.any)),
-    pathItems: S.optional(S.record(restrictedStringKey, S.any)),
-  }),
-  paths: S.optional(PathsObject),
-});
-export type OpenApi = S.To<typeof OpenApi>;
