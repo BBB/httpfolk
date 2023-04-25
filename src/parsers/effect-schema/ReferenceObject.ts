@@ -29,6 +29,6 @@ export const localRef = S.templateLiteral(
 export const ReferenceObject = S.struct({ $ref: localRef });
 export type ReferenceObject = S.To<typeof ReferenceObject>;
 export const isReferenceObject = S.is(ReferenceObject);
-export const referenceOr = <Members extends ReadonlyArray<Schema<any>>>(
+export const referenceOr = <Members extends readonly Schema<any, any>[]>(
   ...members: Members
 ) => S.union(ReferenceObject, ...members);
