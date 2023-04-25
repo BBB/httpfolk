@@ -6,7 +6,6 @@ import * as S from "@effect/schema/Schema";
 import { OpenApi } from "../parsers/effect-schema/OpenApi";
 import { Result } from "@ollierelph/result4t";
 import { decodeToResult } from "../parsers/effect-schema/lib/decodeToResult";
-import { ParseError } from "@effect/schema/ParseResult";
 
 export class ReferenceNotFound {
   protected constructor(public ref: ReferenceObject) {}

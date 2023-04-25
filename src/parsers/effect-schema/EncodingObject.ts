@@ -1,5 +1,4 @@
 import * as S from "@effect/schema/Schema";
-import { ReferenceObject } from "./ReferenceObject";
 import { HeaderObject } from "./HeaderObject";
 
 export const EncodingObject = S.struct({
