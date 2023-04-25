@@ -14,7 +14,7 @@
     "moduleResolution": "node",
     "noEmit": false,
     "lib": [
-      "ES2021"
+      "ES2022"
     ],
     "sourceMap": true,
     "declarationMap": true,
@@ -34,13 +34,15 @@
     "noUncheckedIndexedAccess": false,
     "strictNullChecks": true,
     "baseUrl": ".",
-    "target": "ES2021",
+    "target": "ES2022",
     "module": "ES6",
     "incremental": true,
-    "removeComments": false,                             /* Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */
+    "removeComments": false,
     "outDir": "./dist"
   },
-  "include": [],
+  "include": [
+    "src", "test"
+  ],
   "exclude": [
     "node_modules",
     "dist",

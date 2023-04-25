@@ -1,7 +1,9 @@
 {
   "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "declaration": true
-  },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "test",
+    "dist",
+  ]
 }
