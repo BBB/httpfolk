@@ -1,10 +1,22 @@
 import { describe, expect, it } from "vitest";
 import {
-  localRef,
   ReferenceObject,
+  referenceOr,
 } from "../../../src/parsers/effect-schema/ReferenceObject";
 import { decodeToResult } from "../../../src/parsers/effect-schema/lib/decodeToResult";
 import { Failure, Result } from "@ollierelph/result4t";
+import * as S from "@effect/schema/Schema";
+
+describe("referenceOr", () => {
+  it("expands the schema into a union", () => {
+    const Schema = referenceOr(S.string);
+    const decode = decodeToResult(Schema);
+    expect(decode("woo")).toStrictEqual(Result.success("woo"));
+    expect(decode({ $ref: "#/components/responses/a" })).toStrictEqual(
+      Result.success({ $ref: "#/components/responses/a" })
+    );
+  });
+});
 
 describe("localRef", () => {
   it("should parse a valid ref", () => {

@@ -1,4 +1,3 @@
-import { Schema } from "@effect/schema/src/Schema";
 import * as S from "@effect/schema/Schema";
 
 export const componentFieldNames = S.union(
@@ -14,11 +13,6 @@ export const componentFieldNames = S.union(
   S.literal("pathItems")
 );
 
-/**
- * A simple object to allow referencing other components in the OpenAPI document, internally and externally.
- * https://spec.openapis.org/oas/latest.html#reference-object
- */
-
 export const localRef = S.templateLiteral(
   S.literal("#/components/"),
   componentFieldNames,
@@ -26,9 +20,13 @@ export const localRef = S.templateLiteral(
   S.string
 );
 
+/**
+ * A simple object to allow referencing other components in the OpenAPI document, internally and externally.
+ * https://spec.openapis.org/oas/latest.html#reference-object
+ */
 export const ReferenceObject = S.struct({ $ref: localRef });
 export type ReferenceObject = S.To<typeof ReferenceObject>;
 export const isReferenceObject = S.is(ReferenceObject);
-export const referenceOr = <Members extends readonly Schema<any, any>[]>(
+export const referenceOr = <Members extends readonly S.Schema<any, any>[]>(
   ...members: Members
 ) => S.union(ReferenceObject, ...members);
