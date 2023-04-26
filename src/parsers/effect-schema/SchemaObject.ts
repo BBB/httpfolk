@@ -1,5 +1,4 @@
 import * as S from "@effect/schema/Schema";
-import { PropertySignature, Schema } from "@effect/schema/src/Schema";
 import { ReferenceObject, referenceOr } from "./ReferenceObject";
 import { format } from "./lib/scalar/format";
 
@@ -48,10 +47,10 @@ const SchemaObjectCommon = S.struct({
 function schemaCommonAnd<
   Fields extends Record<
     PropertyKey,
-    | Schema<any>
-    | Schema<never>
-    | PropertySignature<any, boolean, any, boolean>
-    | PropertySignature<never, boolean, never, boolean>
+    | S.Schema<any>
+    | S.Schema<never>
+    | S.PropertySignature<any, boolean, any, boolean>
+    | S.PropertySignature<never, boolean, never, boolean>
   >
 >(fields: Fields) {
   return S.extend(SchemaObjectCommon)(S.struct(fields));
