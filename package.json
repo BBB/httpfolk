@@ -7,7 +7,7 @@
     "test": "vitest",
     "build": "pnpm tsc -p tsconfig.build.json",
     "format": "prettier --write ./{src,test}",
-    "publish-package": "exit 1"
+    "publish-package": "exit 0"
   },
   "keywords": [],
   "author": "",
