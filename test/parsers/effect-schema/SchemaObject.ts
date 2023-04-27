@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { SchemaObject } from "../../../src/parsers/effect-schema/SchemaObject";
 import {
   allOfSchema,
   arraySchema,
@@ -9,8 +8,9 @@ import {
   objectSchema,
   oneOfSchema,
   stringSchema,
-} from "../../../src/inputs/schemas";
-import { decodeToResult } from "../../../src/parsers/effect-schema/lib/decodeToResult";
+} from "~/src/inputs/schemas";
+import { EffectSchema } from "~/src/parsers/effect-schema/EffectSchema";
+import { SchemaObject } from "~/src/parsers/effect-schema/schemas/SchemaObject";
 
 describe("oneOf", () => {
   it("should allow oneOf", () => {
@@ -162,10 +162,11 @@ describe("string", () => {
   });
 });
 
-const schemaDecoder = decodeToResult(SchemaObject);
-
 function underTest(value: unknown) {
-  return schemaDecoder(value).getOrElse(() => {
-    throw new Error("Unexpected");
-  });
+  return EffectSchema.for(SchemaObject)
+    .parse(value)
+    .getOrElse((err) => {
+      console.log(err);
+      throw err;
+    });
 }

@@ -1,6 +1,6 @@
 import * as S from "@effect/schema/Schema";
 import { ReferenceObject, referenceOr } from "./ReferenceObject";
-import { format } from "./lib/scalar/format";
+import { format } from "../lib/scalar/format";
 
 type SchemaCommon = {
   readonly title?: string;
@@ -57,7 +57,7 @@ function schemaCommonAnd<
 }
 
 /**
- * The Schema Object allows the definition of input and output data types
+ * The Schema.ts Object allows the definition of input and output data types
  * https://spec.openapis.org/oas/latest.html#schema-object
  */
 export const SchemaObject: S.Schema<any, SchemaObject> = S.lazy(() =>

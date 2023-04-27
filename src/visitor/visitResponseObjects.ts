@@ -1,9 +1,9 @@
-import { OpenApi } from "../parsers/effect-schema/OpenApi";
 import { getReference } from "./getReference";
 import { visitOperationObjects } from "./visitOperationObjects";
-import { ResponseObject } from "../parsers/effect-schema/ResponseObject";
-import { isReferenceObject } from "../parsers/effect-schema/ReferenceObject";
-import { OperationObject } from "../parsers/effect-schema/OperationObject";
+import { OpenApi } from "../parsers/effect-schema/schemas/OpenApi";
+import { ResponseObject } from "../parsers/effect-schema/schemas/ResponseObject";
+import { isReferenceObject } from "../parsers/effect-schema/schemas/ReferenceObject";
+import { OperationObject } from "../parsers/effect-schema/schemas/OperationObject";
 
 export function visitResponseObjects<T>(schema: OpenApi) {
   const goto = getReference(schema);

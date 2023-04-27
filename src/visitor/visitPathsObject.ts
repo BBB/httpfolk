@@ -1,6 +1,6 @@
-import { OpenApi } from "../parsers/effect-schema/OpenApi";
 import { visitOpenApi } from "./visitOpenApi";
-import { PathsObject } from "../parsers/effect-schema/PathsObject";
+import { OpenApi } from "../parsers/effect-schema/schemas/OpenApi";
+import { PathsObject } from "../parsers/effect-schema/schemas/PathsObject";
 
 export function visitPathsObject<T>(schema: OpenApi) {
   const visitParent = visitOpenApi(schema);

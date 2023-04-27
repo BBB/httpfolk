@@ -1,7 +1,7 @@
 import { expect, it } from "vitest";
-import { visitSchemaObjects } from "../../src/visitor/visitSchemaObjects";
-import { buildOpenApi } from "../../src/parsers/effect-schema/OpenApi";
-import { SchemaObject } from "../../src/parsers/effect-schema/SchemaObject";
+import { visitSchemaObjects } from "~/src/visitor/visitSchemaObjects";
+import { SchemaObject } from "~/src/parsers/effect-schema/schemas/SchemaObject";
+import { buildOpenApi } from "~/src/parsers/effect-schema/schemas/OpenApi";
 
 it("visits every schemaObject", () => {
   const schemas: SchemaObject[] = [];

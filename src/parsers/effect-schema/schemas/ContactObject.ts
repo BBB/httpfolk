@@ -1,6 +1,6 @@
 import * as S from "@effect/schema/Schema";
-import { url } from "./lib/scalar/url";
-import { email } from "./lib/scalar/email";
+import { url } from "../lib/scalar/url";
+import { email } from "../lib/scalar/email";
 
 export const ContactObject = S.optional(
   S.struct({

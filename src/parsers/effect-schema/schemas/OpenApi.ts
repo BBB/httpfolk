@@ -18,7 +18,7 @@ export function buildOpenApi(): OpenApi {
   return {
     openapi: "3.1.0",
     info: {
-      title: "My Schema",
+      title: "My Schema.ts",
       version: "1",
     },
     servers: [],

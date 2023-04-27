@@ -1,8 +1,8 @@
-import { SchemaObject } from "../parsers/effect-schema/SchemaObject";
-import { isReferenceObject } from "../parsers/effect-schema/ReferenceObject";
-import { OpenApi } from "../parsers/effect-schema/OpenApi";
 import { getReference } from "./getReference";
 import { visitMediaTypeObjects } from "./visitMediaTypeObjects";
+import { SchemaObject } from "../parsers/effect-schema/schemas/SchemaObject";
+import { OpenApi } from "../parsers/effect-schema/schemas/OpenApi";
+import { isReferenceObject } from "../parsers/effect-schema/schemas/ReferenceObject";
 
 export function visitSchemaObjects<T>(schema: OpenApi) {
   const goto = getReference(schema);

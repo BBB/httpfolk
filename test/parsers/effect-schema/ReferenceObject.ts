@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
+import { decodeToResult } from "~/src/parsers/effect-schema/lib/decodeToResult";
+import { Failure, Result } from "@ollierelph/result4t";
+import * as S from "@effect/schema/Schema";
 import {
   ReferenceObject,
   referenceOr,
-} from "../../../src/parsers/effect-schema/ReferenceObject";
-import { decodeToResult } from "../../../src/parsers/effect-schema/lib/decodeToResult";
-import { Failure, Result } from "@ollierelph/result4t";
-import * as S from "@effect/schema/Schema";
+} from "~/src/parsers/effect-schema/schemas/ReferenceObject";
 
 describe("referenceOr", () => {
   it("expands the schema into a union", () => {

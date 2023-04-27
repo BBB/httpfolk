@@ -1,5 +1,5 @@
 import * as S from "@effect/schema/Schema";
-import { restrictedStringKey } from "./lib/scalar/restrictedStringKey";
+import { restrictedStringKey } from "../lib/scalar/restrictedStringKey";
 import { referenceOr } from "./ReferenceObject";
 import { ResponseObject } from "./ResponseObject";
 

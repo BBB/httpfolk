@@ -1,6 +1,6 @@
-import { OpenApi } from "../parsers/effect-schema/OpenApi";
 import { visitPathItemObjects } from "./visitPathItemObjects";
-import { OperationObject } from "../parsers/effect-schema/OperationObject";
+import { OpenApi } from "../parsers/effect-schema/schemas/OpenApi";
+import { OperationObject } from "../parsers/effect-schema/schemas/OperationObject";
 
 const operationNames = [
   "get",

@@ -1,8 +1,8 @@
-import { OpenApi } from "../parsers/effect-schema/OpenApi";
 import { getReference } from "./getReference";
 import { visitPathsObject } from "./visitPathsObject";
-import { PathItemObject } from "../parsers/effect-schema/PathItemObject";
-import { isReferenceObject } from "../parsers/effect-schema/ReferenceObject";
+import { OpenApi } from "../parsers/effect-schema/schemas/OpenApi";
+import { PathItemObject } from "../parsers/effect-schema/schemas/PathItemObject";
+import { isReferenceObject } from "../parsers/effect-schema/schemas/ReferenceObject";
 
 export function visitPathItemObjects<T>(schema: OpenApi) {
   const goto = getReference(schema);

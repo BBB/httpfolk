@@ -1,5 +1,5 @@
 import * as S from "@effect/schema/Schema";
-import { url } from "./lib/scalar/url";
+import { url } from "../lib/scalar/url";
 
 const ServerVariablesObject = S.optional(
   S.record(

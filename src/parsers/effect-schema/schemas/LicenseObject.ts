@@ -1,5 +1,5 @@
 import * as S from "@effect/schema/Schema";
-import { url } from "./lib/scalar/url";
+import { url } from "../lib/scalar/url";
 
 export const LicenseObject = S.optional(
   S.struct({

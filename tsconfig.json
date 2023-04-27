@@ -34,6 +34,10 @@
     "noUncheckedIndexedAccess": false,
     "strictNullChecks": true,
     "baseUrl": ".",
+    "paths": {
+      "~/src/*": ["src/*"],
+      "~/test/*": ["test/*"]
+    },
     "target": "ES2022",
     "module": "ES6",
     "incremental": true,

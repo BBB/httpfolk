@@ -1,11 +1,11 @@
 import { it } from "vitest";
-import { decodeToResult } from "../../../src/parsers/effect-schema/lib/decodeToResult";
+
+import { EffectSchema } from "~/src/parsers/effect-schema/EffectSchema";
 import {
   buildOpenApi,
   OpenApi,
-} from "../../../src/parsers/effect-schema/OpenApi";
+} from "~/src/parsers/effect-schema/schemas/OpenApi";
 
-import { formatErrors } from "@effect/schema/TreeFormatter";
 it.each([
   [buildOpenApi()],
   [
@@ -235,11 +235,11 @@ it.each([
   underTest(input);
 });
 
-const schemaDecoder = decodeToResult(OpenApi);
-
 function underTest(value: unknown) {
-  return schemaDecoder(value).getOrElse((err) => {
-    console.error(formatErrors(err.errors));
-    throw err;
-  });
+  return EffectSchema.for(OpenApi)
+    .parse(value)
+    .getOrElse((err) => {
+      console.log(err);
+      throw err;
+    });
 }

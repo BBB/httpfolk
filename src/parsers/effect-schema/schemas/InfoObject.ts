@@ -1,7 +1,7 @@
 import * as S from "@effect/schema/Schema";
-import { url } from "./lib/scalar/url";
 import { ContactObject } from "./ContactObject";
 import { LicenseObject } from "./LicenseObject";
+import { url } from "../lib/scalar/url";
 
 /**
  * https://spec.openapis.org/oas/v3.1.0.html#info-object

@@ -1,11 +1,11 @@
+import * as S from "@effect/schema/Schema";
+import { Result } from "@ollierelph/result4t";
+import { decodeToResult } from "../parsers/effect-schema/lib/decodeToResult";
 import {
   componentFieldNames,
   ReferenceObject,
-} from "../parsers/effect-schema/ReferenceObject";
-import * as S from "@effect/schema/Schema";
-import { OpenApi } from "../parsers/effect-schema/OpenApi";
-import { Result } from "@ollierelph/result4t";
-import { decodeToResult } from "../parsers/effect-schema/lib/decodeToResult";
+} from "../parsers/effect-schema/schemas/ReferenceObject";
+import { OpenApi } from "../parsers/effect-schema/schemas/OpenApi";
 
 export class ReferenceNotFound {
   protected constructor(public ref: ReferenceObject) {}
@@ -41,7 +41,7 @@ export const getReference =
     return decodeComponentFieldNames(section as any)
       .mapFailure((_) => ReferenceNotFound.of(ref))
       .flatMap((s) => {
-        const component = schema.components[s];
+        const component = schema.components?.[s];
         const item = component?.[id];
         if (!item) {
           return Result.failure(ReferenceNotFound.of(ref));
