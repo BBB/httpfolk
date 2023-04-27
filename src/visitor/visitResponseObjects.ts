@@ -9,7 +9,7 @@ export function visitResponseObjects<T>(schema: OpenApi) {
   const goto = getReference(schema);
   const visitParent = visitOperationObjects(schema);
   return (visit: (operationObject: ResponseObject) => void) => {
-    visitParent((parent) => {
+    visitParent((method, parent) => {
       const responses = parent.responses;
       if (responses) {
         Object.entries(responses).forEach(([statusCode, operationObject]) => {

@@ -15,12 +15,17 @@ const operationNames = [
 
 export function visitOperationObjects<T>(schema: OpenApi) {
   const visitParent = visitPathItemObjects(schema);
-  return (visit: (operationObject: OperationObject) => void) => {
+  return (
+    visit: (
+      method: (typeof operationNames)[number],
+      operationObject: OperationObject
+    ) => void
+  ) => {
     visitParent((parent) => {
       operationNames.forEach((operationName) => {
         const operation = parent[operationName];
         if (operation) {
-          visit(operation);
+          visit(operationName, operation);
         }
       });
     });

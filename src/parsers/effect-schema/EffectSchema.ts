@@ -6,8 +6,10 @@ import { Result } from "./lib/Result";
 import { ParseOptions } from "@effect/schema/AST";
 import { formatErrors } from "@effect/schema/TreeFormatter";
 
-export class EffectSchema<Out, TheSchema extends S.Schema<Out>>
-  implements Schema<Out>
+export class EffectSchema<
+  TheSchema extends S.Schema<any>,
+  Out = TheSchema extends S.Schema<infer R> ? R : never
+> implements Schema<Out>
 {
   private readonly decoder: (
     input: unknown,
