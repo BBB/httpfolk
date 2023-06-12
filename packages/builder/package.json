@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "tscheck": "tsc --noEmit",
-    "test:unit": "exit 0",
+    "test:unit": "vitest --run",
     "build": "pnpm tsc -p tsconfig.build.json",
     "format": "prettier --write ./{src,test}",
     "publish-package": "exit 0"
