@@ -1,18 +1,29 @@
 import { getReference } from "./getReference";
-import { visitPathsObject } from "./visitPathsObject";
-import { OpenApi } from "../parsers/effect-schema/schemas/OpenApi";
+import { Paths, visitPathsObject } from "./visitPathsObject";
+import { OpenApiObject } from "../parsers/effect-schema/schemas/OpenApiObject";
 import { PathItemObject } from "../parsers/effect-schema/schemas/PathItemObject";
 import { isReferenceObject } from "../parsers/effect-schema/schemas/ReferenceObject";
+import { NodeAndParent } from "~/src/visitor/lib/NodeAndParent";
 
-export function visitPathItemObjects<T>(schema: OpenApi) {
+type PathItemNode = { path: string; definition: PathItemObject };
+
+export class PathItem implements NodeAndParent<PathItemNode, Paths> {
+  protected constructor(public node: PathItemNode, public parent: Paths) {}
+  static of(path: string, definition: PathItemObject, parent: Paths) {
+    return new PathItem({ path, definition }, parent);
+  }
+}
+export function visitPathItemObjects<T>(schema: OpenApiObject) {
   const goto = getReference(schema);
   const visitParent = visitPathsObject(schema);
-  return (visit: (pathItemObject: PathItemObject) => void) => {
+  return (visit: (pathItemObject: PathItem) => void) => {
     visitParent((parent) => {
-      Object.entries(parent).forEach(([path, pathItem]) =>
+      Object.entries(parent.node).forEach(([path, pathItem]) =>
         isReferenceObject(pathItem)
-          ? goto(pathItem, PathItemObject).map(visit)
-          : visit(pathItem)
+          ? goto(pathItem, PathItemObject).map((definition) =>
+              visit(PathItem.of(path, definition, parent))
+            )
+          : visit(PathItem.of(path, pathItem, parent))
       );
     });
   };

@@ -5,7 +5,7 @@ import {
   componentFieldNames,
   ReferenceObject,
 } from "../parsers/effect-schema/schemas/ReferenceObject";
-import { OpenApi } from "../parsers/effect-schema/schemas/OpenApi";
+import { OpenApiObject } from "../parsers/effect-schema/schemas/OpenApiObject";
 
 export class ReferenceNotFound {
   protected constructor(public ref: ReferenceObject) {}
@@ -29,7 +29,7 @@ export type Goto = <T>(
   itemSchema: S.Schema<T>
 ) => Result<T, ReferenceNotFound | ReferenceNotExpected>;
 export const getReference =
-  (schema: OpenApi): Goto =>
+  (schema: OpenApiObject): Goto =>
   <T>(
     ref: ReferenceObject,
     itemSchema: S.Schema<T>

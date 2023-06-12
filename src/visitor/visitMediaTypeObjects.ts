@@ -1,18 +1,32 @@
 import { getReference } from "./getReference";
-import { visitContentObjects } from "./visitContentObjects";
-import { OpenApi } from "../parsers/effect-schema/schemas/OpenApi";
+import { Content, visitContentObjects } from "./visitContentObjects";
+import { OpenApiObject } from "../parsers/effect-schema/schemas/OpenApiObject";
 import { MediaTypeObject } from "../parsers/effect-schema/schemas/MediaTypeObject";
 import { isReferenceObject } from "../parsers/effect-schema/schemas/ReferenceObject";
+import { NodeAndParent } from "~/src/visitor/lib/NodeAndParent";
 
-export function visitMediaTypeObjects<T>(schema: OpenApi) {
+type MediaTypeNode = {
+  contentType: string;
+  definition: MediaTypeObject;
+};
+
+export class MediaType implements NodeAndParent<MediaTypeNode, Content> {
+  protected constructor(public node: MediaTypeNode, public parent: Content) {}
+  static of(contentType: string, definition: MediaTypeObject, parent: Content) {
+    return new MediaType({ contentType, definition }, parent);
+  }
+}
+export function visitMediaTypeObjects<T>(schema: OpenApiObject) {
   const goto = getReference(schema);
   const visitParent = visitContentObjects(schema);
-  return (visit: (mediaTypeObject: MediaTypeObject) => void) => {
+  return (visit: (mediaTypeObject: MediaType) => void) => {
     visitParent((parent) => {
-      Object.entries(parent).forEach(([contentType, mediaTypeObject]) => {
+      Object.entries(parent.node).forEach(([contentType, mediaTypeObject]) => {
         isReferenceObject(mediaTypeObject)
-          ? goto(mediaTypeObject, MediaTypeObject).map(visit)
-          : visit(mediaTypeObject);
+          ? goto(mediaTypeObject, MediaTypeObject).map((definition) =>
+              visit(MediaType.of(contentType, definition, parent))
+            )
+          : visit(MediaType.of(contentType, mediaTypeObject, parent));
       });
     });
   };

@@ -3,8 +3,8 @@ import { it } from "vitest";
 import { EffectSchema } from "~/src/parsers/effect-schema/EffectSchema";
 import {
   buildOpenApi,
-  OpenApi,
-} from "~/src/parsers/effect-schema/schemas/OpenApi";
+  OpenApiObject,
+} from "~/src/parsers/effect-schema/schemas/OpenApiObject";
 
 it.each([
   [buildOpenApi()],
@@ -236,7 +236,7 @@ it.each([
 });
 
 function underTest(value: unknown) {
-  return EffectSchema.for(OpenApi)
+  return EffectSchema.for(OpenApiObject)
     .parse(value)
     .getOrElse((err) => {
       console.log(err);

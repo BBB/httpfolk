@@ -1,12 +1,12 @@
 import { EffectSchema } from "~/src/parsers/effect-schema/EffectSchema";
 import {
   buildOpenApi,
-  OpenApi,
-} from "~/src/parsers/effect-schema/schemas/OpenApi";
+  OpenApiObject,
+} from "~/src/parsers/effect-schema/schemas/OpenApiObject";
 import { EffectBuilder } from "~/src/builders/effect-schema/EffectBuilder";
 
 export const run = (
-  parser = EffectSchema.for(OpenApi),
+  parser = EffectSchema.for(OpenApiObject),
   Builder = EffectBuilder
 ) => {
   const input = buildOpenApi();

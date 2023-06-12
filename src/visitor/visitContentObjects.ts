@@ -1,14 +1,22 @@
-import { visitResponseObjects } from "./visitResponseObjects";
-import { OpenApi } from "../parsers/effect-schema/schemas/OpenApi";
+import { Response, visitResponseObjects } from "./visitResponseObjects";
+import { OpenApiObject } from "../parsers/effect-schema/schemas/OpenApiObject";
 import { ContentObject } from "../parsers/effect-schema/schemas/ContentObject";
+import { NodeAndParent } from "~/src/visitor/lib/NodeAndParent";
 
-export function visitContentObjects<T>(schema: OpenApi) {
+export class Content implements NodeAndParent<ContentObject, Response> {
+  protected constructor(public node: ContentObject, public parent: Response) {}
+  static of(definition: ContentObject, parent: Response) {
+    return new Content(definition, parent);
+  }
+}
+
+export function visitContentObjects<T>(schema: OpenApiObject) {
   const visitParent = visitResponseObjects(schema);
-  return (visit: (contentObject: ContentObject) => void) => {
+  return (visit: (contentObject: Content) => void) => {
     visitParent((parent) => {
-      const content = parent.content;
+      const content = parent.node.definition.content;
       if (content) {
-        visit(content);
+        visit(Content.of(content, parent));
       }
     });
   };

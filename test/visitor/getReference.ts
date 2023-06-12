@@ -1,7 +1,7 @@
 import { expect, it } from "vitest";
 import { getReference, ReferenceNotFound } from "~/src/visitor/getReference";
 import { Result } from "@ollierelph/result4t";
-import { buildOpenApi } from "~/src/parsers/effect-schema/schemas/OpenApi";
+import { buildOpenApi } from "~/src/parsers/effect-schema/schemas/OpenApiObject";
 import { SchemaObject } from "~/src/parsers/effect-schema/schemas/SchemaObject";
 
 it("resolves a known item", () => {

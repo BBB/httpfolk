@@ -1,8 +1,9 @@
-import { visitPathItemObjects } from "./visitPathItemObjects";
-import { OpenApi } from "../parsers/effect-schema/schemas/OpenApi";
+import { PathItem, visitPathItemObjects } from "./visitPathItemObjects";
+import { OpenApiObject } from "../parsers/effect-schema/schemas/OpenApiObject";
 import { OperationObject } from "../parsers/effect-schema/schemas/OperationObject";
+import { NodeAndParent } from "~/src/visitor/lib/NodeAndParent";
 
-const operationNames = [
+const allOperationNames = [
   "get",
   "put",
   "post",
@@ -13,19 +14,32 @@ const operationNames = [
   "trace",
 ] as const;
 
-export function visitOperationObjects<T>(schema: OpenApi) {
+type OperationName = (typeof allOperationNames)[number];
+
+type OperationNode = { name: string; definition: OperationObject };
+
+export class Operation implements NodeAndParent<OperationNode, PathItem> {
+  protected constructor(public node: OperationNode, public parent: PathItem) {}
+  static of(
+    name: OperationName,
+    definition: OperationObject,
+    parent: PathItem
+  ) {
+    return new Operation({ name, definition }, parent);
+  }
+}
+
+export function visitOperationObjects<T>(
+  schema: OpenApiObject,
+  operations: readonly OperationName[] = allOperationNames
+) {
   const visitParent = visitPathItemObjects(schema);
-  return (
-    visit: (
-      method: (typeof operationNames)[number],
-      operationObject: OperationObject
-    ) => void
-  ) => {
+  return (visit: (operation: Operation) => void) => {
     visitParent((parent) => {
-      operationNames.forEach((operationName) => {
-        const operation = parent[operationName];
+      operations.forEach((operationName) => {
+        const operation = parent.node.definition[operationName];
         if (operation) {
-          visit(operationName, operation);
+          visit(Operation.of(operationName, operation, parent));
         }
       });
     });
