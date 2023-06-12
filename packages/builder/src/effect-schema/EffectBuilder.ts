@@ -1,17 +1,32 @@
 import { Builder, BuildFailure } from "../lib/Builder";
-import { OpenApiObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
+import * as ts from "typescript";
+
+import { OpenApiObject } from "@ollierelph/openapi-parser";
 import { Result } from "@ollierelph/result4t";
-import { visitOperationObjects } from "@ollierelph/openapi-visitor/src/visitOperationObjects";
+import { visitPathItemObjects } from "@ollierelph/openapi-visitor/src/visitPathItemObjects";
+import { ObjectLiteralElementLike } from "typescript";
+import { printAst } from "~/src/lib/printAst";
 
 export class EffectBuilder implements Builder {
   build(input: OpenApiObject) {
     return Result.success(input)
       .map(() => {
-        const pathItems = [];
-        visitOperationObjects(input)((operation) => {
-          pathItems.push(operation.node.definition);
+        const pathProperties: ObjectLiteralElementLike[] = [];
+
+        console.log({ fac: ts.factory });
+
+        visitPathItemObjects(input)((pathItem) => {
+          pathProperties.push(
+            ts.factory.createPropertyAssignment(
+              pathItem.node.path,
+              ts.factory.createObjectLiteralExpression()
+            )
+          );
         });
-        return "";
+
+        return printAst(
+          ts.factory.createObjectLiteralExpression(pathProperties)
+        );
       })
       .mapFailure(() => new BuildFailure());
   }

@@ -2,7 +2,6 @@
   "name": "@ollierelph/openapi-parser",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "tscheck": "tsc --noEmit",
     "test:unit": "vitest --run",
@@ -11,6 +10,7 @@
     "publish-package": "exit 0"
   },
   "keywords": [],
+  "main": "src/index.ts",
   "author": "",
   "license": "ISC",
   "dependencies": {
