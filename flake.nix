@@ -9,7 +9,7 @@
     in {
       devShells.default = pkgs.mkShell {
         packages = [
-          pkgs.nodejs-16_x
+          pkgs.nodejs-18_x
           pkgs.nodePackages.pnpm ];
       };
     });
