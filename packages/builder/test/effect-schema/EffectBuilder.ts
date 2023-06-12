@@ -7,7 +7,9 @@ import {
 } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
 
 it("should create a paths dictionary", () => {
-  expect(underTest().get()).toEqual("");
+  expect(underTest().get()).toEqual(
+    "{ get: { /a: undefined, /b: undefined }, post: { /a: undefined, /b: undefined } }"
+  );
 });
 
 class BuildFailure {

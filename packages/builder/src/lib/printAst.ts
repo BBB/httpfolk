@@ -1,4 +1,4 @@
-import * as ts from "typescript";
+import ts from "typescript";
 
 export function printAst(ast: ts.Node) {
   const resultFile = ts.createSourceFile(
