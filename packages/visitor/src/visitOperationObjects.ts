@@ -1,7 +1,7 @@
 import { PathItem, visitPathItemObjects } from "./visitPathItemObjects";
-import { OpenApiObject } from "../parsers/effect-schema/schemas/OpenApiObject";
-import { OperationObject } from "../parsers/effect-schema/schemas/OperationObject";
-import { NodeAndParent } from "~/src/visitor/lib/NodeAndParent";
+import { OpenApiObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
+import { OperationObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OperationObject";
+import { NodeAndParent } from "./lib/NodeAndParent";
 
 const allOperationNames = [
   "get",

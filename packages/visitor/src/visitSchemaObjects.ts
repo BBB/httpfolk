@@ -1,8 +1,8 @@
 import { getReference } from "./getReference";
 import { visitMediaTypeObjects } from "./visitMediaTypeObjects";
-import { SchemaObject } from "../parsers/effect-schema/schemas/SchemaObject";
-import { OpenApiObject } from "../parsers/effect-schema/schemas/OpenApiObject";
-import { isReferenceObject } from "../parsers/effect-schema/schemas/ReferenceObject";
+import { SchemaObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/SchemaObject";
+import { OpenApiObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
+import { isReferenceObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/ReferenceObject";
 
 export function visitSchemaObjects<T>(schema: OpenApiObject) {
   const goto = getReference(schema);

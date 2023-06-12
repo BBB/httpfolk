@@ -1,13 +1,9 @@
 {
   "name": "@ollierelph/openapi",
+  "private": true,
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "vitest",
-    "build": "pnpm tsc -p tsconfig.build.json",
-    "format": "prettier --write ./{src,test}",
-    "publish-package": "exit 0"
   },
   "keywords": [],
   "author": "",
@@ -16,17 +12,11 @@
     "@ollierelph/result4t": "^0.2.4"
   },
   "devDependencies": {
-    "@effect/data": "^0.12.2",
-    "@effect/schema": "^0.17.2",
-    "@types/node": "^18.16.1",
     "prettier": "^2.8.3",
     "typescript": "^5.0.4",
     "vite": "^4.0.4",
     "vite-tsconfig-paths": "^4.2.0",
-    "vitest": "^0.27.1"
-  },
-  "peerDependencies": {
-    "@effect/data": "^0.12.2",
-    "@effect/schema": "^0.17.2"
+    "vitest": "^0.27.1",
+    "turbo": "^1.9.9"
   }
 }

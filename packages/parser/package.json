@@ -1,0 +1,27 @@
+{
+  "name": "@ollierelph/openapi-parser",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tscheck": "tsc --noEmit",
+    "test:unit": "vitest --run",
+    "build": "pnpm tsc -p tsconfig.build.json",
+    "format": "prettier --write ./{src,test}",
+    "publish-package": "exit 0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@effect/data": "^0.12.2",
+    "@effect/schema": "^0.17.2",
+    "@types/node": "^18.16.1"
+  },
+  "peerDependencies": {
+    "@effect/data": "^0.12.2",
+    "@effect/schema": "^0.17.2"
+  }
+}

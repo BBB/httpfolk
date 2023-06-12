@@ -1,7 +1,7 @@
 import { OpenApi, visitOpenApi } from "./visitOpenApi";
-import { OpenApiObject } from "../parsers/effect-schema/schemas/OpenApiObject";
-import { PathsObject } from "../parsers/effect-schema/schemas/PathsObject";
-import { NodeAndParent } from "~/src/visitor/lib/NodeAndParent";
+import { OpenApiObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
+import { PathsObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/PathsObject";
+import { NodeAndParent } from "./lib/NodeAndParent";
 
 type PathsObjectNode = PathsObject;
 

@@ -1,0 +1,4 @@
+packages:
+  # the root package.json
+  - "."
+  - "packages/**"

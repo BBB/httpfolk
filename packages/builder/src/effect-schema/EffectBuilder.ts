@@ -1,7 +1,7 @@
-import { Builder, BuildFailure } from "~/src/builders/lib/Builder";
-import { OpenApiObject } from "~/src/parsers/effect-schema/schemas/OpenApiObject";
+import { Builder, BuildFailure } from "../lib/Builder";
+import { OpenApiObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
 import { Result } from "@ollierelph/result4t";
-import { visitOperationObjects } from "~/src/visitor/visitOperationObjects";
+import { visitOperationObjects } from "@ollierelph/openapi-visitor/src/visitOperationObjects";
 
 export class EffectBuilder implements Builder {
   build(input: OpenApiObject) {

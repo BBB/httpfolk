@@ -1,11 +1,11 @@
 import * as S from "@effect/schema/Schema";
 import { Result } from "@ollierelph/result4t";
-import { decodeToResult } from "../parsers/effect-schema/lib/decodeToResult";
+import { decodeToResult } from "@ollierelph/openapi-parser/src/parsers/effect-schema/lib/decodeToResult";
 import {
   componentFieldNames,
   ReferenceObject,
-} from "../parsers/effect-schema/schemas/ReferenceObject";
-import { OpenApiObject } from "../parsers/effect-schema/schemas/OpenApiObject";
+} from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/ReferenceObject";
+import { OpenApiObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
 
 export class ReferenceNotFound {
   protected constructor(public ref: ReferenceObject) {}

@@ -1,4 +1,4 @@
-import { SchemaObject } from "~/src/parsers/effect-schema/schemas/SchemaObject";
+import { SchemaObject } from "../parsers/effect-schema/schemas/SchemaObject";
 
 export const stringSchema = () => ({ type: "string" as const });
 export const numberSchema = () => ({ type: "number" as const });

@@ -1,35 +1,78 @@
 lockfileVersion: '6.0'
 
-dependencies:
-  '@ollierelph/result4t':
-    specifier: ^0.2.4
-    version: 0.2.4
+importers:
 
-devDependencies:
-  '@effect/data':
-    specifier: ^0.12.2
-    version: 0.12.2
-  '@effect/schema':
-    specifier: ^0.17.2
-    version: 0.17.2
-  '@types/node':
-    specifier: ^18.16.1
-    version: 18.16.1
-  prettier:
-    specifier: ^2.8.3
-    version: 2.8.3
-  typescript:
-    specifier: ^5.0.4
-    version: 5.0.4
-  vite:
-    specifier: ^4.0.4
-    version: 4.0.4(@types/node@18.16.1)
-  vite-tsconfig-paths:
-    specifier: ^4.2.0
-    version: 4.2.0(typescript@5.0.4)(vite@4.0.4)
-  vitest:
-    specifier: ^0.27.1
-    version: 0.27.1
+  .:
+    dependencies:
+      '@ollierelph/result4t':
+        specifier: ^0.2.4
+        version: 0.2.4
+    devDependencies:
+      prettier:
+        specifier: ^2.8.3
+        version: 2.8.3
+      turbo:
+        specifier: ^1.9.9
+        version: 1.10.3
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
+      vite:
+        specifier: ^4.0.4
+        version: 4.0.4
+      vite-tsconfig-paths:
+        specifier: ^4.2.0
+        version: 4.2.0(typescript@5.0.4)(vite@4.0.4)
+      vitest:
+        specifier: ^0.27.1
+        version: 0.27.1
+
+  packages/builder:
+    dependencies:
+      '@ollierelph/openapi-parser':
+        specifier: workspace:*
+        version: link:../parser
+      '@ollierelph/openapi-visitor':
+        specifier: workspace:*
+        version: link:../visitor
+    devDependencies:
+      '@effect/data':
+        specifier: ^0.12.2
+        version: 0.12.2
+      '@effect/schema':
+        specifier: ^0.17.2
+        version: 0.17.2
+      '@types/node':
+        specifier: ^18.16.1
+        version: 18.16.1
+
+  packages/parser:
+    devDependencies:
+      '@effect/data':
+        specifier: ^0.12.2
+        version: 0.12.2
+      '@effect/schema':
+        specifier: ^0.17.2
+        version: 0.17.2
+      '@types/node':
+        specifier: ^18.16.1
+        version: 18.16.1
+
+  packages/visitor:
+    dependencies:
+      '@ollierelph/openapi-parser':
+        specifier: workspace:*
+        version: link:../parser
+    devDependencies:
+      '@effect/data':
+        specifier: ^0.12.2
+        version: 0.12.2
+      '@effect/schema':
+        specifier: ^0.17.2
+        version: 0.17.2
+      '@types/node':
+        specifier: ^18.16.1
+        version: 18.16.1
 
 packages:
 
@@ -558,6 +601,67 @@ packages:
       typescript: 5.0.4
     dev: true
 
+  /turbo-darwin-64@1.10.3:
+    resolution: {integrity: sha512-IIB9IomJGyD3EdpSscm7Ip1xVWtYb7D0x7oH3vad3gjFcjHJzDz9xZ/iw/qItFEW+wGFcLSRPd+1BNnuLM8AsA==}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /turbo-darwin-arm64@1.10.3:
+    resolution: {integrity: sha512-SBNmOZU9YEB0eyNIxeeQ+Wi0Ufd+nprEVp41rgUSRXEIpXjsDjyBnKnF+sQQj3+FLb4yyi/yZQckB+55qXWEsw==}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /turbo-linux-64@1.10.3:
+    resolution: {integrity: sha512-kvAisGKE7xHJdyMxZLvg53zvHxjqPK1UVj4757PQqtx9dnjYHSc8epmivE6niPgDHon5YqImzArCjVZJYpIGHQ==}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /turbo-linux-arm64@1.10.3:
+    resolution: {integrity: sha512-Qgaqln0IYRgyL0SowJOi+PNxejv1I2xhzXOI+D+z4YHbgSx87ox1IsALYBlK8VRVYY8VCXl+PN12r1ioV09j7A==}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /turbo-windows-64@1.10.3:
+    resolution: {integrity: sha512-rbH9wManURNN8mBnN/ZdkpUuTvyVVEMiUwFUX4GVE5qmV15iHtZfDLUSGGCP2UFBazHcpNHG1OJzgc55GFFrUw==}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /turbo-windows-arm64@1.10.3:
+    resolution: {integrity: sha512-ThlkqxhcGZX39CaTjsHqJnqVe+WImjX13pmjnpChz6q5HHbeRxaJSFzgrHIOt0sUUVx90W/WrNRyoIt/aafniw==}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /turbo@1.10.3:
+    resolution: {integrity: sha512-U4gKCWcKgLcCjQd4Pl8KJdfEKumpyWbzRu75A6FCj6Ctea1PIm58W6Ltw1QXKqHrl2pF9e1raAskf/h6dlrPCA==}
+    hasBin: true
+    requiresBuild: true
+    optionalDependencies:
+      turbo-darwin-64: 1.10.3
+      turbo-darwin-arm64: 1.10.3
+      turbo-linux-64: 1.10.3
+      turbo-linux-arm64: 1.10.3
+      turbo-windows-64: 1.10.3
+      turbo-windows-arm64: 1.10.3
+    dev: true
+
   /type-detect@4.0.8:
     resolution: {integrity: sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==}
     engines: {node: '>=4'}
@@ -607,10 +711,43 @@ packages:
       debug: 4.3.4
       globrex: 0.1.2
       tsconfck: 2.1.1(typescript@5.0.4)
-      vite: 4.0.4(@types/node@18.16.1)
+      vite: 4.0.4
     transitivePeerDependencies:
       - supports-color
       - typescript
+    dev: true
+
+  /vite@4.0.4:
+    resolution: {integrity: sha512-xevPU7M8FU0i/80DMR+YhgrzR5KS2ORy1B4xcX/cXLsvnUWvfHuqMmVU6N0YiJ4JWGRJJsLCgjEzKjG9/GKoSw==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      esbuild: 0.16.17
+      postcss: 8.4.21
+      resolve: 1.22.1
+      rollup: 3.10.0
+    optionalDependencies:
+      fsevents: 2.3.2
     dev: true
 
   /vite@4.0.4(@types/node@18.16.1):

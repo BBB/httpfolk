@@ -1,5 +1,5 @@
-import { OpenApiObject } from "../parsers/effect-schema/schemas/OpenApiObject";
-import { NodeAndParent } from "~/src/visitor/lib/NodeAndParent";
+import { OpenApiObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
+import { NodeAndParent } from "./lib/NodeAndParent";
 
 type OpenApiNode = OpenApiObject;
 
