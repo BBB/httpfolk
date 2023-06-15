@@ -3,8 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "description": "",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -12,11 +11,12 @@
     "@ollierelph/result4t": "^0.2.4"
   },
   "devDependencies": {
+    "@types/prettier": "^2.7.3",
     "prettier": "^2.8.3",
+    "turbo": "^1.9.9",
     "typescript": "^5.0.4",
     "vite": "^4.0.4",
     "vite-tsconfig-paths": "^4.2.0",
-    "vitest": "^0.27.1",
-    "turbo": "^1.9.9"
+    "vitest": "^0.27.1"
   }
 }

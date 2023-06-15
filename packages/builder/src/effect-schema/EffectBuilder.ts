@@ -44,8 +44,13 @@ class MethodPaths {
             ts.factory.createObjectLiteralExpression(
               this.getPaths.map((p) =>
                 ts.factory.createPropertyAssignment(
-                  p,
-                  ts.factory.createIdentifier("undefined")
+                  ts.factory.createStringLiteral(p),
+                  ts.factory.createObjectLiteralExpression([
+                    ts.factory.createPropertyAssignment(
+                      "responses",
+                      ts.factory.createIdentifier("undefined")
+                    ),
+                  ])
                 )
               )
             )
@@ -59,7 +64,21 @@ class MethodPaths {
       .concat(createPropertiesForMethod("post", this.postPaths))
       .concat(createPropertiesForMethod("patch", this.patchPaths))
       .concat(createPropertiesForMethod("delete", this.deletePaths));
-    return ts.factory.createObjectLiteralExpression(properties);
+
+    return ts.factory.createVariableStatement(
+      [ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+      ts.factory.createVariableDeclarationList(
+        [
+          ts.factory.createVariableDeclaration(
+            ts.factory.createIdentifier("paths"),
+            undefined,
+            undefined,
+            ts.factory.createObjectLiteralExpression(properties)
+          ),
+        ],
+        ts.NodeFlags.Const
+      )
+    );
   }
 }
 

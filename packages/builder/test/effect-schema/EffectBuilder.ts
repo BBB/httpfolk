@@ -1,14 +1,22 @@
-import { it, expect } from "vitest";
+import { expect, it } from "vitest";
 import { EffectBuilder } from "~/src/effect-schema/EffectBuilder";
 import { EffectSchema } from "@ollierelph/openapi-parser/src/parsers/effect-schema/EffectSchema";
 import {
-  OpenApiObject,
   buildOpenApi,
+  OpenApiObject,
 } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
+import { TypeScriptProgram } from "~/test/lib/TypeScriptProgram";
 
 it("should create a paths dictionary", () => {
-  expect(underTest().get()).toEqual(
-    "{ get: { /a: undefined, /b: undefined }, post: { /a: undefined, /b: undefined } }"
+  const result = underTest();
+  expect(result.get()).toMatchInlineSnapshot(
+    `
+    // typescript
+    export const paths = {
+      get: { "/a": { responses: undefined }, "/b": { responses: undefined } },
+      post: { "/a": { responses: undefined }, "/b": { responses: undefined } },
+    };
+  `
   );
 });
 
@@ -27,5 +35,6 @@ const underTest = (
       new Builder()
         .build(openApi)
         .mapFailure((inner) => new BuildFailure(inner))
-    );
+    )
+    .map((p) => new TypeScriptProgram(p));
 };
