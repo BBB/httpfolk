@@ -36,5 +36,5 @@ const underTest = (
         .build(openApi)
         .mapFailure((inner) => new BuildFailure(inner))
     )
-    .map((p) => new TypeScriptProgram(p));
+    .map(TypeScriptProgram.of);
 };

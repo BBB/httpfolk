@@ -3,6 +3,10 @@ import prettier from "prettier";
 
 export class TypeScriptProgram {
   constructor(public value: string) {}
+
+  static of(value: string) {
+    return new TypeScriptProgram(value);
+  }
 }
 
 expect.addSnapshotSerializer({
@@ -16,7 +20,7 @@ ${prettier.format((val as TypeScriptProgram).value, {
 });
 
 it("should render a TypeScriptProgram", () => {
-  expect(new TypeScriptProgram("const a = {}")).toMatchInlineSnapshot(`
+  expect(TypeScriptProgram.of("const a = {}")).toMatchInlineSnapshot(`
     // typescript
     const a = {};
   `);
