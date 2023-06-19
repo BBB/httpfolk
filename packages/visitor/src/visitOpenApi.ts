@@ -1,4 +1,4 @@
-import { OpenApiObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
+import { OpenApiObject } from "@ollierelph/openapi-parser";
 import { NodeAndParent } from "./lib/NodeAndParent";
 
 type OpenApiNode = OpenApiObject;

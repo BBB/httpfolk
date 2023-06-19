@@ -1,6 +1,5 @@
 import { Response, visitResponseObjects } from "./visitResponseObjects";
-import { OpenApiObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
-import { ContentObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/ContentObject";
+import { ContentObject, OpenApiObject } from "@ollierelph/openapi-parser";
 import { NodeAndParent } from "./lib/NodeAndParent";
 
 export class Content implements NodeAndParent<ContentObject, Response> {

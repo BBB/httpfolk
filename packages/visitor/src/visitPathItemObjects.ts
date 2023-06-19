@@ -1,8 +1,10 @@
 import { getReference } from "./getReference";
 import { Paths, visitPathsObject } from "./visitPathsObject";
-import { OpenApiObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
-import { PathItemObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/PathItemObject";
-import { isReferenceObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/ReferenceObject";
+import {
+  isReferenceObject,
+  OpenApiObject,
+  PathItemObject,
+} from "@ollierelph/openapi-parser";
 import { NodeAndParent } from "./lib/NodeAndParent";
 
 export type PathItemNode = { path: string; definition: PathItemObject };

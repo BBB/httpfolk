@@ -1,6 +1,5 @@
 import { PathItem, visitPathItemObjects } from "./visitPathItemObjects";
-import { OpenApiObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
-import { OperationObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OperationObject";
+import { OpenApiObject, OperationObject } from "@ollierelph/openapi-parser";
 import { NodeAndParent } from "./lib/NodeAndParent";
 
 const allOperationNames = [

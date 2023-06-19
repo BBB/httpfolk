@@ -1,8 +1,10 @@
 import { getReference } from "./getReference";
 import { Content, visitContentObjects } from "./visitContentObjects";
-import { OpenApiObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
-import { MediaTypeObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/MediaTypeObject";
-import { isReferenceObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/ReferenceObject";
+import {
+  isReferenceObject,
+  MediaTypeObject,
+  OpenApiObject,
+} from "@ollierelph/openapi-parser";
 import { NodeAndParent } from "./lib/NodeAndParent";
 
 type MediaTypeNode = {

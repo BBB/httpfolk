@@ -1,9 +1,11 @@
 import { getReference } from "./getReference";
 import { Operation, visitOperationObjects } from "./visitOperationObjects";
-import { OpenApiObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
-import { ResponseObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/ResponseObject";
-import { isReferenceObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/ReferenceObject";
-import { OperationObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OperationObject";
+import {
+  isReferenceObject,
+  OpenApiObject,
+  OperationObject,
+  ResponseObject,
+} from "@ollierelph/openapi-parser";
 import { NodeAndParent } from "./lib/NodeAndParent";
 
 type ResponseNode = {
