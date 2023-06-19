@@ -5,7 +5,7 @@ import { PathItemObject } from "@ollierelph/openapi-parser/src/parsers/effect-sc
 import { isReferenceObject } from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/ReferenceObject";
 import { NodeAndParent } from "./lib/NodeAndParent";
 
-type PathItemNode = { path: string; definition: PathItemObject };
+export type PathItemNode = { path: string; definition: PathItemObject };
 
 export class PathItem implements NodeAndParent<PathItemNode, Paths> {
   protected constructor(public node: PathItemNode, public parent: Paths) {}

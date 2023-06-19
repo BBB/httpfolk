@@ -1,41 +1,122 @@
 import { Builder, BuildFailure } from "../lib/Builder";
 import ts from "typescript";
 
-import { OpenApiObject } from "@ollierelph/openapi-parser";
+import {
+  OpenApiObject,
+  ResponsesObject,
+  ContentObject,
+  isReferenceObject,
+} from "@ollierelph/openapi-parser";
 import { Result } from "@ollierelph/result4t";
 import { visitPathItemObjects } from "@ollierelph/openapi-visitor/src/visitPathItemObjects";
+import { getReference } from "@ollierelph/openapi-visitor/src/getReference";
 import { printAst } from "~/src/lib/printAst";
 
+type PathResponses = {
+  path: string;
+  responses: ResponsesObject;
+};
+
 class MethodPaths {
-  private getPaths: Array<string> = [];
-  private putPaths: Array<string> = [];
-  private patchPaths: Array<string> = [];
-  private postPaths: Array<string> = [];
-  private deletePaths: Array<string> = [];
-  public addGetPath(path: string) {
+  constructor(private resolveReference: ReturnType<typeof getReference>) {}
+
+  private getPaths: Array<PathResponses> = [];
+  private putPaths: Array<PathResponses> = [];
+  private patchPaths: Array<PathResponses> = [];
+  private postPaths: Array<PathResponses> = [];
+  private deletePaths: Array<PathResponses> = [];
+  public addGetPath(path: PathResponses) {
     this.getPaths.push(path);
   }
 
-  public addPutPath(path: string) {
+  public addPutPath(path: PathResponses) {
     this.putPaths.push(path);
   }
 
-  public addPostPath(path: string) {
+  public addPostPath(path: PathResponses) {
     this.postPaths.push(path);
   }
 
-  public addPatchPath(path: string) {
+  public addPatchPath(path: PathResponses) {
     this.patchPaths.push(path);
   }
 
-  public addDeletePath(path: string) {
+  public addDeletePath(path: PathResponses) {
     this.deletePaths.push(path);
   }
 
   toObjectLiteral() {
+    const responsesToCodec = (definition: ResponsesObject): ts.Expression => {
+      return ts.factory.createCallExpression(
+        ts.factory.createPropertyAccessExpression(
+          ts.factory.createIdentifier("S"),
+          ts.factory.createIdentifier("union")
+        ),
+        undefined,
+        Object.entries(definition).flatMap(([status, def]) => {
+          const res = isReferenceObject(def)
+            ? this.resolveReference(def, ContentObject).getOrElse((err) => {
+                throw err;
+              })
+            : def;
+          if (!res.content) {
+            return [];
+          }
+          return Object.entries(res.content).map(([contentType, media]) => {
+            return ts.factory.createCallExpression(
+              ts.factory.createPropertyAccessExpression(
+                ts.factory.createIdentifier("S"),
+                ts.factory.createIdentifier("struct")
+              ),
+              undefined,
+              [
+                ts.factory.createObjectLiteralExpression(
+                  [
+                    ts.factory.createPropertyAssignment(
+                      ts.factory.createIdentifier("status"),
+                      ts.factory.createCallExpression(
+                        ts.factory.createPropertyAccessExpression(
+                          ts.factory.createIdentifier("S"),
+                          ts.factory.createIdentifier("literal")
+                        ),
+                        undefined,
+                        [ts.factory.createNumericLiteral(status)]
+                      )
+                    ),
+                    ts.factory.createPropertyAssignment(
+                      ts.factory.createIdentifier("contentType"),
+                      ts.factory.createCallExpression(
+                        ts.factory.createPropertyAccessExpression(
+                          ts.factory.createIdentifier("S"),
+                          ts.factory.createIdentifier("literal")
+                        ),
+                        undefined,
+                        [ts.factory.createStringLiteral(contentType)]
+                      )
+                    ),
+                    ts.factory.createPropertyAssignment(
+                      ts.factory.createIdentifier("body"),
+                      ts.factory.createCallExpression(
+                        ts.factory.createPropertyAccessExpression(
+                          ts.factory.createIdentifier("S"),
+                          ts.factory.createIdentifier("struct")
+                        ),
+                        undefined,
+                        []
+                      )
+                    ),
+                  ],
+                  true
+                ),
+              ]
+            );
+          });
+        })
+      );
+    };
     const createPropertiesForMethod = (
       method: string,
-      paths: Array<string>
+      paths: Array<PathResponses>
     ) => {
       if (paths.length > 0) {
         return [
@@ -44,11 +125,11 @@ class MethodPaths {
             ts.factory.createObjectLiteralExpression(
               this.getPaths.map((p) =>
                 ts.factory.createPropertyAssignment(
-                  ts.factory.createStringLiteral(p),
+                  ts.factory.createStringLiteral(p.path),
                   ts.factory.createObjectLiteralExpression([
                     ts.factory.createPropertyAssignment(
                       "responses",
-                      ts.factory.createIdentifier("undefined")
+                      responsesToCodec(p.responses)
                     ),
                   ])
                 )
@@ -65,20 +146,32 @@ class MethodPaths {
       .concat(createPropertiesForMethod("patch", this.patchPaths))
       .concat(createPropertiesForMethod("delete", this.deletePaths));
 
-    return ts.factory.createVariableStatement(
-      [ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
-      ts.factory.createVariableDeclarationList(
-        [
-          ts.factory.createVariableDeclaration(
-            ts.factory.createIdentifier("paths"),
-            undefined,
-            undefined,
-            ts.factory.createObjectLiteralExpression(properties)
-          ),
-        ],
-        ts.NodeFlags.Const
-      )
-    );
+    return [
+      ts.factory.createImportDeclaration(
+        undefined,
+        ts.factory.createImportClause(
+          false,
+          undefined,
+          ts.factory.createNamespaceImport(ts.factory.createIdentifier("S"))
+        ),
+        ts.factory.createStringLiteral("@effect/schema/Schema"),
+        undefined
+      ),
+      ts.factory.createVariableStatement(
+        [ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+        ts.factory.createVariableDeclarationList(
+          [
+            ts.factory.createVariableDeclaration(
+              ts.factory.createIdentifier("paths"),
+              undefined,
+              undefined,
+              ts.factory.createObjectLiteralExpression(properties)
+            ),
+          ],
+          ts.NodeFlags.Const
+        )
+      ),
+    ];
   }
 }
 
@@ -86,27 +179,42 @@ export class EffectBuilder implements Builder {
   build(input: OpenApiObject) {
     return Result.success(input)
       .map(() => {
-        const methodPaths = new MethodPaths();
+        const methodPaths = new MethodPaths(getReference(input));
 
         visitPathItemObjects(input)((pathItem) => {
-          if (pathItem.node.definition.get) {
-            methodPaths.addGetPath(pathItem.node.path);
+          if (pathItem.node.definition.get?.responses) {
+            methodPaths.addGetPath({
+              path: pathItem.node.path,
+              responses: pathItem.node.definition.get.responses,
+            });
           }
-          if (pathItem.node.definition.put) {
-            methodPaths.addPutPath(pathItem.node.path);
+          if (pathItem.node.definition.put?.responses) {
+            methodPaths.addPutPath({
+              path: pathItem.node.path,
+              responses: pathItem.node.definition.put.responses,
+            });
           }
-          if (pathItem.node.definition.post) {
-            methodPaths.addPostPath(pathItem.node.path);
+          if (pathItem.node.definition.post?.responses) {
+            methodPaths.addPostPath({
+              path: pathItem.node.path,
+              responses: pathItem.node.definition.post.responses,
+            });
           }
-          if (pathItem.node.definition.patch) {
-            methodPaths.addPatchPath(pathItem.node.path);
+          if (pathItem.node.definition.patch?.responses) {
+            methodPaths.addPatchPath({
+              path: pathItem.node.path,
+              responses: pathItem.node.definition.patch.responses,
+            });
           }
-          if (pathItem.node.definition.delete) {
-            methodPaths.addDeletePath(pathItem.node.path);
+          if (pathItem.node.definition.delete?.responses) {
+            methodPaths.addDeletePath({
+              path: pathItem.node.path,
+              responses: pathItem.node.definition.delete.responses,
+            });
           }
         });
 
-        return printAst(methodPaths.toObjectLiteral());
+        return methodPaths.toObjectLiteral().map(printAst).join("\n");
       })
       .mapFailure(() => new BuildFailure());
   }

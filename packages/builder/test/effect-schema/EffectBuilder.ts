@@ -12,9 +12,48 @@ it("should create a paths dictionary", () => {
   expect(result.get()).toMatchInlineSnapshot(
     `
     // typescript
+    import * as S from "@effect/schema/Schema";
     export const paths = {
-      get: { "/a": { responses: undefined }, "/b": { responses: undefined } },
-      post: { "/a": { responses: undefined }, "/b": { responses: undefined } },
+      get: {
+        "/a": {
+          responses: S.union(
+            S.struct({
+              status: S.literal(200),
+              contentType: S.literal("application/json"),
+              body: S.struct(),
+            })
+          ),
+        },
+        "/b": {
+          responses: S.union(
+            S.struct({
+              status: S.literal(200),
+              contentType: S.literal("application/json"),
+              body: S.struct(),
+            })
+          ),
+        },
+      },
+      post: {
+        "/a": {
+          responses: S.union(
+            S.struct({
+              status: S.literal(200),
+              contentType: S.literal("application/json"),
+              body: S.struct(),
+            })
+          ),
+        },
+        "/b": {
+          responses: S.union(
+            S.struct({
+              status: S.literal(200),
+              contentType: S.literal("application/json"),
+              body: S.struct(),
+            })
+          ),
+        },
+      },
     };
   `
   );
