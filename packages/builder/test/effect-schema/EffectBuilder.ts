@@ -1,10 +1,10 @@
 import { expect, it } from "vitest";
 import { EffectBuilder } from "~/src/effect-schema/EffectBuilder";
-import { EffectSchema } from "@ollierelph/openapi-parser/src/parsers/effect-schema/EffectSchema";
 import {
   buildOpenApi,
+  EffectSchema,
   OpenApiObject,
-} from "@ollierelph/openapi-parser/src/parsers/effect-schema/schemas/OpenApiObject";
+} from "@ollierelph/openapi-parser";
 import { TypeScriptProgram } from "~/test/lib/TypeScriptProgram";
 
 it("should create a paths dictionary", () => {

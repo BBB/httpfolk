@@ -2,14 +2,16 @@ import { Builder, BuildFailure } from "../lib/Builder";
 import ts from "typescript";
 
 import {
-  OpenApiObject,
-  ResponsesObject,
   ContentObject,
   isReferenceObject,
+  OpenApiObject,
+  ResponsesObject,
 } from "@ollierelph/openapi-parser";
 import { Result } from "@ollierelph/result4t";
-import { visitPathItemObjects } from "@ollierelph/openapi-visitor/src/visitPathItemObjects";
-import { getReference } from "@ollierelph/openapi-visitor/src/getReference";
+import {
+  getReference,
+  visitPathItemObjects,
+} from "@ollierelph/openapi-visitor";
 import { printAst } from "~/src/lib/printAst";
 
 type PathResponses = {
