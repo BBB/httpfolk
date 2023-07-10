@@ -8,9 +8,9 @@
       pkgs = nixpkgs.legacyPackages.${system};
     in {
       devShells.default = pkgs.mkShell {
-        packages = [
-          pkgs.nodejs-18_x
-          pkgs.nodePackages.pnpm ];
+        packages = with pkgs; [
+          nodejs_20
+          nodejs_20.pkgs.pnpm ];
       };
     });
 }
