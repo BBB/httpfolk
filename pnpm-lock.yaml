@@ -52,6 +52,9 @@ importers:
       '@types/node':
         specifier: ^18.16.1
         version: 18.16.1
+      ts-pattern:
+        specifier: ^5.0.1
+        version: 5.0.1
 
   packages/parser:
     devDependencies:
@@ -601,6 +604,10 @@ packages:
   /tinyspy@1.0.2:
     resolution: {integrity: sha512-bSGlgwLBYf7PnUsQ6WOc6SJ3pGOcd+d8AA6EUnLDDM0kWEstC1JIlSZA3UNliDXhd9ABoS7hiRBDCu+XP/sf1Q==}
     engines: {node: '>=14.0.0'}
+    dev: true
+
+  /ts-pattern@5.0.1:
+    resolution: {integrity: sha512-ZyNm28Lsg34Co5DS3e9DVyjlX2Y+2exkI4jqTKyU+9/OL6Y2fKOOuL8i+7no71o74C6mVS+UFoP3ekM3iCT1HQ==}
     dev: true
 
   /tsconfck@2.1.1(typescript@5.0.4):

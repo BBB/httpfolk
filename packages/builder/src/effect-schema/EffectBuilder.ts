@@ -16,6 +16,7 @@ import {
   visitPathItemObjects,
 } from "@ollierelph/openapi-visitor";
 import { printAst } from "~/src/lib/printAst";
+import { match } from "ts-pattern";
 
 type PathResponses = {
   path: string;
@@ -70,20 +71,53 @@ class MethodPaths {
       );
     }
 
-    if ("allOf" in schema) {
-    }
-
     if ("type" in schema) {
-      if (schema.type === "object") {
-        return ts.factory.createCallExpression(
-          ts.factory.createPropertyAccessExpression(
-            ts.factory.createIdentifier("S"),
-            ts.factory.createIdentifier("struct")
-          ),
-          undefined,
-          []
-        );
-      }
+      return match(schema)
+        .with({ type: "boolean" }, (it) =>
+          ts.factory.createCallExpression(
+            ts.factory.createPropertyAccessExpression(
+              ts.factory.createIdentifier("S"),
+              ts.factory.createIdentifier("bool")
+            ),
+            undefined,
+            []
+          )
+        )
+        .with(
+          { type: "string" },
+          { type: "number" },
+          { type: "integer" },
+          (it) =>
+            ts.factory.createCallExpression(
+              ts.factory.createPropertyAccessExpression(
+                ts.factory.createIdentifier("S"),
+                ts.factory.createIdentifier("literal")
+              ),
+              undefined,
+              []
+            )
+        )
+        .with({ type: "object" }, (it) =>
+          ts.factory.createCallExpression(
+            ts.factory.createPropertyAccessExpression(
+              ts.factory.createIdentifier("S"),
+              ts.factory.createIdentifier("struct")
+            ),
+            undefined,
+            []
+          )
+        )
+        .with({ type: "array" }, (it) =>
+          ts.factory.createCallExpression(
+            ts.factory.createPropertyAccessExpression(
+              ts.factory.createIdentifier("S"),
+              ts.factory.createIdentifier("array")
+            ),
+            undefined,
+            []
+          )
+        )
+        .exhaustive();
     }
 
     return ts.factory.createCallExpression(
