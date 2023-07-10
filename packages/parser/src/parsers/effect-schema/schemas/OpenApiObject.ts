@@ -1,18 +1,18 @@
 import * as S from "@effect/schema/Schema";
-import { InfoObject } from "./InfoObject";
+import { InfoObjectCodec } from "./InfoObject";
 import { ServerObject } from "./ServerObject";
-import { PathsObject } from "./PathsObject";
-import { ComponentsObject } from "./ComponentsObject";
+import { PathsObjectCodec } from "./PathsObject";
+import { ComponentsObjectCodec } from "./ComponentsObject";
 
-export const OpenApiObject = S.struct({
+export const OpenApiObjectCodec = S.struct({
   openapi: S.union(S.literal("3.0.0"), S.literal("3.0.1"), S.literal("3.1.0")), // https://spec.openapis.org/oas/v3.1.0.html
-  info: InfoObject,
+  info: InfoObjectCodec,
   jsonSchemaDialect: S.optional(S.string),
   servers: S.optional(S.array(ServerObject)),
-  components: S.optional(ComponentsObject),
-  paths: S.optional(PathsObject),
+  components: S.optional(ComponentsObjectCodec),
+  paths: S.optional(PathsObjectCodec),
 });
-export type OpenApiObject = S.To<typeof OpenApiObject>;
+export type OpenApiObject = S.To<typeof OpenApiObjectCodec>;
 
 export function buildOpenApi(): OpenApiObject {
   return {

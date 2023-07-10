@@ -1,11 +1,11 @@
 import * as S from "@effect/schema/Schema";
-import { HeaderObject } from "./HeaderObject";
+import { HeaderObjectCodec } from "./HeaderObject";
 
-export const EncodingObject = S.struct({
+export const EncodingObjectCodec = S.struct({
   contentType: S.optional(S.string),
-  headers: S.optional(S.record(S.string, S.union(HeaderObject))),
+  headers: S.optional(S.record(S.string, S.union(HeaderObjectCodec))),
   style: S.optional(S.string),
   explode: S.optional(S.boolean),
   allowReserved: S.optional(S.boolean),
 });
-export type EncodingObject = S.To<typeof EncodingObject>;
+export type EncodingObject = S.To<typeof EncodingObjectCodec>;

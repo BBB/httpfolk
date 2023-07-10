@@ -3,7 +3,7 @@ import { EffectBuilder } from "~/src/effect-schema/EffectBuilder";
 import {
   buildOpenApi,
   EffectSchema,
-  OpenApiObject,
+  OpenApiObjectCodec,
 } from "@ollierelph/openapi-parser";
 import { TypeScriptProgram } from "~/test/lib/TypeScriptProgram";
 
@@ -63,7 +63,7 @@ class BuildFailure {
   constructor(public inner: unknown) {}
 }
 const underTest = (
-  parser = EffectSchema.for(OpenApiObject),
+  parser = EffectSchema.for(OpenApiObjectCodec),
   Builder = EffectBuilder
 ) => {
   const input = buildOpenApi();

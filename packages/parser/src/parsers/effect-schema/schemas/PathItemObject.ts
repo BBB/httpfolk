@@ -1,7 +1,7 @@
-import { OperationObject } from "./OperationObject";
+import { OperationObject, OperationObjectCodec } from "./OperationObject";
 import { ServerObject } from "./ServerObject";
-import { ParameterObject } from "./ParameterObject";
-import { ReferenceObject } from "./ReferenceObject";
+import { ParameterObject, ParameterObjectCodec } from "./ParameterObject";
+import { ReferenceObject, ReferenceObjectCodec } from "./ReferenceObject";
 import * as S from "@effect/schema/Schema";
 
 export type PathItemObject = {
@@ -19,19 +19,21 @@ export type PathItemObject = {
   parameters?: ReadonlyArray<ParameterObject | ReferenceObject>;
 };
 
-export const PathItemObject: S.Schema<any, PathItemObject> = S.lazy(() =>
+export const PathItemObjectCodec: S.Schema<any, PathItemObject> = S.lazy(() =>
   S.struct({
     summary: S.optional(S.string),
     description: S.optional(S.string),
-    get: S.optional(OperationObject),
-    put: S.optional(OperationObject),
-    post: S.optional(OperationObject),
-    delete: S.optional(OperationObject),
-    options: S.optional(OperationObject),
-    head: S.optional(OperationObject),
-    patch: S.optional(OperationObject),
-    trace: S.optional(OperationObject),
+    get: S.optional(OperationObjectCodec),
+    put: S.optional(OperationObjectCodec),
+    post: S.optional(OperationObjectCodec),
+    delete: S.optional(OperationObjectCodec),
+    options: S.optional(OperationObjectCodec),
+    head: S.optional(OperationObjectCodec),
+    patch: S.optional(OperationObjectCodec),
+    trace: S.optional(OperationObjectCodec),
     servers: S.optional(S.array(ServerObject)),
-    parameters: S.optional(S.array(S.union(ParameterObject, ReferenceObject))),
+    parameters: S.optional(
+      S.array(S.union(ParameterObjectCodec, ReferenceObjectCodec))
+    ),
   })
 );

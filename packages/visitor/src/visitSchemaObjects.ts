@@ -4,6 +4,7 @@ import {
   isReferenceObject,
   OpenApiObject,
   SchemaObject,
+  SchemaObjectCodec,
 } from "@ollierelph/openapi-parser";
 
 export function visitSchemaObjects<T>(schema: OpenApiObject) {
@@ -14,7 +15,7 @@ export function visitSchemaObjects<T>(schema: OpenApiObject) {
       const schemaObject = parent.node.definition.schema;
       if (schemaObject) {
         if (isReferenceObject(schemaObject)) {
-          goto(schemaObject, SchemaObject).map(visit);
+          goto(schemaObject, SchemaObjectCodec).map(visit);
         } else {
           visit(schemaObject);
         }

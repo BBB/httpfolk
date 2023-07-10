@@ -24,9 +24,9 @@ export const localRef = S.templateLiteral(
  * A simple object to allow referencing other components in the OpenAPI document, internally and externally.
  * https://spec.openapis.org/oas/latest.html#reference-object
  */
-export const ReferenceObject = S.struct({ $ref: localRef });
-export type ReferenceObject = S.To<typeof ReferenceObject>;
-export const isReferenceObject = S.is(ReferenceObject);
+export const ReferenceObjectCodec = S.struct({ $ref: localRef });
+export type ReferenceObject = S.To<typeof ReferenceObjectCodec>;
+export const isReferenceObject = S.is(ReferenceObjectCodec);
 export const referenceOr = <Members extends readonly S.Schema<any, any>[]>(
   ...members: Members
-) => S.union(ReferenceObject, ...members);
+) => S.union(ReferenceObjectCodec, ...members);

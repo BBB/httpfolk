@@ -3,7 +3,7 @@ import { decodeToResult } from "~/src/parsers/effect-schema/lib/decodeToResult";
 import { Failure, Result } from "@ollierelph/result4t";
 import * as S from "@effect/schema/Schema";
 import {
-  ReferenceObject,
+  ReferenceObjectCodec,
   referenceOr,
 } from "~/src/parsers/effect-schema/schemas/ReferenceObject";
 
@@ -21,13 +21,13 @@ describe("referenceOr", () => {
 describe("localRef", () => {
   it("should parse a valid ref", () => {
     expect(
-      decodeToResult(ReferenceObject)({ $ref: "#/components/responses/a" })
+      decodeToResult(ReferenceObjectCodec)({ $ref: "#/components/responses/a" })
     ).toEqual(Result.success({ $ref: "#/components/responses/a" }));
   });
   it("should not allow an invalid ref", () => {
     expect(
       // @ts-ignores
-      decodeToResult(ReferenceObject)({ $ref: "#/components/responses" })
+      decodeToResult(ReferenceObjectCodec)({ $ref: "#/components/responses" })
     ).toBeInstanceOf(Failure);
   });
 });

@@ -3,6 +3,7 @@ import { Content, visitContentObjects } from "./visitContentObjects";
 import {
   isReferenceObject,
   MediaTypeObject,
+  MediaTypeObjectCodec,
   OpenApiObject,
 } from "@ollierelph/openapi-parser";
 import { NodeAndParent } from "./lib/NodeAndParent";
@@ -25,7 +26,7 @@ export function visitMediaTypeObjects<T>(schema: OpenApiObject) {
     visitParent((parent) => {
       Object.entries(parent.node).forEach(([contentType, mediaTypeObject]) => {
         isReferenceObject(mediaTypeObject)
-          ? goto(mediaTypeObject, MediaTypeObject).map((definition) =>
+          ? goto(mediaTypeObject, MediaTypeObjectCodec).map((definition) =>
               visit(MediaType.of(contentType, definition, parent))
             )
           : visit(MediaType.of(contentType, mediaTypeObject, parent));

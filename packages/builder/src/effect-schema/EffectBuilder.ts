@@ -2,10 +2,13 @@ import { Builder, BuildFailure } from "../lib/Builder";
 import ts from "typescript";
 
 import {
-  ContentObject,
   isReferenceObject,
-  OpenApiObject,
   ResponsesObject,
+  MediaTypeObject,
+  SchemaObject,
+  SchemaObjectCodec,
+  OpenApiObject,
+  ResponseObjectCodec,
 } from "@ollierelph/openapi-parser";
 import { Result } from "@ollierelph/result4t";
 import {
@@ -47,6 +50,52 @@ class MethodPaths {
     this.deletePaths.push(path);
   }
 
+  schemaObjectToCodec(media: MediaTypeObject) {
+    const schema: SchemaObject | undefined = isReferenceObject(media.schema)
+      ? this.resolveReference(media.schema, SchemaObjectCodec).getOrElse(
+          (err) => {
+            throw err;
+          }
+        )
+      : media.schema;
+
+    if (!schema) {
+      return ts.factory.createCallExpression(
+        ts.factory.createPropertyAccessExpression(
+          ts.factory.createIdentifier("S"),
+          ts.factory.createIdentifier("struct")
+        ),
+        undefined,
+        []
+      );
+    }
+
+    if ("allOf" in schema) {
+    }
+
+    if ("type" in schema) {
+      if (schema.type === "object") {
+        return ts.factory.createCallExpression(
+          ts.factory.createPropertyAccessExpression(
+            ts.factory.createIdentifier("S"),
+            ts.factory.createIdentifier("struct")
+          ),
+          undefined,
+          []
+        );
+      }
+    }
+
+    return ts.factory.createCallExpression(
+      ts.factory.createPropertyAccessExpression(
+        ts.factory.createIdentifier("S"),
+        ts.factory.createIdentifier("struct")
+      ),
+      undefined,
+      []
+    );
+  }
+
   toObjectLiteral() {
     const responsesToCodec = (definition: ResponsesObject): ts.Expression => {
       return ts.factory.createCallExpression(
@@ -57,9 +106,11 @@ class MethodPaths {
         undefined,
         Object.entries(definition).flatMap(([status, def]) => {
           const res = isReferenceObject(def)
-            ? this.resolveReference(def, ContentObject).getOrElse((err) => {
-                throw err;
-              })
+            ? this.resolveReference(def, ResponseObjectCodec).getOrElse(
+                (err) => {
+                  throw err;
+                }
+              )
             : def;
           if (!res.content) {
             return [];
@@ -98,14 +149,7 @@ class MethodPaths {
                     ),
                     ts.factory.createPropertyAssignment(
                       ts.factory.createIdentifier("body"),
-                      ts.factory.createCallExpression(
-                        ts.factory.createPropertyAccessExpression(
-                          ts.factory.createIdentifier("S"),
-                          ts.factory.createIdentifier("struct")
-                        ),
-                        undefined,
-                        []
-                      )
+                      this.schemaObjectToCodec(media.schema)
                     ),
                   ],
                   true

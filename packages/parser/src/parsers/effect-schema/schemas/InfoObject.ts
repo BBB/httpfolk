@@ -1,17 +1,17 @@
 import * as S from "@effect/schema/Schema";
-import { ContactObject } from "./ContactObject";
-import { LicenseObject } from "./LicenseObject";
+import { ContactObjectCodec } from "./ContactObject";
+import { LicenseObjectCodec } from "./LicenseObject";
 import { url } from "../lib/scalar/url";
 
 /**
  * https://spec.openapis.org/oas/v3.1.0.html#info-object
  */
-export const InfoObject = S.struct({
+export const InfoObjectCodec = S.struct({
   title: S.string,
   description: S.optional(S.string),
   termsOfService: S.optional(url),
-  contact: ContactObject,
-  license: LicenseObject,
+  contact: ContactObjectCodec,
+  license: LicenseObjectCodec,
   version: S.optional(S.string),
 });
-export type InfoObject = S.To<typeof InfoObject>;
+export type InfoObject = S.To<typeof InfoObjectCodec>;

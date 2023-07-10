@@ -1,15 +1,15 @@
 import * as S from "@effect/schema/Schema";
-import { ReferenceObject } from "./ReferenceObject";
-import { HeaderObject } from "./HeaderObject";
-import { LinkObject } from "./LinkObject";
-import { ContentObject } from "./ContentObject";
+import { ReferenceObjectCodec } from "./ReferenceObject";
+import { HeaderObjectCodec } from "./HeaderObject";
+import { LinkObjectCodec } from "./LinkObject";
+import { ContentObjectCodec } from "./ContentObject";
 
-export const ResponseObject = S.struct({
+export const ResponseObjectCodec = S.struct({
   description: S.string,
   headers: S.optional(
-    S.record(S.string, S.union(ReferenceObject, HeaderObject))
+    S.record(S.string, S.union(ReferenceObjectCodec, HeaderObjectCodec))
   ),
-  content: S.optional(ContentObject),
-  links: S.optional(S.record(S.string, LinkObject)),
+  content: S.optional(ContentObjectCodec),
+  links: S.optional(S.record(S.string, LinkObjectCodec)),
 });
-export type ResponseObject = S.To<typeof ResponseObject>;
+export type ResponseObject = S.To<typeof ResponseObjectCodec>;

@@ -1,18 +1,18 @@
 import * as S from "@effect/schema/Schema";
 import { referenceOr } from "./ReferenceObject";
-import { EncodingObject } from "./EncodingObject";
-import { SchemaObject } from "./SchemaObject";
-import { ExampleObject } from "./ExampleObject";
+import { EncodingObjectCodec } from "./EncodingObject";
+import { SchemaObjectCodec } from "./SchemaObject";
+import { ExampleObjectCodec } from "./ExampleObject";
 
 const MediaTypeCommon = S.struct({
-  schema: S.optional(referenceOr(SchemaObject)),
-  encoding: S.optional(S.record(S.string, referenceOr(EncodingObject))),
+  schema: S.optional(referenceOr(SchemaObjectCodec)),
+  encoding: S.optional(S.record(S.string, referenceOr(EncodingObjectCodec))),
 });
 type MediaTypeCommon = S.To<typeof MediaTypeCommon>;
-export const MediaTypeObject = S.union(
+export const MediaTypeObjectCodec = S.union(
   S.extend(MediaTypeCommon)(
     S.struct({
-      examples: S.optional(S.record(S.string, referenceOr(ExampleObject))),
+      examples: S.optional(S.record(S.string, referenceOr(ExampleObjectCodec))),
     })
   ),
   S.extend(MediaTypeCommon)(
@@ -21,4 +21,4 @@ export const MediaTypeObject = S.union(
     })
   )
 );
-export type MediaTypeObject = S.To<typeof MediaTypeObject>;
+export type MediaTypeObject = S.To<typeof MediaTypeObjectCodec>;

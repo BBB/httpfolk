@@ -4,6 +4,7 @@ import {
   isReferenceObject,
   OpenApiObject,
   PathItemObject,
+  PathItemObjectCodec,
 } from "@ollierelph/openapi-parser";
 import { NodeAndParent } from "./lib/NodeAndParent";
 
@@ -22,7 +23,7 @@ export function visitPathItemObjects<T>(schema: OpenApiObject) {
     visitParent((parent) => {
       Object.entries(parent.node).forEach(([path, pathItem]) =>
         isReferenceObject(pathItem)
-          ? goto(pathItem, PathItemObject).map((definition) =>
+          ? goto(pathItem, PathItemObjectCodec).map((definition) =>
               visit(PathItem.of(path, definition, parent))
             )
           : visit(PathItem.of(path, pathItem, parent))

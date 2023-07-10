@@ -1,10 +1,10 @@
 import * as S from "@effect/schema/Schema";
 import { restrictedStringKey } from "../lib/scalar/restrictedStringKey";
 import { referenceOr } from "./ReferenceObject";
-import { ResponseObject } from "./ResponseObject";
+import { ResponseObjectCodec } from "./ResponseObject";
 
-export const ResponsesObject = S.record(
+export const ResponsesObjectCodec = S.record(
   restrictedStringKey,
-  referenceOr(ResponseObject)
+  referenceOr(ResponseObjectCodec)
 );
-export type ResponsesObject = S.To<typeof ResponsesObject>;
+export type ResponsesObject = S.To<typeof ResponsesObjectCodec>;

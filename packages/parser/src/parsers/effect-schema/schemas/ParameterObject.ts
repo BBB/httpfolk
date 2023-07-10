@@ -1,6 +1,6 @@
 import * as S from "@effect/schema/Schema";
 
-export const ParameterObject = S.struct({
+export const ParameterObjectCodec = S.struct({
   name: S.string,
   in: S.union(
     S.literal("query"),
@@ -13,4 +13,4 @@ export const ParameterObject = S.struct({
   deprecated: S.optional(S.boolean),
   allowEmptyValue: S.optional(S.boolean),
 });
-export type ParameterObject = S.To<typeof ParameterObject>;
+export type ParameterObject = S.To<typeof ParameterObjectCodec>;

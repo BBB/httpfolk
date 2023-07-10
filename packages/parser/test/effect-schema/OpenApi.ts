@@ -3,7 +3,7 @@ import { it } from "vitest";
 import { EffectSchema } from "~/src/parsers/effect-schema/EffectSchema";
 import {
   buildOpenApi,
-  OpenApiObject,
+  OpenApiObjectCodec,
 } from "~/src/parsers/effect-schema/schemas/OpenApiObject";
 
 it.each([
@@ -236,7 +236,7 @@ it.each([
 });
 
 function underTest(value: unknown) {
-  return EffectSchema.for(OpenApiObject)
+  return EffectSchema.for(OpenApiObjectCodec)
     .parse(value)
     .getOrElse((err) => {
       console.log(err);

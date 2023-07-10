@@ -1,7 +1,7 @@
 import * as S from "@effect/schema/Schema";
 import { url } from "../lib/scalar/url";
 
-const ServerVariablesObject = S.optional(
+const ServerVariablesObjectCodec = S.optional(
   S.record(
     S.string,
     S.struct({
@@ -14,6 +14,6 @@ const ServerVariablesObject = S.optional(
 export const ServerObject = S.struct({
   url,
   description: S.optional(S.string),
-  variables: ServerVariablesObject,
+  variables: ServerVariablesObjectCodec,
 });
 export type ServerObject = S.To<typeof ServerObject>;

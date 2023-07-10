@@ -36,7 +36,7 @@ export type SchemaObject =
       oneOf: ReadonlyArray<ReferenceObject | SchemaObject>;
     };
 
-const SchemaObjectCommon = S.struct({
+const SchemaObjectCommonCodec = S.struct({
   title: S.optional(S.string),
   description: S.optional(S.string),
   default: S.optional(S.unknown),
@@ -53,14 +53,14 @@ function schemaCommonAnd<
     | S.PropertySignature<never, boolean, never, boolean>
   >
 >(fields: Fields) {
-  return S.extend(SchemaObjectCommon)(S.struct(fields));
+  return S.extend(SchemaObjectCommonCodec)(S.struct(fields));
 }
 
 /**
  * The Schema.ts Object allows the definition of input and output data types
  * https://spec.openapis.org/oas/latest.html#schema-object
  */
-export const SchemaObject: S.Schema<any, SchemaObject> = S.lazy(() =>
+export const SchemaObjectCodec: S.Schema<any, SchemaObject> = S.lazy(() =>
   S.union(
     schemaCommonAnd({
       type: S.literal("string"),
@@ -77,21 +77,26 @@ export const SchemaObject: S.Schema<any, SchemaObject> = S.lazy(() =>
     }),
     schemaCommonAnd({
       type: S.literal("array"),
-      items: referenceOr(SchemaObject),
+      items: referenceOr(SchemaObjectCodec),
     }),
     schemaCommonAnd({
       type: S.literal("object"),
       required: S.optional(S.array(S.string)),
-      properties: S.optional(S.record(S.string, referenceOr(SchemaObject))),
+      properties: S.optional(
+        S.record(S.string, referenceOr(SchemaObjectCodec))
+      ),
       additionalProperties: S.optional(
-        S.union(S.literal(true), S.record(S.string, referenceOr(SchemaObject)))
+        S.union(
+          S.literal(true),
+          S.record(S.string, referenceOr(SchemaObjectCodec))
+        )
       ),
     }),
     schemaCommonAnd({
-      allOf: S.array(referenceOr(SchemaObject)),
+      allOf: S.array(referenceOr(SchemaObjectCodec)),
     }),
     schemaCommonAnd({
-      oneOf: S.array(referenceOr(SchemaObject)),
+      oneOf: S.array(referenceOr(SchemaObjectCodec)),
     })
     // Do I really want to support this?
     // sharedSchemaAnd({ anyOf: S.optional(S.array(schema)) })

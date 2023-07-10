@@ -10,7 +10,7 @@ import {
   stringSchema,
 } from "~/src/inputs/schemas";
 import { EffectSchema } from "~/src/parsers/effect-schema/EffectSchema";
-import { SchemaObject } from "~/src/parsers/effect-schema/schemas/SchemaObject";
+import { SchemaObjectCodec } from "~/src/parsers/effect-schema/schemas/SchemaObject";
 
 describe("oneOf", () => {
   it("should allow oneOf", () => {
@@ -163,7 +163,7 @@ describe("string", () => {
 });
 
 function underTest(value: unknown) {
-  return EffectSchema.for(SchemaObject)
+  return EffectSchema.for(SchemaObjectCodec)
     .parse(value)
     .getOrElse((err) => {
       console.log(err);

@@ -1,5 +1,5 @@
 import * as S from "@effect/schema/Schema";
-import { MediaTypeObject } from "./MediaTypeObject";
+import { MediaTypeObjectCodec } from "./MediaTypeObject";
 
-export const ContentObject = S.record(S.string, MediaTypeObject);
-export type ContentObject = S.To<typeof ContentObject>;
+export const ContentObjectCodec = S.record(S.string, MediaTypeObjectCodec);
+export type ContentObject = S.To<typeof ContentObjectCodec>;

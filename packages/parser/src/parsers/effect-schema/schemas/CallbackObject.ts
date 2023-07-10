@@ -1,9 +1,9 @@
 import * as S from "@effect/schema/Schema";
 import { referenceOr } from "./ReferenceObject";
 
-import { PathItemObject } from "./PathItemObject";
+import { PathItemObjectCodec } from "./PathItemObject";
 
-export const CallbackObject = S.lazy(() =>
-  S.record(S.string, referenceOr(PathItemObject))
+export const CallbackObjectCodec = S.lazy(() =>
+  S.record(S.string, referenceOr(PathItemObjectCodec))
 );
-export type CallbackObject = S.To<typeof CallbackObject>;
+export type CallbackObject = S.To<typeof CallbackObjectCodec>;

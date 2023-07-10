@@ -3,7 +3,7 @@ import { Operation, visitOperationObjects } from "./visitOperationObjects";
 import {
   isReferenceObject,
   OpenApiObject,
-  OperationObject,
+  OperationObjectCodec,
   ResponseObject,
 } from "@ollierelph/openapi-parser";
 import { NodeAndParent } from "./lib/NodeAndParent";
@@ -29,7 +29,7 @@ export function visitResponseObjects<T>(schema: OpenApiObject) {
       if (responses) {
         Object.entries(responses).forEach(([statusCode, responseObject]) => {
           isReferenceObject(responseObject)
-            ? goto(responseObject, OperationObject).map(visit)
+            ? goto(responseObject, OperationObjectCodec).map(visit)
             : visit(Response.of(statusCode, responseObject, parent));
         });
       }

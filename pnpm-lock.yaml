@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -44,11 +44,11 @@ importers:
         version: link:../visitor
     devDependencies:
       '@effect/data':
-        specifier: ^0.12.2
-        version: 0.12.2
+        specifier: ^0.14.0
+        version: 0.14.0
       '@effect/schema':
-        specifier: ^0.17.2
-        version: 0.17.2
+        specifier: ^0.19.3
+        version: 0.19.3
       '@types/node':
         specifier: ^18.16.1
         version: 18.16.1
@@ -56,11 +56,11 @@ importers:
   packages/parser:
     devDependencies:
       '@effect/data':
-        specifier: ^0.12.2
-        version: 0.12.2
+        specifier: ^0.14.0
+        version: 0.14.0
       '@effect/schema':
-        specifier: ^0.17.2
-        version: 0.17.2
+        specifier: ^0.19.3
+        version: 0.19.3
       '@types/node':
         specifier: ^18.16.1
         version: 18.16.1
@@ -72,11 +72,11 @@ importers:
         version: link:../parser
     devDependencies:
       '@effect/data':
-        specifier: ^0.12.2
-        version: 0.12.2
+        specifier: ^0.14.0
+        version: 0.14.0
       '@effect/schema':
-        specifier: ^0.17.2
-        version: 0.17.2
+        specifier: ^0.19.3
+        version: 0.19.3
       '@types/node':
         specifier: ^18.16.1
         version: 18.16.1
@@ -87,14 +87,18 @@ packages:
     resolution: {integrity: sha512-bmWRTcsSRG1FlBswT+D8SxW6r3c4B3pKJrjYfitCD03tXHnup5gLHaWqbFgIjiyYITS+UsJRRjVrNxvyGG4ZNQ==}
     dev: true
 
+  /@effect/data@0.14.0:
+    resolution: {integrity: sha512-ZGmCBE5HQKSMVNjmBtIIhsUkd7cXhTeg8CUqZ6iZFHQz5yIwuAoCB7z7Gv2AXtonpSTsN7KiMg2xJ1+qL/pTrg==}
+    dev: true
+
   /@effect/io@0.25.2:
     resolution: {integrity: sha512-eGkx616RF3uUqhrHHeLGgZKXR8AXZdWrvwPnPdKSqXcr6Iu+8YqFQ73dCk5ujHfNVDLIHUSrI+kjAzLeKhVITg==}
     dependencies:
       '@effect/data': 0.12.2
     dev: true
 
-  /@effect/schema@0.17.2:
-    resolution: {integrity: sha512-HcXZBGtPzhuX/RnIkaVIlYGp1ThuAyl34YNhxrhUQ8TdOnRFkx3tAbmXYpkWkrlo92Ou+/Z0ZixEaSFn7x2shw==}
+  /@effect/schema@0.19.3:
+    resolution: {integrity: sha512-jR7o19HBX7PBYRLV1G6ZlM90giRe+lZkA6BqVNamkhNfVsHU4MnGr2lqM2H4fy4MgR744GGXuxCDjVdydkMvAw==}
     dependencies:
       '@effect/data': 0.12.2
       '@effect/io': 0.25.2
