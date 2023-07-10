@@ -33,5 +33,5 @@ jobs:
           - recursive: true
             args: [--frozen-lockfile, --strict-peer-dependencies]
     - name: Test
-      run: pnpm run --recursive test:unit
+      run: pnpm run --recursive tscheck && pnpm run --recursive test:unit
 
