@@ -12,9 +12,9 @@ importers:
         specifier: ^0.3.0
         version: 0.3.0
     devDependencies:
-      '@types/prettier':
-        specifier: ^3.0.0
-        version: 3.0.0
+      '@prettier/sync':
+        specifier: ^0.3.0
+        version: 0.3.0(prettier@3.0.3)
       prettier:
         specifier: ^3.0.3
         version: 3.0.3
@@ -321,6 +321,14 @@ packages:
     resolution: {integrity: sha512-ENRqjrxoyYcAc+9Wr6vC8FM7ntWkw9U6uRbYISJU/WSzuhLOmPQbZMLyplcw6YAEJphZTHRO3KWetFnj6M6nNw==}
     dev: false
 
+  /@prettier/sync@0.3.0(prettier@3.0.3):
+    resolution: {integrity: sha512-3dcmCyAxIcxy036h1I7MQU/uEEBq8oLwf1CE3xeze+MPlgkdlb/+w6rGR/1dhp6Hqi17fRS6nvwnOzkESxEkOw==}
+    peerDependencies:
+      prettier: ^3.0.0
+    dependencies:
+      prettier: 3.0.3
+    dev: true
+
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
     dev: true
@@ -337,13 +345,6 @@ packages:
 
   /@types/node@18.16.1:
     resolution: {integrity: sha512-DZxSZWXxFfOlx7k7Rv4LAyiMroaxa3Ly/7OOzZO8cBNho0YzAi4qlbrx8W27JGqG57IgR/6J7r+nOJWw6kcvZA==}
-    dev: true
-
-  /@types/prettier@3.0.0:
-    resolution: {integrity: sha512-mFMBfMOz8QxhYVbuINtswBp9VL2b4Y0QqYHwqLz3YbgtfAcat2Dl6Y1o4e22S/OVE6Ebl9m7wWiMT2lSbAs1wA==}
-    deprecated: This is a stub types definition. prettier provides its own type definitions, so you do not need this installed.
-    dependencies:
-      prettier: 3.0.3
     dev: true
 
   /@vitest/expect@0.34.4:

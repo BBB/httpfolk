@@ -13,23 +13,48 @@ it("should create a paths dictionary", () => {
     `
     // typescript
     import * as S from "@effect/schema/Schema";
-    export const paths = { get: { "/a": { responses: S.union(S.struct({
-                    status: S.literal(200),
-                    contentType: S.literal("application/json"),
-                    body: S.struct()
-                })) }, "/b": { responses: S.union(S.struct({
-                    status: S.literal(200),
-                    contentType: S.literal("application/json"),
-                    body: S.struct()
-                })) } }, post: { "/a": { responses: S.union(S.struct({
-                    status: S.literal(200),
-                    contentType: S.literal("application/json"),
-                    body: S.struct()
-                })) }, "/b": { responses: S.union(S.struct({
-                    status: S.literal(200),
-                    contentType: S.literal("application/json"),
-                    body: S.struct()
-                })) } } };
+    export const paths = {
+      get: {
+        "/a": {
+          responses: S.union(
+            S.struct({
+              status: S.literal(200),
+              contentType: S.literal("application/json"),
+              body: S.struct(),
+            }),
+          ),
+        },
+        "/b": {
+          responses: S.union(
+            S.struct({
+              status: S.literal(200),
+              contentType: S.literal("application/json"),
+              body: S.struct(),
+            }),
+          ),
+        },
+      },
+      post: {
+        "/a": {
+          responses: S.union(
+            S.struct({
+              status: S.literal(200),
+              contentType: S.literal("application/json"),
+              body: S.struct(),
+            }),
+          ),
+        },
+        "/b": {
+          responses: S.union(
+            S.struct({
+              status: S.literal(200),
+              contentType: S.literal("application/json"),
+              body: S.struct(),
+            }),
+          ),
+        },
+      },
+    };
   `,
   );
 });

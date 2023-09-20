@@ -11,7 +11,7 @@
     "@ollierelph/result4t": "^0.3.0"
   },
   "devDependencies": {
-    "@types/prettier": "^3.0.0",
+    "@prettier/sync": "^0.3.0",
     "prettier": "^3.0.3",
     "turbo": "^1.10.14",
     "typescript": "^5.2.2",
