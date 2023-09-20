@@ -15,10 +15,16 @@ it("visits every schemaObject", () => {
       },
       {
         "properties": {
+          "bingo": {
+            "type": "number",
+          },
           "foo": {
             "type": "string",
           },
         },
+        "required": [
+          "foo",
+        ],
         "type": "object",
       },
       {

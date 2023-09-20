@@ -1,10 +1,15 @@
 import { Builder, BuildFailure } from "../lib/Builder";
-import ts, { CallExpression, PropertyAssignment } from "typescript";
+import ts, {
+  CallExpression,
+  Expression,
+  PropertyAccessExpression,
+  PropertyAssignment,
+} from "typescript";
 
 import {
   isReferenceObject,
-  ReferenceObject,
   OpenApiObject,
+  ReferenceObject,
   ResponseObjectCodec,
   ResponsesObject,
   SchemaObject,
@@ -54,7 +59,7 @@ class MethodPaths {
 
   schemaObjectToCodec(
     maybeSchema: SchemaObject | ReferenceObject,
-  ): CallExpression {
+  ): CallExpression | PropertyAccessExpression {
     const schema: SchemaObject | undefined = isReferenceObject(maybeSchema)
       ? this.resolveReference(maybeSchema, SchemaObjectCodec).getOrElse(
           (err) => {
@@ -110,31 +115,48 @@ class MethodPaths {
         { properties: P.map() },
         { required: P.array<string>() },
         (it) =>
-          ts.factory.createCallExpression(
-            ts.factory.createPropertyAccessExpression(
-              ts.factory.createIdentifier("S"),
-              ts.factory.createIdentifier("struct"),
-            ),
-            undefined,
-            "properties" in it
-              ? [
+          "properties" in it
+            ? ts.factory.createCallExpression(
+                ts.factory.createPropertyAccessExpression(
+                  ts.factory.createIdentifier("S"),
+                  ts.factory.createIdentifier("struct"),
+                ),
+                undefined,
+                [
                   ts.factory.createObjectLiteralExpression(
-                    Object.entries(it.properties)
-                      .filter(([key]) => it.required?.includes(key))
-                      .reduce(
-                        (agg, [key, value]) =>
-                          agg.concat([
-                            ts.factory.createPropertyAssignment(
-                              ts.factory.createIdentifier(key),
-                              this.schemaObjectToCodec(value),
-                            ),
-                          ]),
-                        [] as PropertyAssignment[],
-                      ),
+                    Object.entries(it.properties || {}).reduce(
+                      (agg, [key, value]) => {
+                        const propertyAssignment = (initializer: Expression) =>
+                          ts.factory.createPropertyAssignment(
+                            ts.factory.createIdentifier(key),
+                            initializer,
+                          );
+                        return agg.concat([
+                          it.required?.includes(key)
+                            ? propertyAssignment(
+                                this.schemaObjectToCodec(value),
+                              )
+                            : propertyAssignment(
+                                ts.factory.createCallExpression(
+                                  ts.factory.createPropertyAccessExpression(
+                                    ts.factory.createIdentifier("S"),
+                                    ts.factory.createIdentifier("optional"),
+                                  ),
+                                  undefined,
+                                  [this.schemaObjectToCodec(value)],
+                                ),
+                              ),
+                        ]);
+                      },
+                      [] as PropertyAssignment[],
+                    ),
                   ),
-                ]
-              : [],
-          ),
+                ],
+              )
+            : ts.factory.createPropertyAccessExpression(
+                ts.factory.createIdentifier("S"),
+                ts.factory.createIdentifier("unknown"),
+              ),
       )
       .with({ allOf: P.any }, (it) => {
         throw new Error("Not implemented");

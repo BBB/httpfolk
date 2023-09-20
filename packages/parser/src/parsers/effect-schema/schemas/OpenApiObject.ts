@@ -82,8 +82,12 @@ export function buildOpenApi(): OpenApiObject {
           properties: {
             foo: {
               "type": "string"
+            },
+            bingo: {
+              "type": "number"
             }
-          }
+          },
+          required: ["foo"]
         },
       },
     },

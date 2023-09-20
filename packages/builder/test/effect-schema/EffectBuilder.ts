@@ -29,7 +29,7 @@ it("should create a paths dictionary", () => {
             S.struct({
               status: S.literal(200),
               contentType: S.literal("application/json"),
-              body: S.struct({}),
+              body: S.struct({ foo: S.literal(), bingo: S.optional(S.literal()) }),
             }),
           ),
         },
@@ -49,7 +49,7 @@ it("should create a paths dictionary", () => {
             S.struct({
               status: S.literal(200),
               contentType: S.literal("application/json"),
-              body: S.struct({}),
+              body: S.struct({ foo: S.literal(), bingo: S.optional(S.literal()) }),
             }),
           ),
         },
