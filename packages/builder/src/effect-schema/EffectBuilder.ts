@@ -3,12 +3,12 @@ import ts from "typescript";
 
 import {
   isReferenceObject,
-  ResponsesObject,
   MediaTypeObject,
-  SchemaObject,
-  SchemaObjectCodec,
   OpenApiObject,
   ResponseObjectCodec,
+  ResponsesObject,
+  SchemaObject,
+  SchemaObjectCodec,
 } from "@ollierelph/openapi-parser";
 import { Result } from "@ollierelph/result4t";
 import {
@@ -52,13 +52,11 @@ class MethodPaths {
   }
 
   schemaObjectToCodec(media: MediaTypeObject) {
-    const schema: SchemaObject | undefined = isReferenceObject(media.schema)
-      ? this.resolveReference(media.schema, SchemaObjectCodec).getOrElse(
-          (err) => {
-            throw err;
-          },
-        )
-      : media.schema;
+    const schema: SchemaObject | undefined = isReferenceObject(media)
+      ? this.resolveReference(media, SchemaObjectCodec).getOrElse((err) => {
+          throw err;
+        })
+      : media;
 
     if (!schema) {
       return ts.factory.createCallExpression(
