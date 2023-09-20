@@ -78,7 +78,12 @@ export function buildOpenApi(): OpenApiObject {
           type: "string",
         },
         b: {
-          type: "string",
+          type: "object",
+          properties: {
+            foo: {
+              "type": "string"
+            }
+          }
         },
       },
     },

@@ -1,9 +1,9 @@
 import { Builder, BuildFailure } from "../lib/Builder";
-import ts from "typescript";
+import ts, { CallExpression, PropertyAssignment } from "typescript";
 
 import {
   isReferenceObject,
-  MediaTypeObject,
+  ReferenceObject,
   OpenApiObject,
   ResponseObjectCodec,
   ResponsesObject,
@@ -31,6 +31,7 @@ class MethodPaths {
   private patchPaths: Array<PathResponses> = [];
   private postPaths: Array<PathResponses> = [];
   private deletePaths: Array<PathResponses> = [];
+
   public addGetPath(path: PathResponses) {
     this.getPaths.push(path);
   }
@@ -51,12 +52,16 @@ class MethodPaths {
     this.deletePaths.push(path);
   }
 
-  schemaObjectToCodec(media: MediaTypeObject) {
-    const schema: SchemaObject | undefined = isReferenceObject(media)
-      ? this.resolveReference(media, SchemaObjectCodec).getOrElse((err) => {
-          throw err;
-        })
-      : media;
+  schemaObjectToCodec(
+    maybeSchema: SchemaObject | ReferenceObject,
+  ): CallExpression {
+    const schema: SchemaObject | undefined = isReferenceObject(maybeSchema)
+      ? this.resolveReference(maybeSchema, SchemaObjectCodec).getOrElse(
+          (err) => {
+            throw err;
+          },
+        )
+      : maybeSchema;
 
     if (!schema) {
       return ts.factory.createCallExpression(
@@ -102,7 +107,22 @@ class MethodPaths {
               ts.factory.createIdentifier("struct"),
             ),
             undefined,
-            [],
+            it.properties
+              ? [
+                  ts.factory.createObjectLiteralExpression(
+                    Object.entries(it.properties).reduce(
+                      (agg, [key, value]) =>
+                        agg.concat([
+                          ts.factory.createPropertyAssignment(
+                            ts.factory.createIdentifier(key),
+                            this.schemaObjectToCodec(value),
+                          ),
+                        ]),
+                      [] as PropertyAssignment[],
+                    ),
+                  ),
+                ]
+              : [],
           ),
         )
         .with({ type: "array" }, (it) =>
