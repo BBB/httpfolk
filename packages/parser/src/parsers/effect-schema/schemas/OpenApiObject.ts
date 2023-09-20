@@ -12,7 +12,7 @@ export const OpenApiObjectCodec = S.struct({
   components: S.optional(ComponentsObjectCodec),
   paths: S.optional(PathsObjectCodec),
 });
-export type OpenApiObject = S.To<typeof OpenApiObjectCodec>;
+export type OpenApiObject = S.Schema.To<typeof OpenApiObjectCodec>;
 
 export function buildOpenApi(): OpenApiObject {
   return {
@@ -81,13 +81,13 @@ export function buildOpenApi(): OpenApiObject {
           type: "object",
           properties: {
             foo: {
-              "type": "string"
+              type: "string",
             },
             bingo: {
-              "type": "number"
-            }
+              type: "number",
+            },
           },
-          required: ["foo"]
+          required: ["foo"],
         },
       },
     },

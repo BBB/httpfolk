@@ -5,4 +5,4 @@ export const HeaderObjectCodec = S.struct({
   deprecated: S.optional(S.boolean),
   allowEmptyValue: S.optional(S.boolean),
 });
-export type HeaderObject = S.To<typeof HeaderObjectCodec>;
+export type HeaderObject = S.Schema.To<typeof HeaderObjectCodec>;

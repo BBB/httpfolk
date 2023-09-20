@@ -16,4 +16,4 @@ export const ServerObject = S.struct({
   description: S.optional(S.string),
   variables: ServerVariablesObjectCodec,
 });
-export type ServerObject = S.To<typeof ServerObject>;
+export type ServerObject = S.Schema.To<typeof ServerObject>;

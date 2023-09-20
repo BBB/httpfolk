@@ -12,4 +12,4 @@ export const ResponseObjectCodec = S.struct({
   content: S.optional(ContentObjectCodec),
   links: S.optional(S.record(S.string, LinkObjectCodec)),
 });
-export type ResponseObject = S.To<typeof ResponseObjectCodec>;
+export type ResponseObject = S.Schema.To<typeof ResponseObjectCodec>;

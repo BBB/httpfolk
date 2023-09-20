@@ -7,4 +7,4 @@ export const LicenseObjectCodec = S.optional(
     url: S.optional(url),
   }),
 );
-export type LicenseObject = S.To<typeof LicenseObjectCodec>;
+export type LicenseObject = S.Schema.To<typeof LicenseObjectCodec>;

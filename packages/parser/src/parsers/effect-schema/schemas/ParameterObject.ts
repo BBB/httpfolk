@@ -13,4 +13,4 @@ export const ParameterObjectCodec = S.struct({
   deprecated: S.optional(S.boolean),
   allowEmptyValue: S.optional(S.boolean),
 });
-export type ParameterObject = S.To<typeof ParameterObjectCodec>;
+export type ParameterObject = S.Schema.To<typeof ParameterObjectCodec>;

@@ -6,4 +6,4 @@ import { PathItemObjectCodec } from "./PathItemObject";
 export const CallbackObjectCodec = S.lazy(() =>
   S.record(S.string, referenceOr(PathItemObjectCodec)),
 );
-export type CallbackObject = S.To<typeof CallbackObjectCodec>;
+export type CallbackObject = S.Schema.To<typeof CallbackObjectCodec>;

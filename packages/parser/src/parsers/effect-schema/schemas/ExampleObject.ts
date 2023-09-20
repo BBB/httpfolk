@@ -6,4 +6,4 @@ export const ExampleObjectCodec = S.struct({
   value: S.any,
   externalValue: S.string,
 });
-export type ExampleObject = S.To<typeof ExampleObjectCodec>;
+export type ExampleObject = S.Schema.To<typeof ExampleObjectCodec>;

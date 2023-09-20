@@ -44,11 +44,11 @@ importers:
         version: link:../visitor
     devDependencies:
       '@effect/data':
-        specifier: ^0.14.0
-        version: 0.14.0
+        specifier: ^0.18.5
+        version: 0.18.5
       '@effect/schema':
-        specifier: ^0.19.3
-        version: 0.19.3
+        specifier: ^0.36.3
+        version: 0.36.3(@effect/data@0.18.5)(@effect/io@0.40.3)
       '@types/node':
         specifier: ^18.16.1
         version: 18.16.1
@@ -59,11 +59,11 @@ importers:
   packages/parser:
     devDependencies:
       '@effect/data':
-        specifier: ^0.14.0
-        version: 0.14.0
+        specifier: ^0.18.5
+        version: 0.18.5
       '@effect/schema':
-        specifier: ^0.19.3
-        version: 0.19.3
+        specifier: ^0.36.3
+        version: 0.36.3(@effect/data@0.18.5)(@effect/io@0.40.3)
       '@types/node':
         specifier: ^18.16.1
         version: 18.16.1
@@ -75,37 +75,38 @@ importers:
         version: link:../parser
     devDependencies:
       '@effect/data':
-        specifier: ^0.14.0
-        version: 0.14.0
+        specifier: ^0.18.5
+        version: 0.18.5
       '@effect/schema':
-        specifier: ^0.19.3
-        version: 0.19.3
+        specifier: ^0.36.3
+        version: 0.36.3(@effect/data@0.18.5)(@effect/io@0.40.3)
       '@types/node':
         specifier: ^18.16.1
         version: 18.16.1
 
 packages:
 
-  /@effect/data@0.12.2:
-    resolution: {integrity: sha512-bmWRTcsSRG1FlBswT+D8SxW6r3c4B3pKJrjYfitCD03tXHnup5gLHaWqbFgIjiyYITS+UsJRRjVrNxvyGG4ZNQ==}
+  /@effect/data@0.18.5:
+    resolution: {integrity: sha512-VFPJ0prGq3eF6/eZYKVI/1IC1purdGJXEHJC1ggKynPko03upjtmeCeCsEyMiY12DzVIAuME425JndiFb7m2xw==}
     dev: true
 
-  /@effect/data@0.14.0:
-    resolution: {integrity: sha512-ZGmCBE5HQKSMVNjmBtIIhsUkd7cXhTeg8CUqZ6iZFHQz5yIwuAoCB7z7Gv2AXtonpSTsN7KiMg2xJ1+qL/pTrg==}
-    dev: true
-
-  /@effect/io@0.25.2:
-    resolution: {integrity: sha512-eGkx616RF3uUqhrHHeLGgZKXR8AXZdWrvwPnPdKSqXcr6Iu+8YqFQ73dCk5ujHfNVDLIHUSrI+kjAzLeKhVITg==}
+  /@effect/io@0.40.3(@effect/data@0.18.5):
+    resolution: {integrity: sha512-bnHBFq1XzXn94x2w5FcXZz3MbY7N3YrhiI2CrncJr3WcGRDc2rCYIpPupw0JQGFcJsoopTj1BNfBuBR5s4/RyA==}
+    peerDependencies:
+      '@effect/data': ^0.18.5
     dependencies:
-      '@effect/data': 0.12.2
+      '@effect/data': 0.18.5
     dev: true
 
-  /@effect/schema@0.19.3:
-    resolution: {integrity: sha512-jR7o19HBX7PBYRLV1G6ZlM90giRe+lZkA6BqVNamkhNfVsHU4MnGr2lqM2H4fy4MgR744GGXuxCDjVdydkMvAw==}
+  /@effect/schema@0.36.3(@effect/data@0.18.5)(@effect/io@0.40.3):
+    resolution: {integrity: sha512-jFhCxWo/clDtzoSpQDRqRj2KtI3zW9CbThgW1vXcBZsHbMnhauo00ps0DRIauKwKab+wscKHhzCgCFFS8aDmYw==}
+    peerDependencies:
+      '@effect/data': ^0.18.5
+      '@effect/io': ^0.40.1
     dependencies:
-      '@effect/data': 0.12.2
-      '@effect/io': 0.25.2
-      fast-check: 3.8.1
+      '@effect/data': 0.18.5
+      '@effect/io': 0.40.3(@effect/data@0.18.5)
+      fast-check: 3.13.0
     dev: true
 
   /@esbuild/android-arm64@0.18.20:
@@ -481,8 +482,8 @@ packages:
       '@esbuild/win32-x64': 0.18.20
     dev: true
 
-  /fast-check@3.8.1:
-    resolution: {integrity: sha512-WRll9CUIz6jWKgByFlHT2M/1BY3F7lewKl5BBIz5VHAy7B8y5iklK9rVm922kx+0x1hJqdkffuTs008xfIgytQ==}
+  /fast-check@3.13.0:
+    resolution: {integrity: sha512-m6+3gZ/yTiCWTuV/1e/UuPPjyyyHdQ5gu0pMd84C6705VTDjAgAE6nqFT5jhgegFllCJ95yOzBpqvJSs2DZAxQ==}
     engines: {node: '>=8.0.0'}
     dependencies:
       pure-rand: 6.0.0

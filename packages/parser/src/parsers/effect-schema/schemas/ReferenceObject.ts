@@ -25,7 +25,7 @@ export const localRef = S.templateLiteral(
  * https://spec.openapis.org/oas/latest.html#reference-object
  */
 export const ReferenceObjectCodec = S.struct({ $ref: localRef });
-export type ReferenceObject = S.To<typeof ReferenceObjectCodec>;
+export type ReferenceObject = S.Schema.To<typeof ReferenceObjectCodec>;
 export const isReferenceObject = S.is(ReferenceObjectCodec);
 export const referenceOr = <Members extends readonly S.Schema<any, any>[]>(
   ...members: Members

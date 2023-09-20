@@ -8,4 +8,4 @@ export const EncodingObjectCodec = S.struct({
   explode: S.optional(S.boolean),
   allowReserved: S.optional(S.boolean),
 });
-export type EncodingObject = S.To<typeof EncodingObjectCodec>;
+export type EncodingObject = S.Schema.To<typeof EncodingObjectCodec>;

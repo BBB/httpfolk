@@ -9,4 +9,4 @@ export const ContactObjectCodec = S.optional(
     email: S.optional(email),
   }),
 );
-export type ContactObject = S.To<typeof ContactObjectCodec>;
+export type ContactObject = S.Schema.To<typeof ContactObjectCodec>;

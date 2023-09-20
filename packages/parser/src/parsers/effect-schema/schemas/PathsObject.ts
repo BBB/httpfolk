@@ -6,4 +6,4 @@ export const PathsObjectCodec = S.record(
   S.string,
   referenceOr(PathItemObjectCodec),
 );
-export type PathsObject = S.To<typeof PathsObjectCodec>;
+export type PathsObject = S.Schema.To<typeof PathsObjectCodec>;

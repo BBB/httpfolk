@@ -4,6 +4,6 @@ export const SecurityRequirementObjectCodec = S.record(
   S.string,
   S.array(S.string),
 );
-export type SecurityRequirementObject = S.To<
+export type SecurityRequirementObject = S.Schema.To<
   typeof SecurityRequirementObjectCodec
 >;

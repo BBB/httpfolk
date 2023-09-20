@@ -9,4 +9,4 @@ export const LinkObjectCodec = S.struct({
   description: S.optional(S.string),
   server: S.optional(ServerObject),
 });
-export type LinkObject = S.To<typeof LinkObjectCodec>;
+export type LinkObject = S.Schema.To<typeof LinkObjectCodec>;

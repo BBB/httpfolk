@@ -14,4 +14,4 @@ export const InfoObjectCodec = S.struct({
   license: LicenseObjectCodec,
   version: S.optional(S.string),
 });
-export type InfoObject = S.To<typeof InfoObjectCodec>;
+export type InfoObject = S.Schema.To<typeof InfoObjectCodec>;

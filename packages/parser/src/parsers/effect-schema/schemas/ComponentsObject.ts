@@ -36,4 +36,4 @@ export const ComponentsObjectCodec = S.struct({
   pathItems: S.optional(S.record(restrictedStringKey, S.any)),
 });
 
-export type ComponentsObject = S.To<typeof ComponentsObjectCodec>;
+export type ComponentsObject = S.Schema.To<typeof ComponentsObjectCodec>;

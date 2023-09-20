@@ -8,7 +8,7 @@ const MediaTypeCommon = S.struct({
   schema: S.optional(referenceOr(SchemaObjectCodec)),
   encoding: S.optional(S.record(S.string, referenceOr(EncodingObjectCodec))),
 });
-type MediaTypeCommon = S.To<typeof MediaTypeCommon>;
+type MediaTypeCommon = S.Schema.To<typeof MediaTypeCommon>;
 export const MediaTypeObjectCodec = S.union(
   S.extend(MediaTypeCommon)(
     S.struct({
@@ -21,4 +21,4 @@ export const MediaTypeObjectCodec = S.union(
     }),
   ),
 );
-export type MediaTypeObject = S.To<typeof MediaTypeObjectCodec>;
+export type MediaTypeObject = S.Schema.To<typeof MediaTypeObjectCodec>;

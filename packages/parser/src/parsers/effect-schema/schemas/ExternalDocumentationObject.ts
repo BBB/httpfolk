@@ -5,6 +5,6 @@ export const ExternalDocumentationObjectCodec = S.struct({
   description: S.optional(S.string),
   url: url,
 });
-export type ExternalDocumentationObject = S.To<
+export type ExternalDocumentationObject = S.Schema.To<
   typeof ExternalDocumentationObjectCodec
 >;

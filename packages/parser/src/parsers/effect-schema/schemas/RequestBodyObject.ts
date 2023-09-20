@@ -6,4 +6,4 @@ export const RequestBodyObjectCodec = S.struct({
   content: S.record(S.string, MediaTypeObjectCodec),
   required: S.optional(S.boolean),
 });
-export type RequestBodyObject = S.To<typeof RequestBodyObjectCodec>;
+export type RequestBodyObject = S.Schema.To<typeof RequestBodyObjectCodec>;

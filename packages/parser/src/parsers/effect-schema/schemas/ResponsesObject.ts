@@ -7,4 +7,4 @@ export const ResponsesObjectCodec = S.record(
   restrictedStringKey,
   referenceOr(ResponseObjectCodec),
 );
-export type ResponsesObject = S.To<typeof ResponsesObjectCodec>;
+export type ResponsesObject = S.Schema.To<typeof ResponsesObjectCodec>;

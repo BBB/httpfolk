@@ -7,7 +7,7 @@ type SchemaCommon = {
   readonly description?: string;
   readonly default?: any;
   readonly nullable?: boolean;
-  readonly format?: S.To<typeof format>;
+  readonly format?: S.Schema.To<typeof format>;
 };
 export type SchemaObject =
   | (SchemaCommon &
