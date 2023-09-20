@@ -17,20 +17,20 @@ export const ComponentsObjectCodec = S.struct({
   schemas: S.optional(S.record(restrictedStringKey, SchemaObjectCodec)),
   responses: S.optional(ResponsesObjectCodec),
   parameters: S.optional(
-    S.record(restrictedStringKey, referenceOr(ParameterObjectCodec))
+    S.record(restrictedStringKey, referenceOr(ParameterObjectCodec)),
   ),
   examples: S.optional(
-    S.record(restrictedStringKey, referenceOr(ExampleObjectCodec))
+    S.record(restrictedStringKey, referenceOr(ExampleObjectCodec)),
   ),
   requestBodies: S.optional(
-    S.record(restrictedStringKey, referenceOr(RequestBodyObjectCodec))
+    S.record(restrictedStringKey, referenceOr(RequestBodyObjectCodec)),
   ),
   headers: S.optional(
-    S.record(restrictedStringKey, referenceOr(HeaderObjectCodec))
+    S.record(restrictedStringKey, referenceOr(HeaderObjectCodec)),
   ),
   securitySchemes: S.optional(S.record(restrictedStringKey, S.any)),
   links: S.optional(
-    S.record(restrictedStringKey, referenceOr(LinkObjectCodec))
+    S.record(restrictedStringKey, referenceOr(LinkObjectCodec)),
   ),
   callbacks: S.optional(S.record(restrictedStringKey, S.any)),
   pathItems: S.optional(S.record(restrictedStringKey, S.any)),

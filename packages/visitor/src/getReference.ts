@@ -26,13 +26,13 @@ const decodeComponentFieldNames = decodeToResult(componentFieldNames);
 
 export type Goto = <T>(
   ref: ReferenceObject,
-  itemSchema: S.Schema<T>
+  itemSchema: S.Schema<T>,
 ) => Result<T, ReferenceNotFound | ReferenceNotExpected>;
 export const getReference =
   (schema: OpenApiObject): Goto =>
   <T>(
     ref: ReferenceObject,
-    itemSchema: S.Schema<T>
+    itemSchema: S.Schema<T>,
   ): Result<T, ReferenceNotFound | ReferenceNotExpected> => {
     if (!schema.components) {
       return Result.failure(ReferenceNotFound.of(ref));
@@ -50,7 +50,7 @@ export const getReference =
       })
       .flatMap((v) =>
         decodeToResult(itemSchema)(v).mapFailure((_) =>
-          ReferenceNotExpected.of(ref)
-        )
+          ReferenceNotExpected.of(ref),
+        ),
       );
   };

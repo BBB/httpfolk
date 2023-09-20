@@ -8,12 +8,12 @@ it("resolves a known item", () => {
     {
       $ref: "#/components/schemas/a",
     },
-    SchemaObjectCodec
+    SchemaObjectCodec,
   );
   expect(result).toStrictEqual(
     Result.success({
       type: "string",
-    })
+    }),
   );
 });
 

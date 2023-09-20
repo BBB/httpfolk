@@ -3,7 +3,10 @@ import { ContentObject, OpenApiObject } from "@ollierelph/openapi-parser";
 import { NodeAndParent } from "./lib/NodeAndParent";
 
 export class Content implements NodeAndParent<ContentObject, Response> {
-  protected constructor(public node: ContentObject, public parent: Response) {}
+  protected constructor(
+    public node: ContentObject,
+    public parent: Response,
+  ) {}
   static of(definition: ContentObject, parent: Response) {
     return new Content(definition, parent);
   }

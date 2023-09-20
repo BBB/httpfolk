@@ -14,7 +14,10 @@ type ResponseNode = {
 };
 
 export class Response implements NodeAndParent<ResponseNode, Operation> {
-  protected constructor(public node: ResponseNode, public parent: Operation) {}
+  protected constructor(
+    public node: ResponseNode,
+    public parent: Operation,
+  ) {}
   static of(statusCode: string, definition: ResponseObject, parent: Operation) {
     return new Response({ statusCode, definition }, parent);
   }

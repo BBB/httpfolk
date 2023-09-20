@@ -18,11 +18,14 @@ type OperationName = (typeof allOperationNames)[number];
 type OperationNode = { name: string; definition: OperationObject };
 
 export class Operation implements NodeAndParent<OperationNode, PathItem> {
-  protected constructor(public node: OperationNode, public parent: PathItem) {}
+  protected constructor(
+    public node: OperationNode,
+    public parent: PathItem,
+  ) {}
   static of(
     name: OperationName,
     definition: OperationObject,
-    parent: PathItem
+    parent: PathItem,
   ) {
     return new Operation({ name, definition }, parent);
   }
@@ -30,7 +33,7 @@ export class Operation implements NodeAndParent<OperationNode, PathItem> {
 
 export function visitOperationObjects<T>(
   schema: OpenApiObject,
-  operations: readonly OperationName[] = allOperationNames
+  operations: readonly OperationName[] = allOperationNames,
 ) {
   const visitParent = visitPathItemObjects(schema);
   return (visit: (operation: Operation) => void) => {

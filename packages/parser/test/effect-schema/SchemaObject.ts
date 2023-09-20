@@ -67,7 +67,7 @@ describe("object", () => {
         additionalProperties: {
           woo: booleanSchema(),
         },
-      })
+      }),
     ).toMatchInlineSnapshot(`
       {
         "additionalProperties": {
@@ -106,7 +106,7 @@ describe("integer", () => {
     expect(
       underTest({
         type: "integer",
-      })
+      }),
     ).toMatchInlineSnapshot(`
       {
         "type": "integer",
@@ -120,7 +120,7 @@ describe("boolean", () => {
     expect(
       underTest({
         type: "boolean",
-      })
+      }),
     ).toMatchInlineSnapshot(`
       {
         "type": "boolean",

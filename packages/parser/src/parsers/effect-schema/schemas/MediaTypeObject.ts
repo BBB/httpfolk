@@ -13,12 +13,12 @@ export const MediaTypeObjectCodec = S.union(
   S.extend(MediaTypeCommon)(
     S.struct({
       examples: S.optional(S.record(S.string, referenceOr(ExampleObjectCodec))),
-    })
+    }),
   ),
   S.extend(MediaTypeCommon)(
     S.struct({
       example: S.optional(S.any),
-    })
-  )
+    }),
+  ),
 );
 export type MediaTypeObject = S.To<typeof MediaTypeObjectCodec>;

@@ -13,7 +13,7 @@ describe("referenceOr", () => {
     const decode = decodeToResult(Schema);
     expect(decode("woo")).toStrictEqual(Result.success("woo"));
     expect(decode({ $ref: "#/components/responses/a" })).toStrictEqual(
-      Result.success({ $ref: "#/components/responses/a" })
+      Result.success({ $ref: "#/components/responses/a" }),
     );
   });
 });
@@ -21,13 +21,15 @@ describe("referenceOr", () => {
 describe("localRef", () => {
   it("should parse a valid ref", () => {
     expect(
-      decodeToResult(ReferenceObjectCodec)({ $ref: "#/components/responses/a" })
+      decodeToResult(ReferenceObjectCodec)({
+        $ref: "#/components/responses/a",
+      }),
     ).toEqual(Result.success({ $ref: "#/components/responses/a" }));
   });
   it("should not allow an invalid ref", () => {
     expect(
       // @ts-ignores
-      decodeToResult(ReferenceObjectCodec)({ $ref: "#/components/responses" })
+      decodeToResult(ReferenceObjectCodec)({ $ref: "#/components/responses" }),
     ).toBeInstanceOf(Failure);
   });
 });

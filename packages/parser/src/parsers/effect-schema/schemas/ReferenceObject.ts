@@ -10,14 +10,14 @@ export const componentFieldNames = S.union(
   S.literal("securitySchemes"),
   S.literal("links"),
   S.literal("callbacks"),
-  S.literal("pathItems")
+  S.literal("pathItems"),
 );
 
 export const localRef = S.templateLiteral(
   S.literal("#/components/"),
   componentFieldNames,
   S.literal("/"),
-  S.string
+  S.string,
 );
 
 /**

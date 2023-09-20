@@ -51,7 +51,7 @@ function schemaCommonAnd<
     | S.Schema<never>
     | S.PropertySignature<any, boolean, any, boolean>
     | S.PropertySignature<never, boolean, never, boolean>
-  >
+  >,
 >(fields: Fields) {
   return S.extend(SchemaObjectCommonCodec)(S.struct(fields));
 }
@@ -83,13 +83,13 @@ export const SchemaObjectCodec: S.Schema<any, SchemaObject> = S.lazy(() =>
       type: S.literal("object"),
       required: S.optional(S.array(S.string)),
       properties: S.optional(
-        S.record(S.string, referenceOr(SchemaObjectCodec))
+        S.record(S.string, referenceOr(SchemaObjectCodec)),
       ),
       additionalProperties: S.optional(
         S.union(
           S.literal(true),
-          S.record(S.string, referenceOr(SchemaObjectCodec))
-        )
+          S.record(S.string, referenceOr(SchemaObjectCodec)),
+        ),
       ),
     }),
     schemaCommonAnd({
@@ -97,8 +97,8 @@ export const SchemaObjectCodec: S.Schema<any, SchemaObject> = S.lazy(() =>
     }),
     schemaCommonAnd({
       oneOf: S.array(referenceOr(SchemaObjectCodec)),
-    })
+    }),
     // Do I really want to support this?
     // sharedSchemaAnd({ anyOf: S.optional(S.array(schema)) })
-  )
+  ),
 );

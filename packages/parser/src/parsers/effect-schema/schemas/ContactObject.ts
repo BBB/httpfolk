@@ -7,6 +7,6 @@ export const ContactObjectCodec = S.optional(
     name: S.optional(S.string),
     url: S.optional(url),
     email: S.optional(email),
-  })
+  }),
 );
 export type ContactObject = S.To<typeof ContactObjectCodec>;

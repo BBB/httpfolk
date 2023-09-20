@@ -8,8 +8,8 @@ const ServerVariablesObjectCodec = S.optional(
       enum: S.optional(S.array(S.string)),
       default: S.string,
       description: S.string,
-    })
-  )
+    }),
+  ),
 );
 export const ServerObject = S.struct({
   url,

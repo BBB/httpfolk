@@ -14,7 +14,10 @@ type MediaTypeNode = {
 };
 
 export class MediaType implements NodeAndParent<MediaTypeNode, Content> {
-  protected constructor(public node: MediaTypeNode, public parent: Content) {}
+  protected constructor(
+    public node: MediaTypeNode,
+    public parent: Content,
+  ) {}
   static of(contentType: string, definition: MediaTypeObject, parent: Content) {
     return new MediaType({ contentType, definition }, parent);
   }
@@ -27,7 +30,7 @@ export function visitMediaTypeObjects<T>(schema: OpenApiObject) {
       Object.entries(parent.node).forEach(([contentType, mediaTypeObject]) => {
         isReferenceObject(mediaTypeObject)
           ? goto(mediaTypeObject, MediaTypeObjectCodec).map((definition) =>
-              visit(MediaType.of(contentType, definition, parent))
+              visit(MediaType.of(contentType, definition, parent)),
             )
           : visit(MediaType.of(contentType, mediaTypeObject, parent));
       });

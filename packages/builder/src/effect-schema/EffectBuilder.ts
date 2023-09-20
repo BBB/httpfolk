@@ -56,7 +56,7 @@ class MethodPaths {
       ? this.resolveReference(media.schema, SchemaObjectCodec).getOrElse(
           (err) => {
             throw err;
-          }
+          },
         )
       : media.schema;
 
@@ -64,10 +64,10 @@ class MethodPaths {
       return ts.factory.createCallExpression(
         ts.factory.createPropertyAccessExpression(
           ts.factory.createIdentifier("S"),
-          ts.factory.createIdentifier("struct")
+          ts.factory.createIdentifier("struct"),
         ),
         undefined,
-        []
+        [],
       );
     }
 
@@ -77,11 +77,11 @@ class MethodPaths {
           ts.factory.createCallExpression(
             ts.factory.createPropertyAccessExpression(
               ts.factory.createIdentifier("S"),
-              ts.factory.createIdentifier("bool")
+              ts.factory.createIdentifier("bool"),
             ),
             undefined,
-            []
-          )
+            [],
+          ),
         )
         .with(
           { type: "string" },
@@ -91,31 +91,31 @@ class MethodPaths {
             ts.factory.createCallExpression(
               ts.factory.createPropertyAccessExpression(
                 ts.factory.createIdentifier("S"),
-                ts.factory.createIdentifier("literal")
+                ts.factory.createIdentifier("literal"),
               ),
               undefined,
-              []
-            )
+              [],
+            ),
         )
         .with({ type: "object" }, (it) =>
           ts.factory.createCallExpression(
             ts.factory.createPropertyAccessExpression(
               ts.factory.createIdentifier("S"),
-              ts.factory.createIdentifier("struct")
+              ts.factory.createIdentifier("struct"),
             ),
             undefined,
-            []
-          )
+            [],
+          ),
         )
         .with({ type: "array" }, (it) =>
           ts.factory.createCallExpression(
             ts.factory.createPropertyAccessExpression(
               ts.factory.createIdentifier("S"),
-              ts.factory.createIdentifier("array")
+              ts.factory.createIdentifier("array"),
             ),
             undefined,
-            []
-          )
+            [],
+          ),
         )
         .exhaustive();
     }
@@ -123,10 +123,10 @@ class MethodPaths {
     return ts.factory.createCallExpression(
       ts.factory.createPropertyAccessExpression(
         ts.factory.createIdentifier("S"),
-        ts.factory.createIdentifier("struct")
+        ts.factory.createIdentifier("struct"),
       ),
       undefined,
-      []
+      [],
     );
   }
 
@@ -135,7 +135,7 @@ class MethodPaths {
       return ts.factory.createCallExpression(
         ts.factory.createPropertyAccessExpression(
           ts.factory.createIdentifier("S"),
-          ts.factory.createIdentifier("union")
+          ts.factory.createIdentifier("union"),
         ),
         undefined,
         Object.entries(definition).flatMap(([status, def]) => {
@@ -143,7 +143,7 @@ class MethodPaths {
             ? this.resolveReference(def, ResponseObjectCodec).getOrElse(
                 (err) => {
                   throw err;
-                }
+                },
               )
             : def;
           if (!res.content) {
@@ -153,7 +153,7 @@ class MethodPaths {
             return ts.factory.createCallExpression(
               ts.factory.createPropertyAccessExpression(
                 ts.factory.createIdentifier("S"),
-                ts.factory.createIdentifier("struct")
+                ts.factory.createIdentifier("struct"),
               ),
               undefined,
               [
@@ -164,39 +164,39 @@ class MethodPaths {
                       ts.factory.createCallExpression(
                         ts.factory.createPropertyAccessExpression(
                           ts.factory.createIdentifier("S"),
-                          ts.factory.createIdentifier("literal")
+                          ts.factory.createIdentifier("literal"),
                         ),
                         undefined,
-                        [ts.factory.createNumericLiteral(status)]
-                      )
+                        [ts.factory.createNumericLiteral(status)],
+                      ),
                     ),
                     ts.factory.createPropertyAssignment(
                       ts.factory.createIdentifier("contentType"),
                       ts.factory.createCallExpression(
                         ts.factory.createPropertyAccessExpression(
                           ts.factory.createIdentifier("S"),
-                          ts.factory.createIdentifier("literal")
+                          ts.factory.createIdentifier("literal"),
                         ),
                         undefined,
-                        [ts.factory.createStringLiteral(contentType)]
-                      )
+                        [ts.factory.createStringLiteral(contentType)],
+                      ),
                     ),
                     ts.factory.createPropertyAssignment(
                       ts.factory.createIdentifier("body"),
-                      this.schemaObjectToCodec(media.schema)
+                      this.schemaObjectToCodec(media.schema),
                     ),
                   ],
-                  true
+                  true,
                 ),
-              ]
+              ],
             );
           });
-        })
+        }),
       );
     };
     const createPropertiesForMethod = (
       method: string,
-      paths: Array<PathResponses>
+      paths: Array<PathResponses>,
     ) => {
       if (paths.length > 0) {
         return [
@@ -209,12 +209,12 @@ class MethodPaths {
                   ts.factory.createObjectLiteralExpression([
                     ts.factory.createPropertyAssignment(
                       "responses",
-                      responsesToCodec(p.responses)
+                      responsesToCodec(p.responses),
                     ),
-                  ])
-                )
-              )
-            )
+                  ]),
+                ),
+              ),
+            ),
           ),
         ];
       }
@@ -232,10 +232,10 @@ class MethodPaths {
         ts.factory.createImportClause(
           false,
           undefined,
-          ts.factory.createNamespaceImport(ts.factory.createIdentifier("S"))
+          ts.factory.createNamespaceImport(ts.factory.createIdentifier("S")),
         ),
         ts.factory.createStringLiteral("@effect/schema/Schema"),
-        undefined
+        undefined,
       ),
       ts.factory.createVariableStatement(
         [ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
@@ -245,11 +245,11 @@ class MethodPaths {
               ts.factory.createIdentifier("paths"),
               undefined,
               undefined,
-              ts.factory.createObjectLiteralExpression(properties)
+              ts.factory.createObjectLiteralExpression(properties),
             ),
           ],
-          ts.NodeFlags.Const
-        )
+          ts.NodeFlags.Const,
+        ),
       ),
     ];
   }

@@ -33,7 +33,7 @@ export const PathItemObjectCodec: S.Schema<any, PathItemObject> = S.lazy(() =>
     trace: S.optional(OperationObjectCodec),
     servers: S.optional(S.array(ServerObject)),
     parameters: S.optional(
-      S.array(S.union(ParameterObjectCodec, ReferenceObjectCodec))
+      S.array(S.union(ParameterObjectCodec, ReferenceObjectCodec)),
     ),
-  })
+  }),
 );

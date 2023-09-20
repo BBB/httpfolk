@@ -5,6 +5,6 @@ export const LicenseObjectCodec = S.optional(
   S.struct({
     name: S.string,
     url: S.optional(url),
-  })
+  }),
 );
 export type LicenseObject = S.To<typeof LicenseObjectCodec>;

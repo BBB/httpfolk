@@ -5,7 +5,10 @@ import { NodeAndParent } from "./lib/NodeAndParent";
 type PathsObjectNode = PathsObject;
 
 export class Paths implements NodeAndParent<PathsObjectNode, OpenApi> {
-  protected constructor(public node: PathsObjectNode, public parent: OpenApi) {}
+  protected constructor(
+    public node: PathsObjectNode,
+    public parent: OpenApi,
+  ) {}
   static of(definition: PathsObject, parent: OpenApi) {
     return new Paths(definition, parent);
   }

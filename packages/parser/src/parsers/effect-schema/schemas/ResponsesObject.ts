@@ -5,6 +5,6 @@ import { ResponseObjectCodec } from "./ResponseObject";
 
 export const ResponsesObjectCodec = S.record(
   restrictedStringKey,
-  referenceOr(ResponseObjectCodec)
+  referenceOr(ResponseObjectCodec),
 );
 export type ResponsesObject = S.To<typeof ResponsesObjectCodec>;

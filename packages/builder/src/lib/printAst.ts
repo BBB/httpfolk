@@ -6,7 +6,7 @@ export function printAst(ast: ts.Node) {
     "",
     ts.ScriptTarget.Latest,
     false,
-    ts.ScriptKind.TS
+    ts.ScriptKind.TS,
   );
   const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
 

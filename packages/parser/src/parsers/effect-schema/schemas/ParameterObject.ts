@@ -6,7 +6,7 @@ export const ParameterObjectCodec = S.struct({
     S.literal("query"),
     S.literal("header"),
     S.literal("path"),
-    S.literal("cookie")
+    S.literal("cookie"),
   ),
   description: S.optional(S.string),
   required: S.boolean,

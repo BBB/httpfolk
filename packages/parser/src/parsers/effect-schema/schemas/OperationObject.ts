@@ -42,5 +42,5 @@ export const OperationObjectCodec: S.Schema<any, OperationObject> = S.lazy(() =>
     deprecated: S.optional(S.boolean),
     security: S.optional(S.array(SecurityRequirementObjectCodec)),
     servers: S.optional(S.array(ServerObject)),
-  })
+  }),
 );

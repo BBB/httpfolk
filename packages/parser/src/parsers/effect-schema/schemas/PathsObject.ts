@@ -4,6 +4,6 @@ import { PathItemObjectCodec } from "./PathItemObject";
 
 export const PathsObjectCodec = S.record(
   S.string,
-  referenceOr(PathItemObjectCodec)
+  referenceOr(PathItemObjectCodec),
 );
 export type PathsObject = S.To<typeof PathsObjectCodec>;

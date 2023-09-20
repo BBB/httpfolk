@@ -8,12 +8,12 @@ import { formatErrors } from "@effect/schema/TreeFormatter";
 
 export class EffectSchema<
   TheSchema extends S.Schema<any>,
-  Out = TheSchema extends S.Schema<infer R> ? R : never
+  Out = TheSchema extends S.Schema<infer R> ? R : never,
 > implements Schema<Out>
 {
   private readonly decoder: (
     input: unknown,
-    options?: ParseOptions
+    options?: ParseOptions,
   ) => Result<Out, ParseError>;
 
   protected constructor(private theSchema: TheSchema) {
@@ -22,7 +22,7 @@ export class EffectSchema<
 
   parse(input: unknown) {
     return this.decoder(input).mapFailure(
-      (err) => new InvalidInput(formatErrors(err.errors))
+      (err) => new InvalidInput(formatErrors(err.errors)),
     );
   }
 
