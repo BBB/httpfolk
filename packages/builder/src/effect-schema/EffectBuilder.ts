@@ -105,30 +105,36 @@ class MethodPaths {
           [],
         ),
       )
-      .with({ type: "object" }, { properties: P.map() }, (it) =>
-        ts.factory.createCallExpression(
-          ts.factory.createPropertyAccessExpression(
-            ts.factory.createIdentifier("S"),
-            ts.factory.createIdentifier("struct"),
-          ),
-          undefined,
-          "properties" in it
-            ? [
-                ts.factory.createObjectLiteralExpression(
-                  Object.entries(it.properties).reduce(
-                    (agg, [key, value]) =>
-                      agg.concat([
-                        ts.factory.createPropertyAssignment(
-                          ts.factory.createIdentifier(key),
-                          this.schemaObjectToCodec(value),
-                        ),
-                      ]),
-                    [] as PropertyAssignment[],
+      .with(
+        { type: "object" },
+        { properties: P.map() },
+        { required: P.array<string>() },
+        (it) =>
+          ts.factory.createCallExpression(
+            ts.factory.createPropertyAccessExpression(
+              ts.factory.createIdentifier("S"),
+              ts.factory.createIdentifier("struct"),
+            ),
+            undefined,
+            "properties" in it
+              ? [
+                  ts.factory.createObjectLiteralExpression(
+                    Object.entries(it.properties)
+                      .filter(([key]) => it.required?.includes(key))
+                      .reduce(
+                        (agg, [key, value]) =>
+                          agg.concat([
+                            ts.factory.createPropertyAssignment(
+                              ts.factory.createIdentifier(key),
+                              this.schemaObjectToCodec(value),
+                            ),
+                          ]),
+                        [] as PropertyAssignment[],
+                      ),
                   ),
-                ),
-              ]
-            : [],
-        ),
+                ]
+              : [],
+          ),
       )
       .with({ allOf: P.any }, (it) => {
         throw new Error("Not implemented");
