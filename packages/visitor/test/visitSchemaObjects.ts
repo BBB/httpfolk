@@ -14,7 +14,12 @@ it("visits every schemaObject", () => {
         "type": "string",
       },
       {
-        "type": "string",
+        "properties": {
+          "foo": {
+            "type": "string",
+          },
+        },
+        "type": "object",
       },
       {
         "type": "string",
