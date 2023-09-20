@@ -1,5 +1,4 @@
 import { expect, it } from "vitest";
-import prettier from "prettier";
 
 export class TypeScriptProgram {
   constructor(public value: string) {}
@@ -10,18 +9,16 @@ export class TypeScriptProgram {
 }
 
 expect.addSnapshotSerializer({
-  test: (v): v is TypeScriptProgram => v instanceof TypeScriptProgram,
-  print(val) {
+  test: (v: any): v is TypeScriptProgram => v instanceof TypeScriptProgram,
+  serialize(val: TypeScriptProgram) {
     return `// typescript
-${prettier.format((val as TypeScriptProgram).value, {
-  parser: "typescript",
-})}`;
+${(val as TypeScriptProgram).value}`;
   },
 });
 
 it("should render a TypeScriptProgram", () => {
   expect(TypeScriptProgram.of("const a = {}")).toMatchInlineSnapshot(`
     // typescript
-    const a = {};
+    const a = {}
   `);
 });

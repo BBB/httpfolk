@@ -3,6 +3,7 @@ import { it } from "vitest";
 import { EffectSchema } from "~/src/parsers/effect-schema/EffectSchema";
 import {
   buildOpenApi,
+  OpenApiObject,
   OpenApiObjectCodec,
 } from "~/src/parsers/effect-schema/schemas/OpenApiObject";
 
@@ -231,7 +232,7 @@ it.each([
       },
     },
   ],
-] as const)("parses an openApi", (input) => {
+])("parses an openApi", (input: OpenApiObject) => {
   underTest(input);
 });
 
