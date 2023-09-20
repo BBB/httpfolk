@@ -16,7 +16,7 @@ import {
   visitPathItemObjects,
 } from "@ollierelph/openapi-visitor";
 import { printAst } from "~/src/lib/printAst";
-import { match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 
 type PathResponses = {
   path: string;
@@ -74,78 +74,69 @@ class MethodPaths {
       );
     }
 
-    if ("type" in schema) {
-      return match(schema)
-        .with({ type: "boolean" }, (it) =>
-          ts.factory.createCallExpression(
-            ts.factory.createPropertyAccessExpression(
-              ts.factory.createIdentifier("S"),
-              ts.factory.createIdentifier("bool"),
-            ),
-            undefined,
-            [],
+    return match(schema)
+      .with({ type: "boolean" }, (it) =>
+        ts.factory.createCallExpression(
+          ts.factory.createPropertyAccessExpression(
+            ts.factory.createIdentifier("S"),
+            ts.factory.createIdentifier("bool"),
           ),
-        )
-        .with(
-          { type: "string" },
-          { type: "number" },
-          { type: "integer" },
-          (it) =>
-            ts.factory.createCallExpression(
-              ts.factory.createPropertyAccessExpression(
-                ts.factory.createIdentifier("S"),
-                ts.factory.createIdentifier("literal"),
-              ),
-              undefined,
-              [],
-            ),
-        )
-        .with({ type: "object" }, (it) =>
-          ts.factory.createCallExpression(
-            ts.factory.createPropertyAccessExpression(
-              ts.factory.createIdentifier("S"),
-              ts.factory.createIdentifier("struct"),
-            ),
-            undefined,
-            it.properties
-              ? [
-                  ts.factory.createObjectLiteralExpression(
-                    Object.entries(it.properties).reduce(
-                      (agg, [key, value]) =>
-                        agg.concat([
-                          ts.factory.createPropertyAssignment(
-                            ts.factory.createIdentifier(key),
-                            this.schemaObjectToCodec(value),
-                          ),
-                        ]),
-                      [] as PropertyAssignment[],
-                    ),
+          undefined,
+          [],
+        ),
+      )
+      .with({ type: "string" }, { type: "number" }, { type: "integer" }, (it) =>
+        ts.factory.createCallExpression(
+          ts.factory.createPropertyAccessExpression(
+            ts.factory.createIdentifier("S"),
+            ts.factory.createIdentifier("literal"),
+          ),
+          undefined,
+          [],
+        ),
+      )
+      .with({ type: "array" }, (it) =>
+        ts.factory.createCallExpression(
+          ts.factory.createPropertyAccessExpression(
+            ts.factory.createIdentifier("S"),
+            ts.factory.createIdentifier("array"),
+          ),
+          undefined,
+          [],
+        ),
+      )
+      .with({ type: "object" }, { properties: P.map() }, (it) =>
+        ts.factory.createCallExpression(
+          ts.factory.createPropertyAccessExpression(
+            ts.factory.createIdentifier("S"),
+            ts.factory.createIdentifier("struct"),
+          ),
+          undefined,
+          "properties" in it
+            ? [
+                ts.factory.createObjectLiteralExpression(
+                  Object.entries(it.properties).reduce(
+                    (agg, [key, value]) =>
+                      agg.concat([
+                        ts.factory.createPropertyAssignment(
+                          ts.factory.createIdentifier(key),
+                          this.schemaObjectToCodec(value),
+                        ),
+                      ]),
+                    [] as PropertyAssignment[],
                   ),
-                ]
-              : [],
-          ),
-        )
-        .with({ type: "array" }, (it) =>
-          ts.factory.createCallExpression(
-            ts.factory.createPropertyAccessExpression(
-              ts.factory.createIdentifier("S"),
-              ts.factory.createIdentifier("array"),
-            ),
-            undefined,
-            [],
-          ),
-        )
-        .exhaustive();
-    }
-
-    return ts.factory.createCallExpression(
-      ts.factory.createPropertyAccessExpression(
-        ts.factory.createIdentifier("S"),
-        ts.factory.createIdentifier("struct"),
-      ),
-      undefined,
-      [],
-    );
+                ),
+              ]
+            : [],
+        ),
+      )
+      .with({ allOf: P.any }, (it) => {
+        throw new Error("Not implemented");
+      })
+      .with({ oneOf: P.any }, (it) => {
+        throw new Error("Not implemented");
+      })
+      .exhaustive();
   }
 
   toObjectLiteral() {
