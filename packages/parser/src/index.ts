@@ -11,7 +11,7 @@ export {
   PathItemObjectCodec,
   PathItemObject,
   httpVerbs,
-  HttpVerb
+  HttpVerb,
 } from "./parsers/effect-schema/schemas/PathItemObject";
 export {
   SchemaObjectCodec,

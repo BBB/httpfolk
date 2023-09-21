@@ -4,7 +4,10 @@
     "//"
   ],
   "pipeline": {
+    "format": {
+    },
     "tscheck": {
+      "dependsOn": ["format"]
     },
     "test:unit": {
       "dependsOn": [
