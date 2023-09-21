@@ -24,28 +24,12 @@ import {
 } from "@ollierelph/openapi-visitor";
 import { printAst } from "~/src/lib/printAst";
 import { match, P } from "ts-pattern";
+import { DefaultDict } from "~/src/lib/DefaultDict";
 
 type PathResponses = {
   path: string;
   responses: ResponsesObject;
 };
-
-class DefaultDict<T, Q> extends Map<T, Q> {
-  defaultFactory: () => Q;
-  constructor(defaultFactory: () => Q) {
-    super();
-    this.defaultFactory = defaultFactory;
-  }
-  get(name: T): Q {
-    if (this.has(name)) {
-      return super.get(name)!;
-    } else {
-      const value = this.defaultFactory();
-      this.set(name, value);
-      return value;
-    }
-  }
-}
 
 class MethodPaths {
   constructor(private resolveReference: ReturnType<typeof getReference>) {}
