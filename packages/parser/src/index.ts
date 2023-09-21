@@ -8,6 +8,10 @@ export {
   ResponsesObject,
 } from "./parsers/effect-schema/schemas/ResponsesObject";
 export {
+  ParameterObjectCodec,
+  ParameterObject,
+} from "./parsers/effect-schema/schemas/ParameterObject";
+export {
   PathItemObjectCodec,
   PathItemObject,
   httpVerbs,

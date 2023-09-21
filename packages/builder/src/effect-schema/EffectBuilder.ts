@@ -16,6 +16,9 @@ import {
   ResponsesObject,
   SchemaObject,
   SchemaObjectCodec,
+  RequestBodyObject,
+  RequestBodyObjectCodec,
+  ParameterObject,
 } from "@ollierelph/openapi-parser";
 import { Result } from "@ollierelph/result4t";
 import {
@@ -28,7 +31,11 @@ import { DefaultDict } from "~/src/lib/DefaultDict";
 
 type PathResponses<T = any> = {
   path: string;
-  body?: T;
+  request: {
+    parameters: ReadonlyArray<ReferenceObject | ParameterObject> | undefined;
+    body: ReadonlyArray<ReferenceObject | RequestBodyObject> | undefined;
+  };
+  requestBody?: T;
   responses: ResponsesObject;
 };
 
@@ -151,7 +158,7 @@ class MethodPaths {
       .exhaustive();
   }
 
-  toObjectLiteral() {
+  public toObjectLiteral() {
     const responsesToCodec = (definition: ResponsesObject): ts.Expression => {
       return ts.factory.createCallExpression(
         ts.factory.createPropertyAccessExpression(
@@ -232,6 +239,92 @@ class MethodPaths {
                       "responses",
                       responsesToCodec(p.responses),
                     ),
+                    ts.factory.createPropertyAssignment(
+                      "request",
+                      ts.factory.createObjectLiteralExpression([
+                        ts.factory.createPropertyAssignment(
+                          ts.factory.createIdentifier("pathParameters"),
+                          ts.factory.createStringLiteral("TODO"),
+                        ),
+                        ts.factory.createPropertyAssignment(
+                          ts.factory.createIdentifier("queryParameters"),
+                          ts.factory.createStringLiteral("TODO"),
+                        ),
+                        ts.factory.createPropertyAssignment(
+                          ts.factory.createIdentifier("headers"),
+                          ts.factory.createStringLiteral("TODO"),
+                        ),
+                        ts.factory.createPropertyAssignment(
+                          ts.factory.createIdentifier("body"),
+                          p.request.body
+                            ? ts.factory.createCallExpression(
+                                ts.factory.createPropertyAccessExpression(
+                                  ts.factory.createIdentifier("S"),
+                                  ts.factory.createIdentifier("union"),
+                                ),
+                                undefined,
+                                p.request.body.flatMap((it) => {
+                                  const requestBody = isReferenceObject(it)
+                                    ? this.resolveReference(
+                                        it,
+                                        RequestBodyObjectCodec,
+                                      ).getOrElse((err) => {
+                                        throw err;
+                                      })
+                                    : it;
+                                  return Object.entries(
+                                    requestBody.content,
+                                  ).map(([contentType, media]) => {
+                                    return ts.factory.createCallExpression(
+                                      ts.factory.createPropertyAccessExpression(
+                                        ts.factory.createIdentifier("S"),
+                                        ts.factory.createIdentifier("struct"),
+                                      ),
+                                      undefined,
+                                      [
+                                        ts.factory.createObjectLiteralExpression(
+                                          [
+                                            ts.factory.createPropertyAssignment(
+                                              ts.factory.createIdentifier(
+                                                "contentType",
+                                              ),
+                                              ts.factory.createCallExpression(
+                                                ts.factory.createPropertyAccessExpression(
+                                                  ts.factory.createIdentifier(
+                                                    "S",
+                                                  ),
+                                                  ts.factory.createIdentifier(
+                                                    "literal",
+                                                  ),
+                                                ),
+                                                undefined,
+                                                [
+                                                  ts.factory.createStringLiteral(
+                                                    contentType,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            ts.factory.createPropertyAssignment(
+                                              ts.factory.createIdentifier(
+                                                "body",
+                                              ),
+                                              this.schemaObjectToCodec(
+                                                media.schema,
+                                              ),
+                                            ),
+                                          ],
+                                          true,
+                                        ),
+                                      ],
+                                    );
+                                  });
+                                }),
+                              )
+                            : ts.factory.createStringLiteral("never"),
+                        ),
+                      ]),
+                    ),
                   ]),
                 ),
               ),
@@ -285,11 +378,16 @@ export class EffectBuilder implements Builder {
 
         visitPathItemObjects(input)((pathItem) => {
           for (const verb of httpVerbs) {
-            const responses = pathItem.node.definition[verb]?.responses;
+            const definition = pathItem.node.definition[verb];
+            const responses = definition?.responses;
             if (responses) {
               methodPaths.addPath(verb, {
                 path: pathItem.node.path,
-                responses: responses,
+                request: {
+                  parameters: definition?.parameters,
+                  body: definition?.requestBody,
+                },
+                responses,
               });
             }
           }

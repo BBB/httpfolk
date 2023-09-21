@@ -57,6 +57,22 @@ export function buildOpenApi(): OpenApiObject {
       },
       "/c": {
         post: {
+          parameters: [
+            { name: "id", in: "path", required: true },
+            { name: "search", in: "query", required: false },
+            { name: "x-example", in: "header", required: false },
+          ],
+          requestBody: [
+            {
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "string",
+                  },
+                },
+              },
+            },
+          ],
           responses: {
             "200": {
               description: "creates the c",

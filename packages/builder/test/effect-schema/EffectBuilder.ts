@@ -23,6 +23,17 @@ it("should create a paths dictionary", () => {
               body: S.literal(),
             }),
           ),
+          request: {
+            pathParameters: "TODO",
+            queryParameters: "TODO",
+            headers: "TODO",
+            body: S.union(
+              S.struct({
+                contentType: S.literal("application/json"),
+                body: S.literal(),
+              }),
+            ),
+          },
         },
       },
       get: {
@@ -34,6 +45,12 @@ it("should create a paths dictionary", () => {
               body: S.literal(),
             }),
           ),
+          request: {
+            pathParameters: "TODO",
+            queryParameters: "TODO",
+            headers: "TODO",
+            body: "never",
+          },
         },
         "/b": {
           responses: S.union(
@@ -43,6 +60,12 @@ it("should create a paths dictionary", () => {
               body: S.struct({ foo: S.literal(), bingo: S.optional(S.literal()) }),
             }),
           ),
+          request: {
+            pathParameters: "TODO",
+            queryParameters: "TODO",
+            headers: "TODO",
+            body: "never",
+          },
         },
       },
     };
