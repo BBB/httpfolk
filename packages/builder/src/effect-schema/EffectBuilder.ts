@@ -26,19 +26,14 @@ import { printAst } from "~/src/lib/printAst";
 import { match, P } from "ts-pattern";
 import { DefaultDict } from "~/src/lib/DefaultDict";
 
-type PathResponses = {
+type PathResponses<T = any> = {
   path: string;
+  body?: T;
   responses: ResponsesObject;
 };
 
 class MethodPaths {
   constructor(private resolveReference: ReturnType<typeof getReference>) {}
-
-  private getPaths: Array<PathResponses> = [];
-  private putPaths: Array<PathResponses> = [];
-  private patchPaths: Array<PathResponses> = [];
-  private postPaths: Array<PathResponses> = [];
-  private deletePaths: Array<PathResponses> = [];
 
   private paths = new DefaultDict<HttpVerb, Array<PathResponses>>(() => []);
 
@@ -46,7 +41,7 @@ class MethodPaths {
     this.paths.set(verb, this.paths.get(verb).concat([path]));
   }
 
-  schemaObjectToCodec(
+  private schemaObjectToCodec(
     maybeSchema: SchemaObject | ReferenceObject,
   ): CallExpression | PropertyAccessExpression {
     const schema: SchemaObject | undefined = isReferenceObject(maybeSchema)
@@ -221,7 +216,7 @@ class MethodPaths {
       );
     };
     const createPropertiesForMethod = (
-      method: string,
+      method: HttpVerb,
       paths: Array<PathResponses>,
     ) => {
       if (paths.length > 0) {
@@ -229,7 +224,7 @@ class MethodPaths {
           ts.factory.createPropertyAssignment(
             method,
             ts.factory.createObjectLiteralExpression(
-              this.getPaths.map((p) =>
+              paths.map((p) =>
                 ts.factory.createPropertyAssignment(
                   ts.factory.createStringLiteral(p.path),
                   ts.factory.createObjectLiteralExpression([
@@ -246,11 +241,12 @@ class MethodPaths {
       }
       return [];
     };
-    const properties = createPropertiesForMethod("get", this.getPaths)
-      .concat(createPropertiesForMethod("put", this.putPaths))
-      .concat(createPropertiesForMethod("post", this.postPaths))
-      .concat(createPropertiesForMethod("patch", this.patchPaths))
-      .concat(createPropertiesForMethod("delete", this.deletePaths));
+
+    const properties = httpVerbs.reduce(
+      (agg, verb) =>
+        agg.concat(createPropertiesForMethod(verb, this.paths.get(verb))),
+      [] as PropertyAssignment[],
+    );
 
     return [
       ts.factory.createImportDeclaration(
