@@ -7,6 +7,8 @@ import ts, {
 } from "typescript";
 
 import {
+  HttpVerb,
+  httpVerbs,
   isReferenceObject,
   OpenApiObject,
   ReferenceObject,
@@ -28,6 +30,23 @@ type PathResponses = {
   responses: ResponsesObject;
 };
 
+class DefaultDict<T, Q> extends Map<T, Q> {
+  defaultFactory: () => Q;
+  constructor(defaultFactory: () => Q) {
+    super();
+    this.defaultFactory = defaultFactory;
+  }
+  get(name: T): Q {
+    if (this.has(name)) {
+      return super.get(name)!;
+    } else {
+      const value = this.defaultFactory();
+      this.set(name, value);
+      return value;
+    }
+  }
+}
+
 class MethodPaths {
   constructor(private resolveReference: ReturnType<typeof getReference>) {}
 
@@ -37,24 +56,10 @@ class MethodPaths {
   private postPaths: Array<PathResponses> = [];
   private deletePaths: Array<PathResponses> = [];
 
-  public addGetPath(path: PathResponses) {
-    this.getPaths.push(path);
-  }
+  private paths = new DefaultDict<HttpVerb, Array<PathResponses>>(() => []);
 
-  public addPutPath(path: PathResponses) {
-    this.putPaths.push(path);
-  }
-
-  public addPostPath(path: PathResponses) {
-    this.postPaths.push(path);
-  }
-
-  public addPatchPath(path: PathResponses) {
-    this.patchPaths.push(path);
-  }
-
-  public addDeletePath(path: PathResponses) {
-    this.deletePaths.push(path);
+  public addPath(verb: HttpVerb, path: PathResponses) {
+    this.paths.set(verb, this.paths.get(verb).concat([path]));
   }
 
   schemaObjectToCodec(
@@ -299,35 +304,14 @@ export class EffectBuilder implements Builder {
         const methodPaths = new MethodPaths(getReference(input));
 
         visitPathItemObjects(input)((pathItem) => {
-          if (pathItem.node.definition.get?.responses) {
-            methodPaths.addGetPath({
-              path: pathItem.node.path,
-              responses: pathItem.node.definition.get.responses,
-            });
-          }
-          if (pathItem.node.definition.put?.responses) {
-            methodPaths.addPutPath({
-              path: pathItem.node.path,
-              responses: pathItem.node.definition.put.responses,
-            });
-          }
-          if (pathItem.node.definition.post?.responses) {
-            methodPaths.addPostPath({
-              path: pathItem.node.path,
-              responses: pathItem.node.definition.post.responses,
-            });
-          }
-          if (pathItem.node.definition.patch?.responses) {
-            methodPaths.addPatchPath({
-              path: pathItem.node.path,
-              responses: pathItem.node.definition.patch.responses,
-            });
-          }
-          if (pathItem.node.definition.delete?.responses) {
-            methodPaths.addDeletePath({
-              path: pathItem.node.path,
-              responses: pathItem.node.definition.delete.responses,
-            });
+          for (const verb of httpVerbs) {
+            const responses = pathItem.node.definition[verb]?.responses;
+            if (responses) {
+              methodPaths.addPath(verb, {
+                path: pathItem.node.path,
+                responses: responses,
+              });
+            }
           }
         });
 

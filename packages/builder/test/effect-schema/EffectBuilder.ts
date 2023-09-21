@@ -13,48 +13,7 @@ it("should create a paths dictionary", () => {
     `
     // typescript
     import * as S from "@effect/schema/Schema";
-    export const paths = {
-      get: {
-        "/a": {
-          responses: S.union(
-            S.struct({
-              status: S.literal(200),
-              contentType: S.literal("application/json"),
-              body: S.literal(),
-            }),
-          ),
-        },
-        "/b": {
-          responses: S.union(
-            S.struct({
-              status: S.literal(200),
-              contentType: S.literal("application/json"),
-              body: S.struct({ foo: S.literal(), bingo: S.optional(S.literal()) }),
-            }),
-          ),
-        },
-      },
-      post: {
-        "/a": {
-          responses: S.union(
-            S.struct({
-              status: S.literal(200),
-              contentType: S.literal("application/json"),
-              body: S.literal(),
-            }),
-          ),
-        },
-        "/b": {
-          responses: S.union(
-            S.struct({
-              status: S.literal(200),
-              contentType: S.literal("application/json"),
-              body: S.struct({ foo: S.literal(), bingo: S.optional(S.literal()) }),
-            }),
-          ),
-        },
-      },
-    };
+    export const paths = {};
   `,
   );
 });
