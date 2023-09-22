@@ -34,14 +34,14 @@ importers:
         specifier: ^0.34.4
         version: 0.34.4
 
-  packages/builder:
+  packages/openapi-builder:
     dependencies:
       '@ollierelph/openapi-parser':
         specifier: workspace:*
-        version: link:../parser
+        version: link:../openapi-parser
       '@ollierelph/openapi-visitor':
         specifier: workspace:*
-        version: link:../visitor
+        version: link:../openapi-visitor
     devDependencies:
       '@effect/data':
         specifier: ^0.18.5
@@ -56,7 +56,7 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1
 
-  packages/parser:
+  packages/openapi-parser:
     devDependencies:
       '@effect/data':
         specifier: ^0.18.5
@@ -68,11 +68,11 @@ importers:
         specifier: ^18.16.1
         version: 18.16.1
 
-  packages/visitor:
+  packages/openapi-visitor:
     dependencies:
       '@ollierelph/openapi-parser':
         specifier: workspace:*
-        version: link:../parser
+        version: link:../openapi-parser
     devDependencies:
       '@effect/data':
         specifier: ^0.18.5
