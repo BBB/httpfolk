@@ -11,6 +11,7 @@
     "@ollierelph/result4t": "^0.3.0"
   },
   "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
     "@prettier/sync": "^0.3.0",
     "prettier": "^3.0.3",
     "turbo": "^1.10.14",

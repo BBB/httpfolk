@@ -232,7 +232,7 @@ it.each([
       },
     },
   ],
-])("parses an openApi", (input: OpenApiObject) => {
+])("parses an openApi", (input) => {
   underTest(input);
 });
 

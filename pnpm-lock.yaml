@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 importers:
 
   .:
@@ -15,6 +11,9 @@ importers:
       '@prettier/sync':
         specifier: ^0.3.0
         version: 0.3.0(prettier@3.0.3)
+      '@tsconfig/node20':
+        specifier: ^20.1.2
+        version: 20.1.2
       prettier:
         specifier: ^3.0.3
         version: 3.0.3
@@ -26,7 +25,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@18.16.1)
+        version: 4.4.9
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -46,9 +45,12 @@ importers:
       '@effect/data':
         specifier: ^0.18.5
         version: 0.18.5
+      '@effect/io':
+        specifier: ^0.41.1
+        version: 0.41.1(@effect/data@0.18.5)
       '@effect/schema':
         specifier: ^0.36.3
-        version: 0.36.3(@effect/data@0.18.5)(@effect/io@0.40.3)
+        version: 0.36.3(@effect/data@0.18.5)(@effect/io@0.41.1)
       '@types/node':
         specifier: ^18.16.1
         version: 18.16.1
@@ -61,9 +63,12 @@ importers:
       '@effect/data':
         specifier: ^0.18.5
         version: 0.18.5
+      '@effect/io':
+        specifier: ^0.41.1
+        version: 0.41.1(@effect/data@0.18.5)
       '@effect/schema':
         specifier: ^0.36.3
-        version: 0.36.3(@effect/data@0.18.5)(@effect/io@0.40.3)
+        version: 0.36.3(@effect/data@0.18.5)(@effect/io@0.41.1)
       '@types/node':
         specifier: ^18.16.1
         version: 18.16.1
@@ -77,9 +82,12 @@ importers:
       '@effect/data':
         specifier: ^0.18.5
         version: 0.18.5
+      '@effect/io':
+        specifier: ^0.41.1
+        version: 0.41.1(@effect/data@0.18.5)
       '@effect/schema':
         specifier: ^0.36.3
-        version: 0.36.3(@effect/data@0.18.5)(@effect/io@0.40.3)
+        version: 0.36.3(@effect/data@0.18.5)(@effect/io@0.41.1)
       '@types/node':
         specifier: ^18.16.1
         version: 18.16.1
@@ -90,22 +98,22 @@ packages:
     resolution: {integrity: sha512-VFPJ0prGq3eF6/eZYKVI/1IC1purdGJXEHJC1ggKynPko03upjtmeCeCsEyMiY12DzVIAuME425JndiFb7m2xw==}
     dev: true
 
-  /@effect/io@0.40.3(@effect/data@0.18.5):
-    resolution: {integrity: sha512-bnHBFq1XzXn94x2w5FcXZz3MbY7N3YrhiI2CrncJr3WcGRDc2rCYIpPupw0JQGFcJsoopTj1BNfBuBR5s4/RyA==}
+  /@effect/io@0.41.1(@effect/data@0.18.5):
+    resolution: {integrity: sha512-gJ9fdN7GKkC1sryroy/bsFYugVFyjY2mhY/hwVQwLHxYluje0b5tRr7kpUnbG0ntSvuPS0JVe1604ppGUmym0g==}
     peerDependencies:
       '@effect/data': ^0.18.5
     dependencies:
       '@effect/data': 0.18.5
     dev: true
 
-  /@effect/schema@0.36.3(@effect/data@0.18.5)(@effect/io@0.40.3):
+  /@effect/schema@0.36.3(@effect/data@0.18.5)(@effect/io@0.41.1):
     resolution: {integrity: sha512-jFhCxWo/clDtzoSpQDRqRj2KtI3zW9CbThgW1vXcBZsHbMnhauo00ps0DRIauKwKab+wscKHhzCgCFFS8aDmYw==}
     peerDependencies:
       '@effect/data': ^0.18.5
       '@effect/io': ^0.40.1
     dependencies:
       '@effect/data': 0.18.5
-      '@effect/io': 0.40.3(@effect/data@0.18.5)
+      '@effect/io': 0.41.1(@effect/data@0.18.5)
       fast-check: 3.13.0
     dev: true
 
@@ -332,6 +340,10 @@ packages:
 
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
+    dev: true
+
+  /@tsconfig/node20@20.1.2:
+    resolution: {integrity: sha512-madaWq2k+LYMEhmcp0fs+OGaLFk0OenpHa4gmI4VEmCKX4PJntQ6fnnGADVFrVkBj0wIdAlQnK/MrlYTHsa1gQ==}
     dev: true
 
   /@types/chai-subset@1.3.3:
@@ -775,10 +787,45 @@ packages:
       debug: 4.3.4
       globrex: 0.1.2
       tsconfck: 2.1.1(typescript@5.2.2)
-      vite: 4.4.9(@types/node@18.16.1)
+      vite: 4.4.9
     transitivePeerDependencies:
       - supports-color
       - typescript
+    dev: true
+
+  /vite@4.4.9:
+    resolution: {integrity: sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      esbuild: 0.18.20
+      postcss: 8.4.30
+      rollup: 3.29.2
+    optionalDependencies:
+      fsevents: 2.3.2
     dev: true
 
   /vite@4.4.9(@types/node@18.16.1):
@@ -895,3 +942,7 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
