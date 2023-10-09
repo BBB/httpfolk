@@ -369,7 +369,6 @@ class MethodPaths {
     ];
   }
 }
-
 export class EffectBuilder implements Builder {
   build(input: OpenApiObject) {
     return Result.success(input)
