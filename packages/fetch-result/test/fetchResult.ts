@@ -1,11 +1,10 @@
 import { expect, it } from "vitest";
-import { fetchResult, NotImplemented } from "~/src/fetchResult";
+import { fetchResult } from "~/src/fetchResult";
 import { Response } from "undici";
 import { Result } from "@ollierelph/result4t";
 
-const underTest = fetchResult(async () => Response.error());
+const underTest = (response: Response) => fetchResult(async () => response);
 it("responds with an error", async () => {
-  expect(await underTest("/woo").run()).toEqual(
-    Result.failure(new NotImplemented()),
-  );
+  const res = Response.error();
+  expect(await underTest(res)("/woo").run()).toEqual(Result.failure(res));
 });

@@ -1,5 +1,6 @@
 import { URL } from "node:url";
 import { TaskResult } from "@ollierelph/result4t";
+
 interface OutgoingHttpInit {
   method?: string;
   url?: string;
@@ -7,6 +8,13 @@ interface OutgoingHttpInit {
   statusText?: string;
   headers?: HeadersInit;
 }
+
+const networkErrorMsgs = new Set([
+  "Failed to fetch", // Chrome & Edge
+  "NetworkError when attempting to fetch resource.", // Firefox
+  "The Internet connection appears to be offline.", // Safari
+  "Load failed", // Safari,
+]);
 
 interface ReadableStream<R = any> {}
 
@@ -204,21 +212,66 @@ export interface OutgoingHttpConfig {
 }
 
 export type Fetch<Res extends IncomingHttpResponse = IncomingHttpResponse> = (
-  input: OutgoingHttpLocation,
+  input: OutgoingHttpLocation | OutgoingHttpInit,
   init?: OutgoingHttpConfig | undefined,
 ) => Promise<Res>;
 
-export class NotImplemented {
-  name = "NotImplemented" as const;
+class UnexpectedIssueThrown {
+  name = "UnexpectedIssueThrown" as const;
+  constructor(inner: unknown) {}
 }
-
-type FetchFailure = NotImplemented;
+class OutgoingHttpRequestAborted {
+  name = "OutgoingHttpRequestAborted" as const;
+}
+class IncomingHttpResponseUnknownIssue<Body = unknown> {
+  name = "IncomingHttpResponseUnknownIssue" as const;
+  constructor(
+    public method: string,
+    public body: Body,
+    public inner: Error,
+  ) {}
+}
+class OutgoingHttpRequestFailed<Body = unknown> {
+  name = "OutgoingHttpRequestFailed" as const;
+  constructor(
+    public method: string,
+    public body: Body,
+    public inner: Error,
+  ) {}
+}
+type FetchFailure =
+  | OutgoingHttpRequestAborted
+  | IncomingHttpResponseUnknownIssue
+  | OutgoingHttpRequestFailed
+  | UnexpectedIssueThrown;
 
 export const fetchResult =
   (fetch: Fetch) =>
-  <Res extends IncomingHttpResponse = IncomingHttpResponse>(
+  (
     input: OutgoingHttpLocation | OutgoingHttpInit,
     init?: OutgoingHttpConfig | undefined,
-  ): TaskResult<Res, FetchFailure> => {
-    return TaskResult.failure(new NotImplemented());
+  ): TaskResult<IncomingHttpResponse, FetchFailure> => {
+    return TaskResult.fromPromise(
+      () => fetch(input, init),
+      (err) => {
+        if (!(err instanceof Error)) {
+          return new UnexpectedIssueThrown(err);
+        }
+        if (err.message.includes("The user aborted a request")) {
+          return new OutgoingHttpRequestAborted();
+        }
+        if (networkErrorMsgs.has(err.message)) {
+          return new OutgoingHttpRequestFailed(
+            init?.method || "GET",
+            input.toString(),
+            err,
+          );
+        }
+        return new IncomingHttpResponseUnknownIssue(
+          init?.method || "GET",
+          input.toString(),
+          err,
+        );
+      },
+    );
   };
