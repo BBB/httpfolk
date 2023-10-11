@@ -1,5 +1,11 @@
 import { URL } from "node:url";
 import { TaskResult } from "@ollierelph/result4t";
+import { NetworkErrorMessage } from "~/src/NetworkErrorMessage";
+import { RequestAbortedErrorMessage } from "~/src/RequestAbortedErrorMessage";
+import { OutgoingHttpRequestFailed } from "~/src/OutgoingHttpRequestFailed";
+import { IncomingHttpResponseUnknownIssue } from "~/src/IncomingHttpResponseUnknownIssue";
+import { OutgoingHttpRequestAborted } from "~/src/OutgoingHttpRequestAborted";
+import { UnexpectedIssueThrown } from "~/src/UnexpectedIssueThrown";
 
 interface OutgoingHttpInit {
   method?: string;
@@ -8,13 +14,6 @@ interface OutgoingHttpInit {
   statusText?: string;
   headers?: HeadersInit;
 }
-
-const networkErrorMsgs = new Set([
-  "Failed to fetch", // Chrome & Edge
-  "NetworkError when attempting to fetch resource.", // Firefox
-  "The Internet connection appears to be offline.", // Safari
-  "Load failed", // Safari,
-]);
 
 interface ReadableStream<R = any> {}
 
@@ -216,29 +215,6 @@ export type Fetch<Res extends IncomingHttpResponse = IncomingHttpResponse> = (
   init?: OutgoingHttpConfig | undefined,
 ) => Promise<Res>;
 
-class UnexpectedIssueThrown {
-  name = "UnexpectedIssueThrown" as const;
-  constructor(inner: unknown) {}
-}
-class OutgoingHttpRequestAborted {
-  name = "OutgoingHttpRequestAborted" as const;
-}
-class IncomingHttpResponseUnknownIssue<Body = unknown> {
-  name = "IncomingHttpResponseUnknownIssue" as const;
-  constructor(
-    public method: string,
-    public body: Body,
-    public inner: Error,
-  ) {}
-}
-class OutgoingHttpRequestFailed<Body = unknown> {
-  name = "OutgoingHttpRequestFailed" as const;
-  constructor(
-    public method: string,
-    public body: Body,
-    public inner: Error,
-  ) {}
-}
 type FetchFailure =
   | OutgoingHttpRequestAborted
   | IncomingHttpResponseUnknownIssue
@@ -257,10 +233,10 @@ export const fetchResult =
         if (!(err instanceof Error)) {
           return new UnexpectedIssueThrown(err);
         }
-        if (err.message.includes("The user aborted a request")) {
+        if (RequestAbortedErrorMessage.of(err.message).isSuccess()) {
           return new OutgoingHttpRequestAborted();
         }
-        if (networkErrorMsgs.has(err.message)) {
+        if (NetworkErrorMessage.of(err.message).isSuccess()) {
           return new OutgoingHttpRequestFailed(
             init?.method || "GET",
             input.toString(),
