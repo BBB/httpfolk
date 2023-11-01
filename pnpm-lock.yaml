@@ -52,6 +52,9 @@ importers:
 
   packages/http-client:
     dependencies:
+      '@foxify/events':
+        specifier: ^2.1.0
+        version: 2.1.0
       '@ollierelph/result4t':
         specifier: ^0.3.0
         version: 0.3.0
@@ -349,6 +352,10 @@ packages:
     resolution: {integrity: sha512-JUFJad5lv7jxj926GPgymrWQxxjPYuJNiNjNMzqT+HiuP6Vl3dk5xzG+8sTX96np0ZAluvaMzPsjhHZ5rNuNQQ==}
     engines: {node: '>=14'}
     dev: true
+
+  /@foxify/events@2.1.0:
+    resolution: {integrity: sha512-aMLFeeQgzAH/ft9VNGwQasr2lAXLIxk1VAYIUDM9G8HQX0yow6b7z/wm42e4s6JHU8zGu940sLj5FeglkFnEFQ==}
+    dev: false
 
   /@jest/schemas@29.6.3:
     resolution: {integrity: sha512-mo5j5X+jIZmJQveBKeS/clAueipV7KgiX1vMgCxam1RNYiqE1w62n0/tJJnHtjW8ZHcQco5gY85jA3mi0L+nSA==}
