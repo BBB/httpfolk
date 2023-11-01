@@ -1,14 +1,14 @@
 import { URLSearchParams } from "url";
 
 export class ImmutableURLSearchParams implements Readonly<URLSearchParams> {
-  private readonly _params: URLSearchParams;
+  readonly #params: URLSearchParams;
 
   [Symbol.iterator](): IterableIterator<[string, string]> {
-    return this._params[Symbol.iterator]();
+    return this.#params[Symbol.iterator]();
   }
 
   constructor(init?: Record<string, string> | string | URLSearchParams) {
-    this._params = new URLSearchParams(init);
+    this.#params = new URLSearchParams(init);
   }
 
   get size() {
@@ -16,31 +16,31 @@ export class ImmutableURLSearchParams implements Readonly<URLSearchParams> {
   }
 
   append(name: string, value: string) {
-    const next = new URLSearchParams(this._params);
+    const next = new URLSearchParams(this.#params);
     next.append(name, value);
     return new ImmutableURLSearchParams(next);
   }
 
   delete(name: string) {
-    const next = new URLSearchParams(this._params);
+    const next = new URLSearchParams(this.#params);
     next.delete(name);
     return new ImmutableURLSearchParams(next);
   }
 
   set(name: string, value: string) {
-    const next = new URLSearchParams(this._params);
+    const next = new URLSearchParams(this.#params);
     next.set(name, value);
     return new ImmutableURLSearchParams(next);
   }
 
   sort() {
-    const next = new URLSearchParams(this._params);
+    const next = new URLSearchParams(this.#params);
     next.sort();
     return new ImmutableURLSearchParams(next);
   }
 
   entries(): IterableIterator<[string, string]> {
-    return this._params.entries();
+    return this.#params.entries();
   }
 
   forEach<TThis>(
@@ -52,7 +52,7 @@ export class ImmutableURLSearchParams implements Readonly<URLSearchParams> {
     ) => void,
     thisArg: TThis | undefined,
   ) {
-    this._params.forEach(
+    this.#params.forEach(
       (value, name) =>
         thisArg
           ? callback.call(thisArg, value, name, this)
@@ -62,26 +62,26 @@ export class ImmutableURLSearchParams implements Readonly<URLSearchParams> {
   }
 
   get(name: string): string | null {
-    return this._params.get(name);
+    return this.#params.get(name);
   }
 
   getAll(name: string): string[] {
-    return this._params.getAll(name);
+    return this.#params.getAll(name);
   }
 
   has(name: string): boolean {
-    return this._params.has(name);
+    return this.#params.has(name);
   }
 
   keys(): IterableIterator<string> {
-    return this._params.keys();
+    return this.#params.keys();
   }
 
   values(): IterableIterator<string> {
-    return this._params.values();
+    return this.#params.values();
   }
 
   toString() {
-    return this._params.toString();
+    return this.#params.toString();
   }
 }
