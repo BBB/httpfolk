@@ -62,4 +62,8 @@ export class ImmutableHeaders implements Readonly<Headers> {
   values(): SpecIterableIterator<string> {
     return this.#headers.values();
   }
+
+  toJSON() {
+    return Object.fromEntries(this.entries());
+  }
 }
