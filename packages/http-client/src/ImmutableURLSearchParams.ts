@@ -48,7 +48,13 @@ export class ImmutableURLSearchParams implements Readonly<URLSearchParams> {
     ) => void,
     thisArg: TThis | undefined,
   ) {
-    this._params.forEach(callback, thisArg);
+    this._params.forEach(
+      (value, name) =>
+        thisArg
+          ? callback.call(thisArg, value, name, this)
+          : callback.call(this as unknown as TThis, value, name, this),
+      thisArg,
+    );
   }
 
   get(name: string): string | null {
