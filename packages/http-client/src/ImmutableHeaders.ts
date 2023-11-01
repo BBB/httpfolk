@@ -3,7 +3,7 @@ import { Headers, SpecIterableIterator, SpecIterator } from "undici";
 export class ImmutableHeaders implements Readonly<Headers> {
   readonly #headers: Headers;
 
-  constructor(nextHeaders: Headers | Record<string, string>) {
+  constructor(nextHeaders?: Headers | Record<string, string>) {
     this.#headers =
       nextHeaders instanceof Headers
         ? nextHeaders
