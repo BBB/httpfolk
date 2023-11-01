@@ -12,7 +12,7 @@ export class ImmutableURLSearchParams implements Readonly<URLSearchParams> {
   }
 
   get size() {
-    return this._params.size;
+    return [...this.keys()].length;
   }
 
   append(name: string, value: string) {
@@ -79,5 +79,9 @@ export class ImmutableURLSearchParams implements Readonly<URLSearchParams> {
 
   values(): IterableIterator<string> {
     return this._params.values();
+  }
+
+  toString() {
+    return this._params.toString();
   }
 }
