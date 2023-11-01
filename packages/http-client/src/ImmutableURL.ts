@@ -2,14 +2,18 @@ import { URL } from "node:url";
 import { ImmutableURLSearchParams } from "~/src/ImmutableURLSearchParams";
 
 export class ImmutableURL implements Readonly<URL> {
-  readonly searchParams: ImmutableURLSearchParams;
+  readonly #searchParams: ImmutableURLSearchParams;
   readonly #url: URL;
 
   constructor(url: URL);
   constructor(url: string, base?: string | URL);
   constructor(url: string | URL, base?: string | URL) {
     this.#url = typeof url === "object" ? url : new URL(url, base);
-    this.searchParams = new ImmutableURLSearchParams(this.#url.searchParams);
+    this.#searchParams = new ImmutableURLSearchParams(this.#url.searchParams);
+  }
+
+  get searchParams() {
+    return this.#searchParams;
   }
 
   get hash() {
