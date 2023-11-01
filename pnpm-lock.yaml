@@ -50,6 +50,19 @@ importers:
         specifier: ^5.25.4
         version: 5.25.4
 
+  packages/http-client:
+    dependencies:
+      '@ollierelph/result4t':
+        specifier: ^0.3.0
+        version: 0.3.0
+    devDependencies:
+      '@types/node':
+        specifier: ^18.16.1
+        version: 18.16.1
+      undici:
+        specifier: ^5.25.4
+        version: 5.25.4
+
   packages/openapi-builder:
     dependencies:
       '@ollierelph/openapi-parser':
