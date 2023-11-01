@@ -28,11 +28,15 @@ export class ImmutableURL implements Readonly<URL> {
     this.#searchParams = new ImmutableURLSearchParams(this.#url.searchParams);
   }
 
-  copy(update?: Partial<Pick<ImmutableURL, MutableURLFields>>) {
+  copy(
+    update?: Partial<Pick<ImmutableURL, MutableURLFields | "searchParams">>,
+  ) {
     const next = new URL(this.#url.toString());
     if (update) {
       Object.entries(update).forEach(([key, value]) => {
-        if (isMutableUrlField(key)) {
+        if (key === "searchParams") {
+          next.search = value.toString();
+        } else if (isMutableUrlField(key) && typeof value === "string") {
           next[key] = value;
         }
       });
