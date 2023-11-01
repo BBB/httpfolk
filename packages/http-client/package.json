@@ -1,0 +1,25 @@
+{
+  "name": "@ollierelph/http-client",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tscheck": "tsc --noEmit",
+    "test:unit": "vitest --run",
+    "build": "pnpm tsc -p tsconfig.build.json",
+    "format": "prettier --write ./{src,test}",
+    "publish-package": "exit 0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ollierelph/result4t": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.1",
+    "undici": "^5.25.4"
+  },
+  "peerDependencies": {
+  }
+}
