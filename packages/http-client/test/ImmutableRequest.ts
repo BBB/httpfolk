@@ -10,11 +10,13 @@ it("constructs a request", () => {
   ImmutableRequest.patch(new ImmutableURL("http://example.com/api"));
 });
 
-it("can modify the headers a header", () => {
+it("can modify the headers", () => {
   const underTest = ImmutableRequest.get(
     new ImmutableURL("https://example.com/api"),
   );
-  const updated = underTest.setHeaders(underTest.headers.set("bingo", "bango"));
+  const updated = underTest.copy({
+    headers: underTest.headers.set("bingo", "bango"),
+  });
   expect(underTest.headers.get("bingo")).not.toEqual(
     updated.headers.get("bingo"),
   );

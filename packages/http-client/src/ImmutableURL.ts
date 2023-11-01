@@ -1,6 +1,22 @@
 import { URL } from "node:url";
 import { ImmutableURLSearchParams } from "~/src/ImmutableURLSearchParams";
 
+const mutableUrlField = [
+  "hash",
+  "host",
+  "hostname",
+  "href",
+  "password",
+  "pathname",
+  "port",
+  "protocol",
+  "search",
+  "username",
+] as const;
+type MutableURLFields = (typeof mutableUrlField)[number];
+const isMutableUrlField = (it: any): it is MutableURLFields =>
+  mutableUrlField.includes(it);
+
 export class ImmutableURL implements Readonly<URL> {
   readonly #searchParams: ImmutableURLSearchParams;
   readonly #url: URL;
@@ -10,6 +26,18 @@ export class ImmutableURL implements Readonly<URL> {
   constructor(url: string | URL, base?: string | URL) {
     this.#url = typeof url === "object" ? url : new URL(url, base);
     this.#searchParams = new ImmutableURLSearchParams(this.#url.searchParams);
+  }
+
+  copy(update?: Partial<Pick<ImmutableURL, MutableURLFields>>) {
+    const next = new URL(this.#url.toString());
+    if (update) {
+      Object.entries(update).forEach(([key, value]) => {
+        if (isMutableUrlField(key)) {
+          next[key] = value;
+        }
+      });
+    }
+    return new ImmutableURL(next);
   }
 
   get searchParams() {
