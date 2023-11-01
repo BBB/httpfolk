@@ -2,6 +2,7 @@
   "extends": "@tsconfig/node20",
   "compilerOptions": {
     "baseUrl": ".",
+    "target": "ES2023",
     "paths": {
       "~/src/*": ["src/*"],
       "~/test/*": ["test/*"]

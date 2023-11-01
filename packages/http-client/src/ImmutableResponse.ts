@@ -1,6 +1,6 @@
 import { ImmutableHeaders } from "~/src/ImmutableHeaders";
 
-export class HttpResponse {
+export class ImmutableResponse {
   constructor(
     public status: number,
     private body: unknown,

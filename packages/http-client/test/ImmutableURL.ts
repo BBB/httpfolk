@@ -1,5 +1,4 @@
 import { expect, it } from "vitest";
-import { ImmutableRequest } from "~/src/ImmutableRequest";
 import { ImmutableURL } from "~/src/ImmutableURL";
 
 it("can copy the fields", () => {
