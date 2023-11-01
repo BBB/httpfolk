@@ -41,12 +41,14 @@ export class HttpAbortSignal implements Readonly<AbortSignal> {
     return true;
   }
 
+  // @ts-ignore TODO
   set onabort(
     listener: (
       this: AbortSignal,
       listener: EventListenerOrEventListenerObject,
     ) => any,
   ) {
+    // @ts-ignore TODO
     this.addEventListener("abort", listener);
   }
   addEventListener(
@@ -54,6 +56,7 @@ export class HttpAbortSignal implements Readonly<AbortSignal> {
     listener: EventListenerOrEventListenerObject,
     options?: boolean | AddEventListenerOptions | undefined,
   ): void {
+    // @ts-ignore TODO
     this.#eventEmitter.addListener(type, listener, options);
   }
   removeEventListener(
@@ -61,6 +64,7 @@ export class HttpAbortSignal implements Readonly<AbortSignal> {
     listener: EventListenerOrEventListenerObject,
     options?: boolean | EventListenerOptions | undefined,
   ): void {
+    // @ts-ignore TODO
     this.#eventEmitter.removeListener(type, listener);
   }
 }
