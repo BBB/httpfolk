@@ -1,33 +1,33 @@
 import { ImmutableURL } from "~/src/ImmutableURL";
 import { Method } from "~/src/Method";
-import { Headers } from "undici";
+import { ImmutableHeaders } from "~/src/ImmutableHeaders";
 
 export type Credentials = "omit" | "include" | "same-origin";
 
 export class HttpRequest {
+  private readonly _headers: ImmutableHeaders;
   constructor(
-    private readonly _headers: Record<string, string>,
+    _headers: Record<string, string> | ImmutableHeaders,
     private readonly _url: ImmutableURL,
     private readonly _method: Method,
     private readonly _abortSignal: AbortSignal | undefined,
     private readonly _credentials: Credentials | undefined,
     private readonly _body: unknown | undefined,
-  ) {}
+  ) {
+    this._headers = new ImmutableHeaders(_headers);
+  }
 
   url() {
     return this._url;
   }
 
   headers() {
-    return new Headers(this._headers);
+    return new ImmutableHeaders(this._headers);
   }
 
   addHeader(name: string, value: string) {
     return new HttpRequest(
-      {
-        ...this._headers,
-        [name]: value,
-      },
+      this._headers.set(name, value),
       this._url,
       this._method,
       this._abortSignal,
