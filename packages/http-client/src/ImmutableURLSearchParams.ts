@@ -11,6 +11,10 @@ export class ImmutableURLSearchParams implements Readonly<URLSearchParams> {
     this._params = new URLSearchParams(init);
   }
 
+  get size() {
+    return this._params.size;
+  }
+
   append(name: string, value: string) {
     const next = new URLSearchParams(this._params);
     next.append(name, value);
