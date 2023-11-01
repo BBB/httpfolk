@@ -5,6 +5,13 @@ export class ImmutableURL implements Readonly<URL> {
   readonly searchParams: ImmutableURLSearchParams;
   private readonly _url: URL;
 
+  constructor(url: URL);
+  constructor(url: string, base?: string | URL);
+  constructor(url: string | URL, base?: string | URL) {
+    this._url = typeof url === "object" ? url : new URL(url, base);
+    this.searchParams = new ImmutableURLSearchParams(this._url.searchParams);
+  }
+
   get hash() {
     return this._url.hash;
   }
@@ -47,13 +54,6 @@ export class ImmutableURL implements Readonly<URL> {
 
   get username() {
     return this._url.username;
-  }
-
-  constructor(url: URL);
-  constructor(url: string, base?: string | URL);
-  constructor(url: string | URL, base?: string | URL) {
-    this._url = typeof url === "object" ? url : new URL(url, base);
-    this.searchParams = new ImmutableURLSearchParams(this._url.searchParams);
   }
 
   toJSON() {
