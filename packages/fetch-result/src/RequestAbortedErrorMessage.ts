@@ -1,7 +1,6 @@
-import { SensibleSet } from "~/src/SensibleSet";
-import { Pair } from "~/src/Pair";
 import { Result } from "@ollierelph/result4t";
 import { Invalid } from "~/src/Invalid";
+import { SensibleSet } from "~/src/iterables/SensibleSet";
 
 const valid = SensibleSet.of("The user aborted a request");
 

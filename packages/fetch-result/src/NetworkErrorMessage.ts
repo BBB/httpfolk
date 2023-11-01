@@ -1,7 +1,7 @@
-import { SensibleSet } from "~/src/SensibleSet";
-import { Pair } from "~/src/Pair";
 import { Result } from "@ollierelph/result4t";
 import { Invalid } from "~/src/Invalid";
+import { SensibleSet } from "~/src/iterables/SensibleSet";
+import { Pair } from "~/src/iterables/Pair";
 
 const valid = SensibleSet.of(
   Pair.of("Failed to fetch", "Chrome / Edge"),
