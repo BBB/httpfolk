@@ -140,9 +140,12 @@ export interface HttpFormData {
   readonly [Symbol.iterator]: () => SpecIterator<[string, string]>;
 }
 
-export interface IncomingHttpResponse {
-  readonly url: string;
-  readonly status: number;
+/**
+ * An approximation of Response
+ */
+export interface IncomingHttpResponse<URL = string, Status = number> {
+  readonly url: URL;
+  readonly status: Status;
   readonly statusText: string;
   readonly type:
     | "default"
@@ -153,7 +156,7 @@ export interface IncomingHttpResponse {
     | "opaqueredirect";
   readonly body: ReadableStream | null;
   readonly headers: Headers | null;
-  clone(): IncomingHttpResponse;
+  clone(): IncomingHttpResponse<URL, Status>;
   json(): Promise<unknown>;
   text(): Promise<string>;
   blob(): Promise<Blob>;

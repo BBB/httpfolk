@@ -57,6 +57,9 @@ importers:
       '@ollierelph/result4t':
         specifier: ^0.3.0
         version: 0.3.0
+      '@ollierelph/sensible-fetch':
+        specifier: workspace:*
+        version: link:../sensible-fetch
     devDependencies:
       '@types/node':
         specifier: ^18.16.1
