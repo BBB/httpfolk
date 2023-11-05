@@ -143,9 +143,9 @@ export interface HttpFormData {
 /**
  * An approximation of Response
  */
-export interface IncomingHttpResponse<URL = string, Status = number> {
-  readonly url: URL;
-  readonly status: Status;
+export interface IncomingHttpResponse {
+  readonly url: string;
+  readonly status: number;
   readonly statusText: string;
   readonly type:
     | "default"
@@ -156,7 +156,7 @@ export interface IncomingHttpResponse<URL = string, Status = number> {
     | "opaqueredirect";
   readonly body: ReadableStream | null;
   readonly headers: Headers | null;
-  clone(): IncomingHttpResponse<URL, Status>;
+  clone(): IncomingHttpResponse;
   json(): Promise<unknown>;
   text(): Promise<string>;
   blob(): Promise<Blob>;
