@@ -3,7 +3,13 @@ import { ImmutableHeaders } from "~/src/ImmutableHeaders";
 import { ImmutableURL } from "~/src/ImmutableURL";
 import { StatusCode } from "~/src/StatusCode";
 
-export class ImmutableResponse<Status extends StatusCode<any>>
+interface ResponseInit {
+  status: StatusCode;
+  headers?: ImmutableHeaders;
+  url?: ImmutableURL;
+}
+
+export class ImmutableResponse<Status extends StatusCode = StatusCode>
   implements Readonly<IncomingHttpResponse<ImmutableURL, Status>>
 {
   #response: IncomingHttpResponse;
@@ -17,6 +23,32 @@ export class ImmutableResponse<Status extends StatusCode<any>>
     response: Response,
   ) {
     return new ImmutableResponse(StatusCode.from(response.status), response);
+  }
+
+  /**
+   * @TODO: a proper response in hera
+   */
+  static of(body: any, init: ResponseInit) {
+    return new ImmutableResponse(init.status, {
+      status: init.status.value,
+      statusText: "",
+      headers: init.headers ?? new ImmutableHeaders(),
+      body: body,
+      url: init.url?.toString() ?? "<none>",
+      type: "default",
+      text(): Promise<string> {
+        return body;
+      },
+      blob(): Promise<Blob> {
+        return body;
+      },
+      clone(): IncomingHttpResponse<string, number> {
+        return this;
+      },
+      json(): Promise<unknown> {
+        return body;
+      },
+    });
   }
 
   get status() {
