@@ -30,8 +30,8 @@ function isValidStatusCode(maybeStatus: number): maybeStatus is AllStatusCodes {
   return allStatusCodes.includes(maybeStatus as any);
 }
 
-export class StatusCode<Status extends AllStatusCodes = AllStatusCodes> {
-  static OK: StatusCode = StatusCode.of(200);
+export class StatusCode<const Status extends AllStatusCodes = AllStatusCodes> {
+  static OK = StatusCode.of(200);
   protected constructor(public value: Status) {}
 
   is1xx(): this is StatusCode<StatusCode1xx> {
