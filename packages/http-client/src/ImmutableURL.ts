@@ -24,8 +24,19 @@ export class ImmutableURL implements Readonly<URL> {
   constructor(url: URL);
   constructor(url: string, base?: string | URL);
   constructor(url: string | URL, base?: string | URL) {
-    this.#url = typeof url === "object" ? url : new URL(url, base);
-    this.#searchParams = new ImmutableURLSearchParams(this.#url.searchParams);
+    try {
+      this.#url = typeof url === "object" ? url : new URL(url, base);
+      this.#searchParams = new ImmutableURLSearchParams(this.#url.searchParams);
+    } catch (err) {
+      if (err instanceof TypeError && err.message == "Invalid URL") {
+        throw new TypeError(`Invalid URL: ${url}`);
+      }
+      throw err;
+    }
+  }
+
+  static fromPathname(pathname: string) {
+    return new ImmutableURL(pathname, "http://example.com/");
   }
 
   copy(

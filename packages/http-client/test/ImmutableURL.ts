@@ -1,6 +1,9 @@
 import { expect, it } from "vitest";
 import { ImmutableURL } from "~/src/ImmutableURL";
 
+it("throws an error on an invalid string", () => {
+  expect(() => new ImmutableURL("/api")).toThrow(`Invalid URL: /api`);
+});
 it("can copy the fields", () => {
   const underTest = new ImmutableURL("https://example.com/api");
   const changed = underTest.copy({ username: "user", password: "pass" });
