@@ -5,7 +5,16 @@ import { HttpAbortSignal } from "~/src/HttpAbortSignal";
 
 export type Credentials = "omit" | "include" | "same-origin";
 
-export class ImmutableRequest {
+export interface ReadOnlyRequest {
+  readonly url: ImmutableURL;
+  readonly headers: ImmutableHeaders;
+  readonly body: unknown;
+  readonly abortSignal: HttpAbortSignal | undefined;
+  readonly credentials: Credentials | undefined;
+  readonly method: Method;
+}
+
+export class ImmutableRequest implements ReadOnlyRequest {
   readonly #headers: ImmutableHeaders;
   readonly #url: ImmutableURL;
   readonly #method: Method;
