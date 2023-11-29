@@ -1,5 +1,5 @@
-import { ImmutableResponse } from "~/src/ImmutableResponse";
-import { ImmutableRequest } from "~/src/ImmutableRequest";
+import { ImmutableResponse } from "~/src/ImmutableResponse.js";
+import { ImmutableRequest } from "~/src/ImmutableRequest.js";
 
 type FilterApply = (next: HttpHandler) => HttpHandler;
 
@@ -8,7 +8,7 @@ export type HttpHandler = (
 ) => Promise<ImmutableResponse>;
 
 export class Filter {
-  constructor(protected base: FilterApply) {}
+  protected constructor(protected base: FilterApply) {}
 
   static from(base: FilterApply) {
     return new Filter(base);
