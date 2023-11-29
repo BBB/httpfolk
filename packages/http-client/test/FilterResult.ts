@@ -19,7 +19,9 @@ const addAuth = () =>
   });
 
 const alwaysStatusAndReflectRequest =
-  (status: StatusCode): HttpHandler<ImmutableResponse, Error> =>
+  (
+    status: StatusCode,
+  ): HttpHandler<Promise<Result<ImmutableResponse, Error>>> =>
   async (req: ImmutableRequest) =>
     Result.success(
       ImmutableResponse.of(null, {
@@ -35,8 +37,8 @@ it("can build a filter chain", async () => {
     .then(
       Filter.from(
         (
-          next: HttpHandler<ImmutableResponse, Error>,
-        ): HttpHandler<StatusCode, Error> =>
+          next: HttpHandler<Promise<Result<ImmutableResponse, Error>>>,
+        ): HttpHandler<Promise<Result<StatusCode, Error>>> =>
           (request: ImmutableRequest) =>
             next(request).then((res) => res.map((it) => it.status)),
       ),

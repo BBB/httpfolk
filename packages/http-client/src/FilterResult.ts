@@ -1,63 +1,41 @@
 import { ImmutableRequest } from "~/src/ImmutableRequest";
 import { Result, Task } from "@ollierelph/result4t";
 
-export type FilterApply<SuccessIn, FailureIn, SuccessOut, FailureOut> = (
-  next: HttpHandler<SuccessIn, FailureIn>,
-) => HttpHandler<SuccessOut, FailureOut>;
+export type FilterApply<ReturnIn, ReturnOut> = (
+  next: HttpHandler<ReturnIn>,
+) => HttpHandler<ReturnOut>;
 
-export type HttpHandler<Success, Failure> = (
-  request: ImmutableRequest,
-) => Promise<Result<Success, Failure>>;
+export type HttpHandler<Return> = (request: ImmutableRequest) => Return;
 
 export class Filter<
-  Fn extends FilterApply<any, any, any, any>,
-  SuccessIn = Fn extends FilterApply<infer R, any, any, any> ? R : never,
-  FailureIn = Fn extends FilterApply<any, infer R, any, any> ? R : never,
-  SuccessOut = Fn extends FilterApply<any, any, infer R, any> ? R : never,
-  FailureOut = Fn extends FilterApply<any, any, any, infer R> ? R : never,
+  Fn extends FilterApply<any, any>,
+  ReturnIn = Fn extends FilterApply<infer R, any> ? R : never,
+  ReturnOut = Fn extends FilterApply<any, infer R> ? R : never,
 > {
-  #task: Task<
-    [input: HttpHandler<SuccessIn, FailureIn>],
-    HttpHandler<SuccessOut, FailureOut>
-  >;
-  protected constructor(
-    fn: FilterApply<SuccessIn, FailureIn, SuccessOut, FailureOut>,
-  ) {
+  #task: Task<[input: HttpHandler<ReturnIn>], HttpHandler<ReturnOut>>;
+  protected constructor(fn: FilterApply<ReturnIn, ReturnOut>) {
     this.#task = Task.of(fn);
   }
-  static from<Fn extends FilterApply<any, any, any, any>>(fn: Fn) {
+  static from<Fn extends FilterApply<any, any>>(fn: Fn) {
     return new Filter<Fn>(fn);
   }
 
   then<
-    Other extends Filter<FilterApply<any, any, SuccessIn, FailureIn>>,
-    SuccessIn2 = Other extends Filter<
-      FilterApply<any, any, SuccessIn, FailureIn>,
+    Other extends Filter<FilterApply<any, ReturnIn>>,
+    ReturnIn2 = Other extends Filter<
+      FilterApply<any, ReturnIn>,
       infer R,
-      any,
-      SuccessIn,
-      FailureIn
-    >
-      ? R
-      : never,
-    FailureIn2 = Other extends Filter<
-      FilterApply<any, any, SuccessIn, FailureIn>,
-      any,
-      infer R,
-      SuccessIn,
-      FailureIn
+      ReturnIn
     >
       ? R
       : never,
   >(otherFilter: Other) {
-    return new Filter((next: HttpHandler<SuccessIn2, FailureIn2>) =>
+    return new Filter((next: HttpHandler<ReturnIn2>) =>
       this.#task.call(otherFilter.apply(next)),
     );
   }
 
-  apply(
-    filter: HttpHandler<SuccessIn, FailureIn>,
-  ): HttpHandler<SuccessOut, FailureOut> {
+  apply(filter: HttpHandler<ReturnIn>): HttpHandler<ReturnOut> {
     return this.#task.call(filter);
   }
 }
