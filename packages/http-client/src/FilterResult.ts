@@ -1,8 +1,6 @@
 import { ImmutableResponse } from "~/src/ImmutableResponse";
 import { ImmutableRequest } from "~/src/ImmutableRequest";
 import { Result, Task } from "@ollierelph/result4t";
-import { StatusCode } from "~/src/StatusCode";
-import { ImmutableURL } from "~/src/ImmutableURL";
 
 type FilterApply = <SuccessIn, FailureIn, SuccessOut, FailureOut>(
   next: HttpHandler<SuccessIn, FailureIn>,
@@ -20,7 +18,7 @@ export class Filter<SuccessOut, FailureOut> {
     this.#task = Task.of(fn);
   }
   static of<
-    Fn extends (request: ImmutableRequest) => Promise<Result<any, any>>,
+    Fn extends HttpHandler<any, any>,
     Output extends Result<any, any> = Fn extends (
       ...args: any[]
     ) => Promise<infer R>
