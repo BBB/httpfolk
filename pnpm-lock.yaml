@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@ollierelph/result4t':
-        specifier: ^0.6.0
-        version: 0.6.0
+        specifier: ^0.7.0
+        version: 0.7.0
     devDependencies:
       '@prettier/sync':
         specifier: ^0.3.0
@@ -388,8 +388,8 @@ packages:
     resolution: {integrity: sha512-ENRqjrxoyYcAc+9Wr6vC8FM7ntWkw9U6uRbYISJU/WSzuhLOmPQbZMLyplcw6YAEJphZTHRO3KWetFnj6M6nNw==}
     dev: false
 
-  /@ollierelph/result4t@0.6.0:
-    resolution: {integrity: sha512-hSL94NrepL/h1YCGaJoo1WM7dhj/r06MY0rhrgH2ap2Yxtjx0bqyY8EHvmFTLNUgdEDihs0plFW8bKJJXVNvyw==}
+  /@ollierelph/result4t@0.7.0:
+    resolution: {integrity: sha512-EPzIdvR1NrIVGWTsCFezQgH9bon7vSVJNedpgx9h0X1T/m//ZqcKteOUy/7r2gR8z75hG0JKILFopq6WHktteQ==}
     dev: false
 
   /@prettier/sync@0.3.0(prettier@3.0.3):

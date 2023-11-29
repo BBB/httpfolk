@@ -1,8 +1,7 @@
-import { ImmutableResponse } from "~/src/ImmutableResponse";
 import { ImmutableRequest } from "~/src/ImmutableRequest";
 import { Result, Task } from "@ollierelph/result4t";
 
-type FilterApply = <SuccessIn, FailureIn, SuccessOut, FailureOut>(
+export type FilterApply<SuccessIn, FailureIn, SuccessOut, FailureOut> = (
   next: HttpHandler<SuccessIn, FailureIn>,
 ) => HttpHandler<SuccessOut, FailureOut>;
 
@@ -10,84 +9,43 @@ export type HttpHandler<Success, Failure> = (
   request: ImmutableRequest,
 ) => Promise<Result<Success, Failure>>;
 
-export class Filter<SuccessOut, FailureOut> {
-  #task: Task<[input: ImmutableRequest], Result<SuccessOut, FailureOut>>;
+export class Filter<SuccessIn, FailureIn, SuccessOut, FailureOut> {
+  #task: Task<
+    [input: HttpHandler<SuccessIn, FailureIn>],
+    HttpHandler<SuccessOut, FailureOut>
+  >;
   protected constructor(
-    fn: (input: ImmutableRequest) => Promise<Result<SuccessOut, FailureOut>>,
+    fn: FilterApply<SuccessIn, FailureIn, SuccessOut, FailureOut>,
   ) {
     this.#task = Task.of(fn);
   }
-  static of<
-    Fn extends HttpHandler<any, any>,
-    Output extends Result<any, any> = Fn extends (
-      ...args: any[]
-    ) => Promise<infer R>
-      ? R
-      : never,
-    SuccessOut = Output extends Result<infer R, any> ? R : never,
-    FailureOut = Output extends Result<any, infer R> ? R : never,
+  static from<
+    Fn extends FilterApply<any, any, any, any>,
+    SuccessIn = Fn extends FilterApply<infer R, any, any, any> ? R : never,
+    FailureIn = Fn extends FilterApply<any, infer R, any, any> ? R : never,
+    SuccessOut = Fn extends FilterApply<any, any, infer R, any> ? R : never,
+    FailureOut = Fn extends FilterApply<any, any, any, infer R> ? R : never,
   >(fn: Fn) {
-    return new Filter<SuccessOut, FailureOut>(fn);
+    return new Filter<SuccessIn, FailureIn, SuccessOut, FailureOut>(fn);
   }
 
-  static fromTask<
-    Task2 extends Task<[request: ImmutableRequest], Result<any, any>>,
-    SuccessOut = Task2 extends Task<
-      [request: ImmutableRequest],
-      Result<infer R, any>
-    >
+  then<
+    Other extends Filter<any, any, SuccessIn, FailureIn>,
+    SuccessIn2 = Other extends Filter<infer R, any, SuccessIn, FailureIn>
       ? R
       : never,
-    FailureOut = Task2 extends Task<
-      [request: ImmutableRequest],
-      Result<any, infer R>
-    >
+    FailureIn2 = Other extends Filter<any, infer R, SuccessIn, FailureIn>
       ? R
       : never,
-  >(task2: Task2) {
-    return new Filter<SuccessOut, FailureOut>(task2.call.bind(task2));
-  }
-
-  static alwaysRespondWith(response: ImmutableResponse) {
-    return Filter.of(async (request: ImmutableRequest) =>
-      Result.success<ImmutableResponse, Error>(response),
+  >(filter: Other) {
+    return new Filter<SuccessIn2, FailureIn2, SuccessOut, FailureOut>((other) =>
+      this.#task.call(filter.apply(other)),
     );
   }
 
-  map<Output extends Result<any, any>>(
-    predicate: (
-      value: (
-        input: ImmutableRequest,
-      ) => Promise<Result<SuccessOut, FailureOut>>,
-    ) => (input: ImmutableRequest) => Promise<Output>,
-  ) {
-    return Filter.of(predicate(this.#task.call.bind(this.#task)));
-  }
-
-  mapRequest(
-    predicate: (input: ImmutableRequest) => ImmutableRequest,
-  ): Filter<SuccessOut, FailureOut> {
-    return Filter.fromTask(
-      this.#task.map((next) => (req: ImmutableRequest) => next(predicate(req))),
-    );
-  }
-
-  mapResponse<
-    Output extends Result<any, any>,
-    Success2 = Output extends Result<infer R, any> ? R : never,
-    Failure2 = Output extends Result<any, infer R> ? R : never,
-  >(
-    predicate: (result: Result<SuccessOut, FailureOut>) => Promise<Output>,
-  ): Filter<Success2, Failure2> {
-    const task2 = this.#task.map((next) => {
-      const newVar: (req: ImmutableRequest) => Promise<Output> = (
-        req: ImmutableRequest,
-      ) => next(req).then(predicate);
-      return newVar;
-    });
-    return Filter.fromTask(task2);
-  }
-  call(request: ImmutableRequest): Promise<Result<SuccessOut, FailureOut>> {
-    return this.#task.call(request);
+  apply(
+    filter: HttpHandler<SuccessIn, FailureIn>,
+  ): HttpHandler<SuccessOut, FailureOut> {
+    return this.#task.call(filter);
   }
 }
