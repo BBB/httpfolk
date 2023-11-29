@@ -1,7 +1,12 @@
 import { ImmutableRequest } from "~/src/ImmutableRequest";
 import { Result, Task } from "@ollierelph/result4t";
 
-export type FilterApply<SuccessIn, FailureIn, SuccessOut, FailureOut> = (
+export type FilterApply<
+  SuccessIn,
+  FailureIn,
+  SuccessOut = SuccessIn,
+  FailureOut = FailureIn,
+> = (
   next: HttpHandler<SuccessIn, FailureIn>,
 ) => HttpHandler<SuccessOut, FailureOut>;
 
@@ -37,9 +42,9 @@ export class Filter<SuccessIn, FailureIn, SuccessOut, FailureOut> {
     FailureIn2 = Other extends Filter<any, infer R, SuccessIn, FailureIn>
       ? R
       : never,
-  >(filter: Other) {
-    return new Filter<SuccessIn2, FailureIn2, SuccessOut, FailureOut>((other) =>
-      this.#task.call(filter.apply(other)),
+  >(otherFilter: Other) {
+    return new Filter<SuccessIn2, FailureIn2, SuccessOut, FailureOut>((next) =>
+      this.#task.call(otherFilter.apply(next)),
     );
   }
 
