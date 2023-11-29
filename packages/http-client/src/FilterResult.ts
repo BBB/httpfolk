@@ -4,10 +4,18 @@ import { Result, Task } from "@ollierelph/result4t";
 import { StatusCode } from "~/src/StatusCode";
 import { ImmutableURL } from "~/src/ImmutableURL";
 
-export class Filter<Success, Failure> {
-  #task: Task<[input: ImmutableRequest], Result<Success, Failure>>;
+type FilterApply = <SuccessIn, FailureIn, SuccessOut, FailureOut>(
+  next: HttpHandler<SuccessIn, FailureIn>,
+) => HttpHandler<SuccessOut, FailureOut>;
+
+export type HttpHandler<Success, Failure> = (
+  request: ImmutableRequest,
+) => Promise<Result<Success, Failure>>;
+
+export class Filter<SuccessOut, FailureOut> {
+  #task: Task<[input: ImmutableRequest], Result<SuccessOut, FailureOut>>;
   protected constructor(
-    fn: (input: ImmutableRequest) => Promise<Result<Success, Failure>>,
+    fn: (input: ImmutableRequest) => Promise<Result<SuccessOut, FailureOut>>,
   ) {
     this.#task = Task.of(fn);
   }
@@ -18,28 +26,28 @@ export class Filter<Success, Failure> {
     ) => Promise<infer R>
       ? R
       : never,
-    Success = Output extends Result<infer R, any> ? R : never,
-    Failure = Output extends Result<any, infer R> ? R : never,
+    SuccessOut = Output extends Result<infer R, any> ? R : never,
+    FailureOut = Output extends Result<any, infer R> ? R : never,
   >(fn: Fn) {
-    return new Filter<Success, Failure>(fn);
+    return new Filter<SuccessOut, FailureOut>(fn);
   }
 
   static fromTask<
     Task2 extends Task<[request: ImmutableRequest], Result<any, any>>,
-    Success = Task2 extends Task<
+    SuccessOut = Task2 extends Task<
       [request: ImmutableRequest],
       Result<infer R, any>
     >
       ? R
       : never,
-    Failure = Task2 extends Task<
+    FailureOut = Task2 extends Task<
       [request: ImmutableRequest],
       Result<any, infer R>
     >
       ? R
       : never,
   >(task2: Task2) {
-    return new Filter<Success, Failure>(task2.call.bind(task2));
+    return new Filter<SuccessOut, FailureOut>(task2.call.bind(task2));
   }
 
   static alwaysRespondWith(response: ImmutableResponse) {
@@ -50,7 +58,9 @@ export class Filter<Success, Failure> {
 
   map<Output extends Result<any, any>>(
     predicate: (
-      value: (input: ImmutableRequest) => Promise<Result<Success, Failure>>,
+      value: (
+        input: ImmutableRequest,
+      ) => Promise<Result<SuccessOut, FailureOut>>,
     ) => (input: ImmutableRequest) => Promise<Output>,
   ) {
     return Filter.of(predicate(this.#task.call.bind(this.#task)));
@@ -58,7 +68,7 @@ export class Filter<Success, Failure> {
 
   mapRequest(
     predicate: (input: ImmutableRequest) => ImmutableRequest,
-  ): Filter<Success, Failure> {
+  ): Filter<SuccessOut, FailureOut> {
     return Filter.fromTask(
       this.#task.map((next) => (req: ImmutableRequest) => next(predicate(req))),
     );
@@ -69,7 +79,7 @@ export class Filter<Success, Failure> {
     Success2 = Output extends Result<infer R, any> ? R : never,
     Failure2 = Output extends Result<any, infer R> ? R : never,
   >(
-    predicate: (result: Result<Success, Failure>) => Promise<Output>,
+    predicate: (result: Result<SuccessOut, FailureOut>) => Promise<Output>,
   ): Filter<Success2, Failure2> {
     const task2 = this.#task.map((next) => {
       const newVar: (req: ImmutableRequest) => Promise<Output> = (
@@ -79,45 +89,7 @@ export class Filter<Success, Failure> {
     });
     return Filter.fromTask(task2);
   }
-  call(request: ImmutableRequest): Promise<Result<Success, Failure>> {
+  call(request: ImmutableRequest): Promise<Result<SuccessOut, FailureOut>> {
     return this.#task.call(request);
   }
 }
-
-const f = Filter.alwaysRespondWith(
-  ImmutableResponse.of(null, {
-    status: StatusCode.OK,
-  }),
-)
-  .mapRequest((req) => req.copy({ headers: req.headers.append("woo", "hoo") }))
-  .mapResponse(async (res): Promise<Result<boolean, Error>> => {
-    return res.map((res) => false);
-  })
-  .map((next) => (request: ImmutableRequest) => next(request))
-  .call(ImmutableRequest.get(ImmutableURL.fromPathname(`/}`)))
-  .then((result) =>
-    result.getOrElse((err) => {
-      throw err;
-    }),
-  );
-
-class Boo {}
-
-const result = Task.of(
-  async (
-    request: ImmutableRequest,
-  ): Promise<Result<ImmutableResponse, Error>> =>
-    Result.success(ImmutableResponse.of(null, { status: StatusCode.OK })),
-)
-  .map(
-    (next) =>
-      (request: ImmutableRequest): Promise<Result<Boo, Error>> =>
-        next(request).then((result) => result.map(() => new Boo())),
-  )
-  .flatMap((next) =>
-    Task.of(async (input: number) =>
-      next(ImmutableRequest.get(ImmutableURL.fromPathname(`/${input}`))),
-    ),
-  );
-
-const a = result.call(5);

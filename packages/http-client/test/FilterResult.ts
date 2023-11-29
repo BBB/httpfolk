@@ -16,3 +16,25 @@ it("can build a filter chain", async () => {
   );
   expect(response.isSuccess()).toEqual(true);
 });
+
+it("is something like this", async () => {
+  const f = await Filter.alwaysRespondWith(
+    ImmutableResponse.of(null, {
+      status: StatusCode.OK,
+    }),
+  )
+    .mapRequest((req) =>
+      req.copy({ headers: req.headers.append("woo", "hoo") }),
+    )
+    .mapResponse(async (res): Promise<Result<boolean, Error>> => {
+      return res.map((res) => false);
+    })
+    .map((next) => (request: ImmutableRequest) => next(request))
+    .call(ImmutableRequest.get(ImmutableURL.fromPathname(`/}`)))
+    .then((result) =>
+      result.getOrElse((err) => {
+        throw err;
+      }),
+    );
+  expect(f).toEqual(true);
+});
