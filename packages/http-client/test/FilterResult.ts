@@ -3,7 +3,7 @@ import { StatusCode } from "~/src/StatusCode";
 import { ImmutableResponse } from "~/src/ImmutableResponse";
 import { Result } from "@ollierelph/result4t";
 import { expect, it } from "vitest";
-import { Filter, HttpHandler } from "~/src/FilterResult";
+import { Filter, FilterApply, HttpHandler } from "~/src/FilterResult";
 import { ImmutableURL } from "~/src/ImmutableURL";
 
 const setHostnameForEnvironment = (env: string) =>
@@ -32,7 +32,12 @@ const alwaysStatusAndReflectRequest =
     );
 
 it("can build a filter chain", async () => {
-  const chain = setHostnameForEnvironment("stg")
+  const chain: Filter<
+    FilterApply<
+      Promise<Result<ImmutableResponse, Error>>,
+      Promise<Result<StatusCode, Error>>
+    >
+  > = setHostnameForEnvironment("stg")
     .then(addAuth())
     .then(
       Filter.from(

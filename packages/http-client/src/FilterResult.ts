@@ -1,5 +1,5 @@
 import { ImmutableRequest } from "~/src/ImmutableRequest";
-import { Result, Task } from "@ollierelph/result4t";
+import { Task } from "@ollierelph/result4t";
 
 export type FilterApply<ReturnIn, ReturnOut> = (
   next: HttpHandler<ReturnIn>,
