@@ -20,10 +20,6 @@ const alwaysStatusAndReflectRequest =
     );
 
 it("can build a filter chain", async () => {
-  /**
-   * We have to specify all 4 generics for each Filter for the composition to work
-   * which kind of ruins the point, as we want it to be inferred
-   */
   type ResultHttpHandler = (
     request: ImmutableRequest,
   ) => Promise<Result<ImmutableResponse, Error>>;
