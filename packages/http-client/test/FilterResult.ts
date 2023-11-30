@@ -3,20 +3,8 @@ import { StatusCode } from "~/src/StatusCode";
 import { ImmutableResponse } from "~/src/ImmutableResponse";
 import { Result } from "@ollierelph/result4t";
 import { expect, it } from "vitest";
-import { Filter, FilterApply, HttpHandler } from "~/src/FilterResult";
+import { Filter, HttpHandler } from "~/src/FilterResult";
 import { ImmutableURL } from "~/src/ImmutableURL";
-
-const setHostnameForEnvironment = (env: string) =>
-  Filter.from((next) => async (request: ImmutableRequest) => {
-    const finalUrl = request.url.copy({ hostname: `${env}.example.com` });
-    return next(request.copy({ url: finalUrl }));
-  });
-
-const addAuth = () =>
-  Filter.from((next) => (request: ImmutableRequest) => {
-    const finalHeaders = request.headers.append("Authorization", "Basic 123");
-    return next(request.copy({ headers: finalHeaders }));
-  });
 
 const alwaysStatusAndReflectRequest =
   (
@@ -32,26 +20,41 @@ const alwaysStatusAndReflectRequest =
     );
 
 it("can build a filter chain", async () => {
-  const chain: Filter<
-    FilterApply<
-      Promise<Result<ImmutableResponse, Error>>,
-      Promise<Result<StatusCode, Error>>
-    >
-  > = setHostnameForEnvironment("stg")
-    .then(addAuth())
+  /**
+   * We have to specify all 4 generics for each Filter for the composition to work
+   * which kind of ruins the point, as we want it to be inferred
+   */
+  type ResultHttpHandler = (
+    request: ImmutableRequest,
+  ) => Promise<Result<ImmutableResponse, Error>>;
+
+  const client = Filter.from(
+    (next: ResultHttpHandler) => async (request: ImmutableRequest) => {
+      const finalUrl = request.url.copy({ hostname: `${"stg"}.example.com` });
+      return next(request.copy({ url: finalUrl }));
+    },
+  )
     .then(
       Filter.from(
-        (
-          next: HttpHandler<Promise<Result<ImmutableResponse, Error>>>,
-        ): HttpHandler<Promise<Result<StatusCode, Error>>> =>
-          (request: ImmutableRequest) =>
-            next(request).then((res) => res.map((it) => it.status)),
+        (next: ResultHttpHandler) => async (request: ImmutableRequest) => {
+          const finalHeaders = request.headers.append(
+            "Authorization",
+            "Basic 123",
+          );
+          return next(request.copy({ headers: finalHeaders }));
+        },
       ),
-    );
-  const client = chain.apply(alwaysStatusAndReflectRequest(StatusCode.OK));
+    )
+    .then(
+      Filter.from(
+        (next: ResultHttpHandler) => (request: ImmutableRequest) =>
+          next(request),
+      ),
+    )
+    .apply(alwaysStatusAndReflectRequest(StatusCode.OK));
   const response = await client(
     ImmutableRequest.get(ImmutableURL.fromPathname("/")),
   );
   expect(response.isSuccess()).toEqual(true);
-  expect(response.get()).toHaveProperty("value", StatusCode.OK.value);
+  expect(response.get()).toHaveProperty("status.value", StatusCode.OK.value);
 });
